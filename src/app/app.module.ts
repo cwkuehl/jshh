@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
-import { MenuComponent } from './menu/menu.component';
+import { MenuComponent } from './components/menu/menu.component';
+
+import { TagebuchService } from './services';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,9 @@ import { MenuComponent } from './menu/menu.component';
   imports: [
     BrowserModule, NgbModule
   ],
-  providers: [],
+  providers: [
+    TagebuchService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
