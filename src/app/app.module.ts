@@ -5,6 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
 
+import { IdbService } from './services';
 import { TagebuchService } from './services';
 
 @NgModule({
@@ -16,7 +17,7 @@ import { TagebuchService } from './services';
     BrowserModule, NgbModule
   ],
   providers: [
-    TagebuchService
+    IdbService, TagebuchService
   ],
   bootstrap: [AppComponent]
 })
