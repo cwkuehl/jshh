@@ -5,22 +5,24 @@ import { AppRoutingModule } from './app-rounting.module';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
+import { Fz700Component } from './components/private/fz700/fz700.component';
+import { Tb100Component } from './components/diary/tb100.component';
 
 import { IdbService } from './services';
-import { DiaryService } from './services';
-import { DiaryComponent } from './components/diary/diary.component';
+import { DiaryService, PrivateService } from './services';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    DiaryComponent
+    Fz700Component,
+    Tb100Component
   ],
   imports: [
     BrowserModule, NgbModule, AppRoutingModule
   ],
   providers: [
-    IdbService, DiaryService
+    IdbService, DiaryService, PrivateService
   ],
   bootstrap: [AppComponent]
 })

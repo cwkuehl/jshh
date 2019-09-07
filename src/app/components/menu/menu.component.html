@@ -14,9 +14,8 @@
     <div ngbDropdown class="d-inline-block">
       <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle>Privat</button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <a [routerLink]="'/'" routerLinkActive="active"> Tagebuch </a>
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
-        <button ngbDropdownItem>Notizen</button>
+        <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem>Sudoku</button>
       </div>
     </div>
