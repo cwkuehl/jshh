@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-rounting.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
 
@@ -20,7 +22,7 @@ import { DiaryService, PrivateService } from './services';
     Tb100Component
   ],
   imports: [
-    BrowserModule, NgbModule, AppRoutingModule
+    BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     IdbService, DiaryService, PrivateService
@@ -29,8 +31,7 @@ import { DiaryService, PrivateService } from './services';
 })
 export class AppModule {
   constructor(private idbservice: IdbService) {
-    if (!environment.production)
-      console.log("Entwicklungsmodus");
+    console.log(environment.production ? "Produktion" : "Entwicklung");
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
   }
