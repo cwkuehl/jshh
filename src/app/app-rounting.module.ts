@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TagebuchComponent } from './components/tagebuch/tagebuch.component';
+import { DiaryComponent } from './components/diary/diary.component';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'tagebuch', pathMatch: 'full'},
-    { path: 'tagebuch', component: TagebuchComponent},
+    {path: '', redirectTo: 'diary', pathMatch: 'full'},
+    { path: 'diary', component: DiaryComponent},
 ];
 @NgModule({
     imports: [RouterModule.forRoot(routes)],

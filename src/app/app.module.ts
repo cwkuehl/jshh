@@ -7,20 +7,20 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './components/menu/menu.component';
 
 import { IdbService } from './services';
-import { TagebuchService } from './services';
-import { TagebuchComponent } from './components/tagebuch/tagebuch.component';
+import { DiaryService } from './services';
+import { DiaryComponent } from './components/diary/diary.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
-    TagebuchComponent
+    DiaryComponent
   ],
   imports: [
     BrowserModule, NgbModule, AppRoutingModule
   ],
   providers: [
-    IdbService, TagebuchService
+    IdbService, DiaryService
   ],
   bootstrap: [AppComponent]
 })

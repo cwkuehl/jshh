@@ -1,2 +1,2 @@
 export { IdbService } from './idb.service';
-export { TagebuchService } from './tagebuch.service';
+export { DiaryService } from './diary.service';
