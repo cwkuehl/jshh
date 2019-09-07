@@ -26,4 +26,10 @@ import { DiaryService, PrivateService } from './services';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private idbservice: IdbService) {
+    // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
+    //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
+  }
+
+ }
