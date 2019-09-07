@@ -4,17 +4,19 @@ import { Injectable } from '@angular/core';
 import { openDB } from 'idb/with-async-ittr.js';
 import { Observable, Subject } from 'rxjs';
 import { Parameter } from '../apis/parameter';
+import { BaseService } from './base.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class IdbService {
+export class IdbService extends BaseService {
 
   private _dataChange: Subject<Parameter> = new Subject<Parameter>();
   private _dbPromise;
 
   constructor() {
+    super();
     this.createDB();
    }
 
