@@ -2,8 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-rounting.module';
-
 import { AppComponent } from './app.component';
+import { environment } from '../environments/environment';
+
 import { MenuComponent } from './components/menu/menu.component';
 import { Fz700Component } from './components/private/fz700/fz700.component';
 import { Tb100Component } from './components/diary/tb100.component';
@@ -28,6 +29,8 @@ import { DiaryService, PrivateService } from './services';
 })
 export class AppModule {
   constructor(private idbservice: IdbService) {
+    if (!environment.production)
+      console.log("Entwicklungsmodus");
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
   }
