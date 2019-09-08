@@ -11,7 +11,7 @@ export class IdbService extends BaseService {
 
   constructor(private storage: StorageMap) {
     super();
-    this.saveDb(null);
+    this.saveDb(new Blob());
     let user: Parameter = { schluessel: 'DB', wert: 'abc', angelegtAm: new Date(2019, 9, 7), angelegtVon: 'Hallo' };
     this.storage.set('user', user).subscribe(() => {});
     // this.storage.set('user', null).subscribe(() => {}); // delete
@@ -19,7 +19,7 @@ export class IdbService extends BaseService {
 
   private saveDb(db: Blob) {
     this.storage.set('DB', db).subscribe({
-      next: (user) => { console.log('Weiter:' + user); },
+      next: (user) => { console.log('Weiter: ' + user); },
       error: (error) => { console.log('Fehler: ' + error); },
     });
   }
