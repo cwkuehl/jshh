@@ -9,7 +9,7 @@ const routes: Routes = [
     { path: 'diary', component: Tb100Component},
 ];
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [RouterModule.forRoot(routes, {useHash: true})],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }

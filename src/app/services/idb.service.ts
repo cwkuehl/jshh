@@ -21,8 +21,9 @@ export class IdbService extends BaseService {
     super();
     //this.createDB();
     //this.connectToIDB();
-    let user: Parameter = { schluessel: 'DB', wert: 'Berabcgson', angelegtAm: new Date(2019, 9, 7), angelegtVon: 'Hallo' };
+    let user: Parameter = { schluessel: 'DB', wert: 'abc', angelegtAm: new Date(2019, 9, 7), angelegtVon: 'Hallo' };
     this.storage.set('user', user).subscribe(() => {});
+    // this.storage.set('user', null).subscribe(() => {}); // delete
    }
 
    async createDB() {
