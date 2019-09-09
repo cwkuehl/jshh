@@ -11,8 +11,10 @@ import { MenuComponent } from './components/menu/menu.component';
 import { Fz700Component } from './components/private/fz700/fz700.component';
 import { Tb100Component } from './components/diary/tb100.component';
 
-import { IdbService } from './services';
-import { DiaryService, PrivateService } from './services';
+import { IdbService, DiaryService, PrivateService } from './services';
+
+import { Tb100DeactivateGuard } from './guards/diary.guard';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { DiaryService, PrivateService } from './services';
     BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    IdbService, DiaryService, PrivateService
+    IdbService, DiaryService, PrivateService,
+    Tb100DeactivateGuard
   ],
   bootstrap: [AppComponent]
 })
