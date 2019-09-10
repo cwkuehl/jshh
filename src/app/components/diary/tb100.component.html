@@ -1,5 +1,16 @@
 <p>TB100 Tagebuch</p>
 
+<div class="right" *ngIf="diary">
+
+  <h3>Tagebuch</h3>
+  <ul>
+    <li *ngFor="let d of diary | async">
+        {{ d.datum.toISOString().slice(0,10) }} {{ d.eintrag }}
+    </li>
+  </ul>
+
+</div>
+
 <div class="jumbotron">
   <div class="container">
     <ngb-alert type="success" [dismissible]="false">
@@ -13,6 +24,7 @@
   </div>
 </div>
 <p>
+
   <ngb-alert [dismissible]="true">
     <strong>Warning!</strong> Better check yourself, you're not looking too good.
   </ngb-alert>

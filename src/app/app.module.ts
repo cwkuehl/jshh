@@ -14,6 +14,8 @@ import { Tb100Component } from './components/diary/tb100.component';
 import { IdbService, DiaryService, PrivateService } from './services';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
+import { StoreModule } from '@ngrx/store';
+import { reducer } from './reducers/tbeintrag.reducer';
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { Tb100DeactivateGuard } from './guards/diary.guard';
     Tb100Component
   ],
   imports: [
-    BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    StoreModule.forRoot({ diary: reducer })
   ],
   providers: [
     IdbService, DiaryService, PrivateService,
