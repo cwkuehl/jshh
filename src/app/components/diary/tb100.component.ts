@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { TbEintrag } from '../../apis';
 import { AppState } from '../../app.state';
+import * as TbEintragActions from '../../actions/tbeintrag.actions';
+import { Global } from '../../services';
 
 @Component({
   selector: 'app-tb100',
@@ -22,4 +24,8 @@ export class Tb100Component implements OnInit {
   ngOnInit() {
   }
 
+  AddTbEintrag(datum: string, eintrag: string) {
+    this.store.dispatch(new TbEintragActions.AddTbEintrag(
+      {datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc'}));
+  }
 }

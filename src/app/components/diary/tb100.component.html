@@ -11,6 +11,14 @@
 
 </div>
 
+<div class="left">
+
+  <input type="text" placeholder="Datum" #datum>
+  <input type="text" placeholder="Eintrag" #eintrag>
+
+  <button (click)="AddTbEintrag(datum.value,eintrag.value)">Add a day</button>
+</div>
+
 <div class="jumbotron">
   <div class="container">
     <ngb-alert type="success" [dismissible]="false">
