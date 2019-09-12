@@ -4,7 +4,7 @@
 
   <h3>Tagebuch</h3>
   <ul>
-    <li *ngFor="let d of diary | async">
+    <li *ngFor="let d of diary | async; let i = index" (click)="RemoveTbEintrag(i)">
         {{ d.datum.toISOString().slice(0,10) }} {{ d.eintrag }}
     </li>
   </ul>

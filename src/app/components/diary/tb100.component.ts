@@ -28,4 +28,8 @@ export class Tb100Component implements OnInit {
     this.store.dispatch(new TbEintragActions.AddTbEintrag(
       {datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc'}));
   }
+
+  RemoveTbEintrag(index: number) {
+    this.store.dispatch(new TbEintragActions.RemoveTbEintrag(index) )
+  }
 }
