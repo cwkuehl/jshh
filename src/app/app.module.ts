@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-rounting.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
@@ -16,6 +17,7 @@ import { IdbService, DiaryService, PrivateService } from './services';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducers/tbeintrag.reducer';
+import { AppEffects } from './app.effects';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { reducer } from './reducers/tbeintrag.reducer';
   ],
   imports: [
     BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    StoreModule.forRoot({ diary: reducer })
+    StoreModule.forRoot({ diary: reducer }),
+    EffectsModule.forRoot([AppEffects])
   ],
   providers: [
     IdbService, DiaryService, PrivateService,
