@@ -1,5 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-rounting.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -30,7 +31,8 @@ import { DateComponent } from './components/comp/date/date.component';
     DateComponent
   ],
   imports: [
-    BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    BrowserModule, FormsModule, NgbModule, AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot({ diary: reducer }),
     EffectsModule.forRoot([AppEffects])
   ],
