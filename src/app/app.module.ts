@@ -18,6 +18,7 @@ import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from './reducers/tbeintrag.reducer';
 import { AppEffects } from './app.effects';
+import { DateComponent } from './components/comp/date/date.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AppEffects } from './app.effects';
     AppComponent,
     MenuComponent,
     Fz700Component,
-    Tb100Component
+    Tb100Component,
+    DateComponent
   ],
   imports: [
     BrowserModule, NgbModule, AppRoutingModule, ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),

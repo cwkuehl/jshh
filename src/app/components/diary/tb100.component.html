@@ -3,6 +3,10 @@
 <div class="right" *ngIf="diary">
 
   <h3>Tagebuch</h3>
+  <ngb-datepicker #datum [startDate]="{year: 1789, month: 7}"></ngb-datepicker>
+  <input type="text" ngbDatepicker #datum2="ngbDatepicker" [startDate]="{year: 2089, month: 8, day: 27}"/><button (click)="datum2.toggle()">Toggle</button>
+  <app-date></app-date>
+
   <ul>
     <li *ngFor="let d of diary | async; let i = index" (click)="RemoveTbEintrag(i)">
         {{ d.datum | date:'yyyy-MM-dd' }} {{ d.eintrag }}
