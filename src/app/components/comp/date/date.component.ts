@@ -1,5 +1,6 @@
 import { Component, OnInit , Injectable } from '@angular/core';
 import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
+import { Global } from '../../../services/global';
 
 @Component({
   selector: 'app-date',
@@ -9,14 +10,18 @@ import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap
 })
 export class DateComponent implements OnInit {
 
-  model2: Date;
+  seldate: Date;
 
-  constructor() { }
+  constructor() {
+    this.seldate = this.today;
+  }
 
   ngOnInit() {
+//    this.seldate = Global.today();
   }
 
   get today() {
-    return new Date();
+    //return new Date();
+    return Global.today();
   }
 }

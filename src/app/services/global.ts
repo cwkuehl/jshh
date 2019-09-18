@@ -42,7 +42,7 @@ export class Global {
     d.setMinutes(0);
     d.setSeconds(0);
     d.setMilliseconds(0);
-    d.setTime(d.getTime() + d.getTimezoneOffset()*60*1000);
+    d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
     return d;
   }
 
