@@ -15,6 +15,7 @@ export class Tb100Component implements OnInit {
 
   // Section 1
   diary: Observable<TbEintrag[]>;
+  seldate: Date;
 
   // Section 2
   constructor(private store: Store<AppState>) {

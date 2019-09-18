@@ -3,9 +3,12 @@
 <div class="right" *ngIf="diary">
 
   <h3>Tagebuch</h3>
-  <!--ngb-datepicker #datum [startDate]="{year: 1789, month: 7}"></ngb-datepicker>
-  <input type="text" ngbDatepicker #datum2="ngbDatepicker" [startDate]="{year: 2089, month: 8, day: 27}"/>
-  <button (click)="datum2.toggle()">Toggle</button-->
+  <!--ngb-datepicker #datum [startDate]="{year: 1789, month: 7, day: 14}" [(ngModel)]="seldate"></ngb-datepicker>
+  <pre>Model: {{ seldate | json }}</pre>
+  <input type="text" ngbDatepicker #datum2="ngbDatepicker" [startDate]="{year: 2089, month: 8, day: 27}" [(ngModel)]="seldate"/>
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary calendar" (click)="datum2.toggle()" type="button"></button>
+  </div-->
   <app-date></app-date>
 
   <ul>
