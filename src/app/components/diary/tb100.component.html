@@ -9,7 +9,9 @@
   <div class="input-group-append">
     <button class="btn btn-outline-secondary calendar" (click)="datum2.toggle()" type="button"></button>
   </div-->
-  <app-date></app-date>
+  <div class="col-4">
+    <app-date [date]="seldate"></app-date>
+  </div>
 
   <ul>
     <li *ngFor="let d of diary | async; let i = index" (click)="RemoveTbEintrag(i)">

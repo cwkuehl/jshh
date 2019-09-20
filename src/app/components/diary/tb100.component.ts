@@ -23,6 +23,8 @@ export class Tb100Component implements OnInit {
   }
 
   ngOnInit() {
+    this.seldate = Global.today();
+    this.seldate.setDate(this.seldate.getDate() + 1);
   }
 
   AddTbEintrag(datum: string, eintrag: string) {

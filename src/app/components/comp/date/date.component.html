@@ -1,21 +1,10 @@
-<div class="col-6">
-  <form class="form-inline">
-    <div class="form-group">
-      <div class="input-group">
-        <input class="form-control" placeholder="yyyy-mm-dd" (focus)="d.open()" name="d" [(ngModel)]="seldate" ngbDatepicker #d="ngbDatepicker"
-        [minDate]="{year: 2000, month: 1, day: 1}" [navigation]="select" />
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
-        </div>
-        <ngb-datepicker #d2 [startDate]="{year: 1789, month: 7}"></ngb-datepicker>
-        <button (click)="d2.navigateTo({year: 2048, month: 1})">Goto JAN 2048</button>
+<div class="form-group">
+  <div class="input-group">
+    <input class="form-control" placeholder="yyyy-mm-dd" (focus)="openSelection(d)" name="d" [(ngModel)]="seldate" ngbDatepicker #d="ngbDatepicker" [navigation]="select" />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button">-</button>
+      <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button">o</button>
+      <button class="btn btn-outline-secondary calendar" (click)="onChanged(1)" type="button">+</button>
     </div>
-    </div>
-  </form>
-
-  <hr/>
-  <button class="btn btn-sm btn-outline-primary" (click)="seldate = today">Select Today</button>
-  <hr/>
-
-  <pre>Model: {{ seldate | json }}</pre>
+  </div>
 </div>

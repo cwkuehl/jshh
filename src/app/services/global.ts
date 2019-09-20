@@ -4,17 +4,14 @@ export class Global {
   constructor() { }
 
   /**
-   * Liefert Datum.aus Einzeldaten.
+   * Liefert Datum aus Einzeldaten.
    * @param tag
    * @param monat
    * @param jahr
    */
   public static date(tag: number, monat: number, jahr: number): Date {
-    let d = Global.today();
-    d.setDate(tag);
-    d.setMonth(monat - 1);
-    d.setFullYear(jahr);
-    return d;
+    let d = new Date(jahr, monat - 1, tag);
+    return this.clearTime(d);
   }
 
   /**
@@ -38,6 +35,15 @@ export class Global {
   public static today(): Date {
     let d = new Date();
     //d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0));
+    d.setHours(0);
+    d.setMinutes(0);
+    d.setSeconds(0);
+    d.setMilliseconds(0);
+    d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+    return d;
+  }
+
+  public static clearTime(d: Date): Date {
     d.setHours(0);
     d.setMinutes(0);
     d.setSeconds(0);
