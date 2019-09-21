@@ -10,8 +10,10 @@ export class Global {
    * @param jahr
    */
   public static date(tag: number, monat: number, jahr: number): Date {
-    let d = new Date(jahr, monat - 1, tag);
-    return this.clearTime(d);
+    //let d = new Date(jahr, monat - 1, tag);
+    //return this.clearTime(d);
+    var d = new Date(Date.UTC(jahr, monat - 1, tag, 0, 0, 0, 0));
+    return d;
   }
 
   /**

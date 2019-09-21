@@ -27,6 +27,13 @@ export class Tb100Component implements OnInit {
     this.seldate.setDate(this.seldate.getDate() + 1);
   }
 
+  public onDateChanged(datum: Date) {
+    this.seldate = datum;
+    //this.tbservice.setDatum(datum);
+    // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
+    //this.bearbeiteEintraege(true, true);
+  }
+
   AddTbEintrag(datum: string, eintrag: string) {
     this.store.dispatch(new TbEintragActions.AddTbEintrag(
       {datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc'}));

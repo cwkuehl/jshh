@@ -21,7 +21,7 @@ export class DateComponent implements OnInit {
   ngOnInit() {
     if (this.date == null) {
       this.seldate = this.today;
-      console.log("ngOnInit date == null");
+      //console.log("ngOnInit date == null");
     } else
       this.seldate = {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()};
   }
