@@ -13,6 +13,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { Fz700Component } from './components/private/fz700/fz700.component';
 import { Tb100Component } from './components/diary/tb100.component';
 
+import { JshhDatabase } from './components/database/database';
 import { IdbService, DiaryService, PrivateService } from './services';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
@@ -37,7 +38,7 @@ import { DateComponent } from './components/comp/date/date.component';
     EffectsModule.forRoot([AppEffects])
   ],
   providers: [
-    IdbService, DiaryService, PrivateService,
+    JshhDatabase, IdbService, DiaryService, PrivateService,
     Tb100DeactivateGuard
   ],
   bootstrap: [AppComponent]

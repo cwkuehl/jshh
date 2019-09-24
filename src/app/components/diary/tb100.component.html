@@ -1,8 +1,5 @@
 <h3>Tagebuch</h3>
 
-<div class="right" *ngIf="diary">
-</div>
-
 <form>
   <div class="form-row">
     <div class="form-group col-3">
@@ -16,7 +13,7 @@
   </div>
 </form>
 
-<div class="row">
+<div class="row" *ngIf="diary">
   <ul>
     <li *ngFor="let d of diary | async; let i = index" (click)="RemoveTbEintrag(i)">
         {{ d.datum | date:'yyyy-MM-dd' }} {{ d.eintrag }}
