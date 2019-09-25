@@ -10,7 +10,7 @@ import { Global } from '../../../services/global';
 })
 export class DateComponent implements OnInit {
 
-  @Output() dateChanged: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
   @Input() public date: Date;
 
   seldate: NgbDateStruct;
@@ -56,6 +56,6 @@ export class DateComponent implements OnInit {
     if (t == 0 && m == 0 && j == 0)
       d = Global.today();
     this.seldate = { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
-    this.dateChanged.emit(d);
+    this.dateChange.next(d);
   }
 }
