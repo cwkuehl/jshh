@@ -4,11 +4,11 @@
   <div class="form-row">
     <div class="form-group col-3">
       <label for="entrydate">Datum</label>
-      <app-date [date]="seldate" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
+      <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
     </div>
     <div class="form-group col-9">
-        <label for="entry">Eintrag</label>
-        <textarea class="form-control" aria-label="With textarea" title="Tagebuch-Eintrag" id="entry"></textarea>
+        <label for="eintrag">Eintrag</label>
+        <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="10" cols="30"></textarea>
     </div>
   </div>
 </form>
@@ -26,7 +26,7 @@
   <input type="text" placeholder="Datum" #datum>
   <input type="text" placeholder="Eintrag" #eintrag>
 
-  <button (click)="AddTbEintrag(datum.value,eintrag.value)">Add a day</button>
+  <button (click)="SaveTbEintrag(datum.value,eintrag.value)">Add a day</button>
 </div>
 
 <div class="jumbotron">

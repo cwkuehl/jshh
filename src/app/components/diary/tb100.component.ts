@@ -5,6 +5,7 @@ import { TbEintrag } from '../../apis';
 import { AppState } from '../../app.state';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { Global } from '../../services';
+import { DiaryService } from '../../services/diary.service';
 
 @Component({
   selector: 'app-tb100',
@@ -15,31 +16,82 @@ export class Tb100Component implements OnInit {
 
   // Section 1
   diary: Observable<TbEintrag[]>;
-  seldate: Date;
+  date: Date;
+  entry: string;
+  angelegt: string;
+  geaendert: string;
+  private datumAlt: Date;
+  private eintragAlt: string;
+  private geladen: boolean;
 
   // Section 2
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
   }
 
   ngOnInit() {
-    this.seldate = Global.today();
-    this.seldate.setDate(this.seldate.getDate() + 1);
+    this.date = Global.today();
+    this.date.setDate(this.date.getDate() + 1);
+    this.entry = 'leeeeeer';
   }
 
   public onDateChange(datum: Date) {
-    this.seldate = datum;
+    this.date = datum;
     //this.tbservice.setDatum(datum);
     // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
-    //this.bearbeiteEintraege(true, true);
+    this.bearbeiteEintraege(true, true);
   }
 
-  AddTbEintrag(datum: string, eintrag: string) {
-    this.store.dispatch(new TbEintragActions.AddTbEintrag(
-      {datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc'}));
+  private ladeEintraege(datum: Date) {
+
+    if (datum != null) {
+      this.date = datum;
+      this.diaryservice.getEintrag(this.date).then(e => {
+        if (e == null) {
+          this.eintragAlt = null;
+          this.entry = null;
+          this.angelegt = null;
+          this.geaendert = null;
+        } else {
+          this.eintragAlt = e.eintrag;
+          this.entry = e.eintrag;
+          this.angelegt = Global.formatDatumVon(e.angelegtAm, e.angelegtVon);
+          this.geaendert = Global.formatDatumVon(e.geaendertAm, e.geaendertVon);
+        }
+        this.datumAlt = new Date(this.date.getTime());
+      });
+    }
   }
 
-  RemoveTbEintrag(index: number) {
-    this.store.dispatch(new TbEintragActions.RemoveTbEintrag(index) )
+  /**
+ * Lesen der Einträge ausgehend vom aktuellen Datum. Evtl. wird vorher der aktuelle Eintrag gespeichert.
+ * @param speichern True, wenn vorher gespeichert werden soll.
+ * @param laden True, wenn Einträge geladen werden sollen.
+ */
+  private bearbeiteEintraege(speichern: boolean, laden: boolean) {
+
+    // Rekursion vermeiden
+    if (speichern && this.geladen) {
+      // alten Eintrag von vorher merken
+      let alt = this.eintragAlt;
+      let neu = Global.trim(this.entry);
+      // nur speichern, wenn etwas geändert ist.
+      if ((Global.nes(alt) !== Global.nes(neu)) || alt !== neu) {
+        /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
+      }
+    }
+    if (laden) {
+      this.ladeEintraege(this.date);
+      this.geladen = true;
+    }
+  }
+
+  SaveTbEintrag(datum: string, eintrag: string) {
+    this.store.dispatch(new TbEintragActions.SaveTbEintrag(
+      { datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc' }));
+  }
+
+  LoadTbEintrag(index: number) {
+    this.store.dispatch(new TbEintragActions.LoadTbEintrag(index));
   }
 }

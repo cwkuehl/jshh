@@ -14,7 +14,8 @@ import { Fz700Component } from './components/private/fz700/fz700.component';
 import { Tb100Component } from './components/diary/tb100.component';
 
 import { JshhDatabase } from './components/database/database';
-import { IdbService, DiaryService, PrivateService } from './services';
+import { IdbService, PrivateService } from './services';
+import { DiaryService } from './services/diary.service';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule } from '@ngrx/store';
