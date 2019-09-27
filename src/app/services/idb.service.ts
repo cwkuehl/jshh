@@ -3,14 +3,15 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 
 import { Parameter } from '../apis/parameter';
 import { BaseService } from './base.service';
+import { JshhDatabase } from '../components/database/database';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdbService extends BaseService {
 
-  constructor(private storage: StorageMap) {
-    super();
+  constructor(private storage: StorageMap, db: JshhDatabase) {
+    super(db);
     this.saveDb(new Blob());
     let user: Parameter = { schluessel: 'DB', wert: 'abc', angelegtAm: new Date(), angelegtVon: 'Hallo' };
     this.storage.set('user', user).subscribe(() => {});

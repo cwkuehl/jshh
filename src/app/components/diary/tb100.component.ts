@@ -16,6 +16,8 @@ export class Tb100Component implements OnInit {
 
   // Section 1
   diary: Observable<TbEintrag[]>;
+  userId: string;
+
   date: Date;
   entry: string;
   angelegt: string;
@@ -27,12 +29,13 @@ export class Tb100Component implements OnInit {
   // Section 2
   constructor(private store: Store<AppState>, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
+    store.select('userId').subscribe(x => this.userId = x);
   }
 
   ngOnInit() {
     this.date = Global.today();
-    this.date.setDate(this.date.getDate() + 1);
-    this.entry = 'leeeeeer';
+    //this.date.setDate(this.date.getDate() + 1);
+    //this.entry = 'leeeeeer';
   }
 
   public onDateChange(datum: Date) {
@@ -73,11 +76,15 @@ export class Tb100Component implements OnInit {
     // Rekursion vermeiden
     if (speichern && this.geladen) {
       // alten Eintrag von vorher merken
-      let alt = this.eintragAlt;
+      let alt = Global.trim(this.eintragAlt);
       let neu = Global.trim(this.entry);
       // nur speichern, wenn etwas geändert ist.
       if ((Global.nes(alt) !== Global.nes(neu)) || alt !== neu) {
         /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
+        // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
+        //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
+        this.store.dispatch(new TbEintragActions.SaveTbEintrag(
+          { datum: this.datumAlt, eintrag: this.entry }));
       }
     }
     if (laden) {
@@ -88,7 +95,7 @@ export class Tb100Component implements OnInit {
 
   SaveTbEintrag(datum: string, eintrag: string) {
     this.store.dispatch(new TbEintragActions.SaveTbEintrag(
-      { datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: 'abc' }));
+      { datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: this.userId }));
   }
 
   LoadTbEintrag(index: number) {

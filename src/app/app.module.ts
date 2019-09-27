@@ -35,7 +35,7 @@ import { DateComponent } from './components/comp/date/date.component';
   imports: [
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    StoreModule.forRoot({ diary: DiaryReducer.reducer }),
+    StoreModule.forRoot({ userId: DiaryReducer.reducerUserId, diary: DiaryReducer.reducer }),
     EffectsModule.forRoot([AppEffects])
   ],
   providers: [

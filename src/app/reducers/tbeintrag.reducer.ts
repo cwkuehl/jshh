@@ -24,3 +24,12 @@ export function reducer(state: TbEintrag[] = [initialState], action: TbEintragAc
       return state;
   }
 }
+
+export function reducerUserId(state: string = 'User', action: TbEintragActions.Actions) {
+
+  // Section 3
+  switch(action.type) {
+    default:
+      return state;
+  }
+}
