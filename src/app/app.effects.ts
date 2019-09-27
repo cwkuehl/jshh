@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { from, EMPTY, throwError, of, pipe, Observable } from 'rxjs';
+import { from, empty , EMPTY, throwError, of, pipe, Observable } from 'rxjs';
 import { tap, map, take, mergeMap, catchError, switchMap, mapTo } from 'rxjs/operators';
 
 import { Action } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { JshhDatabase } from './components/database/database';
 import { TbEintrag } from './apis';
 import { DiaryService } from './services/diary.service';
 
-const toPayload = <T>(action: { payload: T }) => action.payload;
+//const toPayload = <T>(action: { payload: T }) => action.payload;
 
 @Injectable()
 export class AppEffects {
@@ -26,6 +26,8 @@ export class AppEffects {
     ofType<TbEintragActions.SaveTbEintrag>(TbEintragActions.SAVE_TB_EINTRAG),
     //mergeMap(x => from(this.db.table<TbEintrag>('TbEintrag').where('datum').equals(x.payload.datum).first()))
     mergeMap(x => from(this.diaryservice.saveEntry(x.payload.datum, x.payload.eintrag))), // OK
+    //map(a => new TbEintragActions.SaveTbEintrag(a)),
+    map(a => new TbEintragActions.LoadTbEintrag(null)),
     //mapTo<any, any>(() => EMPTY),
     //mergeMap(x => from(this.db.table<TbEintrag, Date>('TbEintrag').put(x.payload))), // OK
     //map(x => x.payload),
@@ -42,9 +44,9 @@ export class AppEffects {
     //   console.log('Handling error locally and rethrowing it...', e);
     //   return throwError(e);
     // }) // Loggen und Fehler behalten.
-    //catchError(e => e.pipe(mapTo(new TbEintragActions.ErrorTbEintrag(e))))
-    //catchError(e => of(new TbEintragActions.ErrorTbEintrag(e)))
-  ), { dispatch: false }
+    //catchError(e => empty().pipe(mapTo(new TbEintragActions.ErrorTbEintrag(e))))
+    catchError(e => of(new TbEintragActions.ErrorTbEintrag(e)))
+  ), //{ dispatch: false }
   );
 
   // @Effect()

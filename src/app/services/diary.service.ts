@@ -55,7 +55,7 @@ export class DiaryService extends BaseService {
     return this.db.TbEintrag.delete(e);
   }
 
-  public saveEntry(datum: Date, eintrag: string): Dexie.Promise<any> {
+  public saveEntry(datum: Date, eintrag: string): Dexie.Promise<TbEintrag> {
 
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);
@@ -81,6 +81,7 @@ export class DiaryService extends BaseService {
         // leeren Eintrag löschen
         this.deleteTbEintrag(daten, datum);
       }
+      return tbEintrag;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
   }
 
