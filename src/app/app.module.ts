@@ -19,7 +19,7 @@ import { DiaryService } from './services/diary.service';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule } from '@ngrx/store';
-import { reducer } from './reducers/tbeintrag.reducer';
+import  * as DiaryReducer from './reducers/tbeintrag.reducer';
 import { AppEffects } from './app.effects';
 import { DateComponent } from './components/comp/date/date.component';
 
@@ -35,7 +35,7 @@ import { DateComponent } from './components/comp/date/date.component';
   imports: [
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    StoreModule.forRoot({ diary: reducer }),
+    StoreModule.forRoot({ diary: DiaryReducer.reducer }),
     EffectsModule.forRoot([AppEffects])
   ],
   providers: [
