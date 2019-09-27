@@ -6,6 +6,7 @@ import { AppState } from '../../app.state';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { Global } from '../../services';
 import { DiaryService } from '../../services/diary.service';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-tb100',
@@ -26,14 +27,19 @@ export class Tb100Component implements OnInit {
   private eintragAlt: string;
   private geladen: boolean;
 
+  error: string = '';
+
   // Section 2
-  constructor(private store: Store<AppState>, private diaryservice: DiaryService) {
+  constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
     store.select('userId').subscribe(x => this.userId = x);
+    this.actions$.pipe(ofType<TbEintragActions.ErrorTbEintrag>(TbEintragActions.ERROR_TB_EINTRAG))
+      .subscribe(a => this.error = a.payload);
   }
 
   ngOnInit() {
     this.date = Global.today();
+    this.bearbeiteEintraege(false, true); // Zuerst nur laden.
     //this.date.setDate(this.date.getDate() + 1);
     //this.entry = 'leeeeeer';
   }
@@ -83,6 +89,7 @@ export class Tb100Component implements OnInit {
         /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
+        this.error = null;
         this.store.dispatch(new TbEintragActions.SaveTbEintrag(
           { datum: this.datumAlt, eintrag: this.entry }));
       }

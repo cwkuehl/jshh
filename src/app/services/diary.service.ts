@@ -74,6 +74,7 @@ export class DiaryService extends BaseService {
       } else if (!leer) {
         if (eintrag !== tbEintrag.eintrag) {
           tbEintrag.eintrag = eintrag;
+          //return Dexie.Promise.reject('Fehler beim Ändern.');
           this.iuTbEintrag(daten, tbEintrag);
         }
       } else {

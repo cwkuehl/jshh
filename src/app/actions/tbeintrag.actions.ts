@@ -5,6 +5,7 @@ import { TbEintrag } from './../apis'
 // Section 2
 export const SAVE_TB_EINTRAG = '[TB_EINTRAG] Save'
 export const LOAD_TB_EINTRAG = '[TB_EINTRAG] Load'
+export const ERROR_TB_EINTRAG = '[TB_EINTRAG] Error'
 
 // Section 3
 export class SaveTbEintrag implements Action {
@@ -19,5 +20,11 @@ export class LoadTbEintrag implements Action {
     constructor(public payload: number) {}
 }
 
+export class ErrorTbEintrag implements Action {
+  readonly type = ERROR_TB_EINTRAG
+
+  constructor(public payload: string) {}
+}
+
 // Section 4
-export type Actions = SaveTbEintrag | LoadTbEintrag
+export type Actions = SaveTbEintrag | LoadTbEintrag | ErrorTbEintrag
