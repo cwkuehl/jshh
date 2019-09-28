@@ -14,7 +14,7 @@
 </form>
 
 <div *ngIf="error">
-  {{ error }}
+  <ngb-alert type="danger" (close)="error = null">{{ error }}</ngb-alert>
 </div>
 
 <div class="row" *ngIf="diary">

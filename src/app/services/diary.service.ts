@@ -5,6 +5,9 @@ import { Observable, from, of, range } from 'rxjs';
 import { TbEintrag, Kontext } from '../apis';
 import { Global } from '.';
 import Dexie from 'dexie';
+import { Action } from '@ngrx/store';
+import * as TbEintragActions from '../actions/tbeintrag.actions'
+import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -47,12 +50,23 @@ export class DiaryService extends BaseService {
     return this.db.TbEintrag.put(e);
   }
 
-  deleteTbEintrag(daten: Kontext, e: Date): Dexie.Promise<void> {
+  // deleteTbEintrag(daten: Kontext, e: Date): Dexie.Promise<void> {
 
-    if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
-    }
-    return this.db.TbEintrag.delete(e);
+  //   if (daten == null || e == null) {
+  //     return Dexie.Promise.reject('Parameter fehlt');
+  //   }
+  //   return this.db.TbEintrag.delete(e);
+  // }
+
+  public saveEntryOb(datum: Date, eintrag: string): Observable<Action> {
+    var ob = new Observable<Action>(s => {
+      this.saveEntry(datum, eintrag)
+        .then(a => s.next(new TbEintragActions.EmptyTbEintrag()))
+        //.catch(e => s.error(e))
+        .catch(e => s.next(new TbEintragActions.ErrorTbEintrag(e)))
+        .finally(() => s.complete());
+    });
+    return ob;
   }
 
   public saveEntry(datum: Date, eintrag: string): Dexie.Promise<TbEintrag> {
@@ -64,22 +78,34 @@ export class DiaryService extends BaseService {
     }
     eintrag = Global.trim(eintrag);
     let leer = Global.nes(eintrag);
+    //const x = await this.db.TbEintrag.get(datum);
     return this.getTbEintrag(datum).then((tbEintrag: TbEintrag) => {
       // console.log('Then: ' + tbEintrag);
       if (tbEintrag == null) {
         if (!leer) {
           tbEintrag = { datum: datum, eintrag: eintrag, angelegtAm: null, angelegtVon: null, geaendertAm: null, geaendertVon: null };
-          this.iuTbEintrag(daten, tbEintrag);
+          //this.iuTbEintrag(daten, tbEintrag);
+          return this.iuTbEintrag(daten, tbEintrag).then(r => {
+            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+          });
         }
       } else if (!leer) {
         if (eintrag !== tbEintrag.eintrag) {
           tbEintrag.eintrag = eintrag;
           //return Dexie.Promise.reject('Fehler beim Ändern.');
-          this.iuTbEintrag(daten, tbEintrag);
+          //this.iuTbEintrag(daten, tbEintrag);
+          return this.iuTbEintrag(daten, tbEintrag).then(r => {
+            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+          });
         }
       } else {
         // leeren Eintrag löschen
-        this.deleteTbEintrag(daten, datum);
+        if (datum == null)
+          return Dexie.Promise.reject('Fehler beim Löschen.');
+        return this.db.TbEintrag.delete(datum).then(r => {
+          return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+        });
+        //this.deleteTbEintrag(daten, datum);
       }
       return tbEintrag;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));

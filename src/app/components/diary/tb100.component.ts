@@ -79,6 +79,7 @@ export class Tb100Component implements OnInit {
  */
   private bearbeiteEintraege(speichern: boolean, laden: boolean) {
 
+    this.error = null;
     // Rekursion vermeiden
     if (speichern && this.geladen) {
       // alten Eintrag von vorher merken
@@ -89,7 +90,6 @@ export class Tb100Component implements OnInit {
         /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
-        this.error = null;
         this.store.dispatch(new TbEintragActions.SaveTbEintrag(
           { datum: this.datumAlt, eintrag: this.entry }));
       }

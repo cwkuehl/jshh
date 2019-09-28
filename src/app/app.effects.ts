@@ -22,32 +22,38 @@ export class AppEffects {
     // }, e => { console.log('AppEffects addTbEintrag Fehler: ' + e) });
   }
 
-  addTbEintrag$ = createEffect(() => this.actions$.pipe(
+  saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType<TbEintragActions.SaveTbEintrag>(TbEintragActions.SAVE_TB_EINTRAG),
-    //mergeMap(x => from(this.db.table<TbEintrag>('TbEintrag').where('datum').equals(x.payload.datum).first()))
-    mergeMap(x => from(this.diaryservice.saveEntry(x.payload.datum, x.payload.eintrag))), // OK
-    //map(a => new TbEintragActions.SaveTbEintrag(a)),
-    map(a => new TbEintragActions.LoadTbEintrag(null)),
-    //mapTo<any, any>(() => EMPTY),
-    //mergeMap(x => from(this.db.table<TbEintrag, Date>('TbEintrag').put(x.payload))), // OK
-    //map(x => x.payload),
-    //tap((x) => console.log("tap: " + x.payload.datum)),
-    //this.db.store()
-    //map((x) => x),
-    // mergeMap(() => EMPTY //this.moviesService.getAll()
-    //   .pipe(
-    //     map(movies => ({ type: '[Movies API] Movies Loaded Success', payload: movies })),
-    //     catchError(() => EMPTY)
-    //   ))
-    //catchError(e => of([])), // Fehler verschlucken
-    // catchError(e => {
-    //   console.log('Handling error locally and rethrowing it...', e);
-    //   return throwError(e);
-    // }) // Loggen und Fehler behalten.
-    //catchError(e => empty().pipe(mapTo(new TbEintragActions.ErrorTbEintrag(e))))
-    catchError(e => of(new TbEintragActions.ErrorTbEintrag(e)))
-  ), //{ dispatch: false }
-  );
+    mergeMap(x => this.diaryservice.saveEntryOb(x.payload.datum, x.payload.eintrag)),
+    catchError(e => of(new TbEintragActions.ErrorTbEintrag(e))) // Effect wird beendet.
+  ));
+
+  // addTbEintrag$ = createEffect(() => this.actions$.pipe(
+  //   ofType<TbEintragActions.SaveTbEintrag>(TbEintragActions.SAVE_TB_EINTRAG),
+  //   //mergeMap(x => from(this.db.table<TbEintrag>('TbEintrag').where('datum').equals(x.payload.datum).first()))
+  //   mergeMap(x => from(this.diaryservice.saveEntry(x.payload.datum, x.payload.eintrag))), // OK
+  //   //map(a => new TbEintragActions.SaveTbEintrag(a)),
+  //   map(a => new TbEintragActions.LoadTbEintrag(null)),
+  //   //mapTo<any, any>(() => EMPTY),
+  //   //mergeMap(x => from(this.db.table<TbEintrag, Date>('TbEintrag').put(x.payload))), // OK
+  //   //map(x => x.payload),
+  //   //tap((x) => console.log("tap: " + x.payload.datum)),
+  //   //this.db.store()
+  //   //map((x) => x),
+  //   // mergeMap(() => EMPTY //this.moviesService.getAll()
+  //   //   .pipe(
+  //   //     map(movies => ({ type: '[Movies API] Movies Loaded Success', payload: movies })),
+  //   //     catchError(() => EMPTY)
+  //   //   ))
+  //   //catchError(e => of([])), // Fehler verschlucken
+  //   // catchError(e => {
+  //   //   console.log('Handling error locally and rethrowing it...', e);
+  //   //   return throwError(e);
+  //   // }) // Loggen und Fehler behalten.
+  //   //catchError(e => empty().pipe(mapTo(new TbEintragActions.ErrorTbEintrag(e))))
+  //   catchError(e => of(new TbEintragActions.ErrorTbEintrag(e)))
+  // ), //{ dispatch: false }
+  // );
 
   // @Effect()
   // addTbEintrag$: Observable<Action> = this.actions$.pipe(
@@ -68,6 +74,4 @@ export class AppEffects {
   //     //   .map(books => new book.SearchCompleteAction(books))
   //     //   .catch(() => of(new book.SearchCompleteAction([])));
   //   }));
-
-
 }
