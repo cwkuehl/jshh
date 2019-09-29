@@ -26,7 +26,7 @@ export function reducer(state: TbEintrag[] = [initialState], action: TbEintragAc
   }
 }
 
-export function reducerUserId(state: string = 'User', action: TbEintragActions.Actions) {
+export function reducerUserId(state: string = 'Benutzer', action: TbEintragActions.Actions) {
 
   switch(action.type) {
     default:

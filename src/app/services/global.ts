@@ -110,7 +110,9 @@ export class Global {
     }
     let s = '';
     if (datum !== null) {
-      s = datum.toLocaleDateString() + ' ' + datum.toLocaleTimeString();
+      //s = datum.toLocaleDateString() + ' ' + datum.toLocaleTimeString();
+      s = datum.toISOString();
+      s = s.substring(0, 10) + ' ' + s.substring(11, 19);
     }
     if (!Global.nes(von)) {
       s += ' von ' + von;
