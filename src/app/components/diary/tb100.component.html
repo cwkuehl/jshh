@@ -13,6 +13,10 @@
   </div>
 </form>
 
+<div *ngIf="guid">
+  <ngb-alert type="success" (close)="onUuid()">{{ guid }}</ngb-alert>
+</div>
+
 <div *ngIf="error">
   <ngb-alert type="danger" (close)="error = null">{{ error }}</ngb-alert>
 </div>

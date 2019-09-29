@@ -7,6 +7,7 @@ import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { Global } from '../../services';
 import { DiaryService } from '../../services/diary.service';
 import { Actions, ofType } from '@ngrx/effects';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-tb100',
@@ -28,6 +29,7 @@ export class Tb100Component implements OnInit {
   private geladen: boolean;
 
   error: string = '';
+  guid: string = '';
 
   // Section 2
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
@@ -35,6 +37,7 @@ export class Tb100Component implements OnInit {
     store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(ofType<TbEintragActions.ErrorTbEintrag>(TbEintragActions.ERROR_TB_EINTRAG))
       .subscribe(a => this.error = a.payload);
+    this.guid = uuid();
   }
 
   ngOnInit() {
@@ -49,6 +52,10 @@ export class Tb100Component implements OnInit {
     //this.tbservice.setDatum(datum);
     // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
     this.bearbeiteEintraege(true, true);
+  }
+
+  onUuid(): void {
+    this.guid = uuid();
   }
 
   private ladeEintraege(datum: Date) {
