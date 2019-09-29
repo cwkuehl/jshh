@@ -18,6 +18,6 @@ export class AppComponent {
   }
 
   clearErrorGlobal() {
-    this.store.dispatch(new GlobalActions.ClearErrorGlobal());
+    this.store.dispatch(GlobalActions.ClearErrorGlobal());
   }
 }
