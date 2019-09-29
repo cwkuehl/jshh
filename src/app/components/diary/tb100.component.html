@@ -3,12 +3,20 @@
 <form>
   <div class="form-row">
     <div class="form-group col-3">
-      <label for="entrydate">Datum</label>
+      <label class="control-label" for="entrydate">Datum</label>
       <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
+      <label class="control-label mt-3" for="created" *ngIf="angelegt">Angelegt</label>
+      <p class="form-control-static">{{angelegt}}</p>
+      <label class="control-label" for="changed" *ngIf="geaendert">Geändert</label>
+      <p class="form-control-static">{{geaendert}}</p>
     </div>
     <div class="form-group col-9">
-        <label for="eintrag">Eintrag</label>
-        <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="10" cols="30"></textarea>
+      <label for="eintrag">Eintrag</label>
+      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="10" cols="30"></textarea>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-3">
     </div>
   </div>
 </form>
@@ -39,22 +47,3 @@
 
   <button (click)="SaveTbEintrag(datum.value,eintrag.value)">Add a day</button>
 </div>
-
-<div class="jumbotron">
-  <div class="container">
-    <ngb-alert type="success" [dismissible]="false">
-      Bootstrap is working!
-    </ngb-alert>
-
-    <h1>
-      <i class="fa fa-bath" aria-hidden="true"></i>
-      And so is Font Awesome!
-    </h1>
-  </div>
-</div>
-
-<p>
-  <ngb-alert [dismissible]="true">
-    <strong>Warning!</strong> Better check yourself, you're not looking too good.
-  </ngb-alert>
-</p>

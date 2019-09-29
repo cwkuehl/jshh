@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { TbEintrag } from '../../apis';
 import { AppState } from '../../app.state';
-import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { Global } from '../../services';
 import { DiaryService } from '../../services/diary.service';
-import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   selector: 'app-tb100',
@@ -15,7 +15,6 @@ import { Actions, ofType } from '@ngrx/effects';
 })
 export class Tb100Component implements OnInit {
 
-  // Section 1
   diary: Observable<TbEintrag[]>;
   userId: string;
 
