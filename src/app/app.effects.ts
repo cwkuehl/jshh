@@ -21,7 +21,7 @@ export class AppEffects {
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.SaveTbEintrag),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload.datum, x.payload.eintrag)),
-    //catchError(e => of(new GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
+    catchError(e => of(GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
   ));
 
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
