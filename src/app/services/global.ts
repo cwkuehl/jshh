@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 /** Globale Funktionen */
 export class Global {
 
@@ -116,4 +118,10 @@ export class Global {
     return s;
   }
 
+  public static getUID(): string {
+    var s = uuid();
+    if (s.length > 35)
+      s = s.substring(0,8) + s.substring(9); // Erstes - entfernen.
+    return s;
+  }
 }

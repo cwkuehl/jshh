@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 import * as TbEintragActions from '../actions/tbeintrag.actions'
+import * as GlobalActions from '../actions/global.actions'
 
 // Section 1
 const initialState: TbEintrag = {
@@ -27,8 +28,19 @@ export function reducer(state: TbEintrag[] = [initialState], action: TbEintragAc
 
 export function reducerUserId(state: string = 'User', action: TbEintragActions.Actions) {
 
-  // Section 3
   switch(action.type) {
+    default:
+      return state;
+  }
+}
+
+export function reducerGlobalError(state: string = '', action: GlobalActions.Actions) {
+
+  switch(action.type) {
+    case GlobalActions.SET_ERROR_GLOBAL:
+      return action.payload;
+    case GlobalActions.CLEAR_ERROR_GLOBAL:
+      return '';
     default:
       return state;
   }

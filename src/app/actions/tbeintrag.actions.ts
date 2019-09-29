@@ -1,14 +1,12 @@
-// Section 1
 import { Action } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 
-// Section 2
 export const SAVE_TB_EINTRAG = '[TB_EINTRAG] Save'
 export const LOAD_TB_EINTRAG = '[TB_EINTRAG] Load'
 export const EMPTY_TB_EINTRAG = '[TB_EINTRAG] Empty'
 export const ERROR_TB_EINTRAG = '[TB_EINTRAG] Error'
 
-// Section 3
+/* Speichern eines Tagebucheintrags */
 export class SaveTbEintrag implements Action {
     readonly type = SAVE_TB_EINTRAG
 
@@ -21,17 +19,18 @@ export class LoadTbEintrag implements Action {
     constructor(public payload: number) {}
 }
 
+/* Action, die nichts machts. */
 export class EmptyTbEintrag implements Action {
   readonly type = EMPTY_TB_EINTRAG
 
   constructor() {}
 }
 
+/* Fehler bei der Tagebuch-Verarbeitung. */
 export class ErrorTbEintrag implements Action {
   readonly type = ERROR_TB_EINTRAG
 
   constructor(public payload: string) {}
 }
 
-// Section 4
 export type Actions = SaveTbEintrag | LoadTbEintrag | EmptyTbEintrag | ErrorTbEintrag

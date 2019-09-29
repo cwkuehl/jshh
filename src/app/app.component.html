@@ -1,4 +1,7 @@
 <div class="container">
   <app-menu></app-menu>
+  <div *ngIf="globalError$ | async as globalError">
+    <ngb-alert type="danger" (close)="clearErrorGlobal()">{{ globalError }}</ngb-alert>
+  </div>
   <router-outlet></router-outlet>
 </div>
