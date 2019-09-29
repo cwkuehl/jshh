@@ -31,19 +31,3 @@
     <ngb-alert type="danger" (close)="error = null">{{ error }}</ngb-alert>
   </div>
 </div>
-
-<div class="row" *ngIf="diary">
-  <ul>
-    <li *ngFor="let d of diary | async; let i = index" (click)="RemoveTbEintrag(i)">
-        {{ d.datum | date:'yyyy-MM-dd' }} {{ d.eintrag }}
-    </li>
-  </ul>
-</div>
-
-<div class="left">
-
-  <input type="text" placeholder="Datum" #datum>
-  <input type="text" placeholder="Eintrag" #eintrag>
-
-  <button (click)="SaveTbEintrag(datum.value,eintrag.value)">Add a day</button>
-</div>

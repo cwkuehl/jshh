@@ -32,7 +32,7 @@ export class Tb100Component implements OnInit {
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
     store.select('userId').subscribe(x => this.userId = x);
-    this.actions$.pipe(ofType<TbEintragActions.ErrorTbEintrag>(TbEintragActions.ERROR_TB_EINTRAG))
+    this.actions$.pipe(ofType(TbEintragActions.ErrorTbEintrag))
       .subscribe(a => this.error = a.payload);
     this.onUuid();
   }
@@ -52,7 +52,7 @@ export class Tb100Component implements OnInit {
   }
 
   createError() {
-    this.store.dispatch(new TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
+    this.store.dispatch(TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
   }
 
   onUuid(): void {
@@ -98,7 +98,7 @@ export class Tb100Component implements OnInit {
         /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
-        this.store.dispatch(new TbEintragActions.SaveTbEintrag(
+        this.store.dispatch(TbEintragActions.SaveTbEintrag(
           { datum: this.datumAlt, eintrag: this.entry }));
       }
     }
@@ -106,14 +106,5 @@ export class Tb100Component implements OnInit {
       this.ladeEintraege(this.date);
       this.geladen = true;
     }
-  }
-
-  SaveTbEintrag(datum: string, eintrag: string) {
-    this.store.dispatch(new TbEintragActions.SaveTbEintrag(
-      { datum: Global.toDate(datum), eintrag: eintrag, angelegtAm: Global.now(), angelegtVon: this.userId }));
-  }
-
-  LoadTbEintrag(index: number) {
-    this.store.dispatch(new TbEintragActions.LoadTbEintrag(index));
   }
 }

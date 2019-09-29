@@ -61,9 +61,9 @@ export class DiaryService extends BaseService {
   public saveEntryOb(datum: Date, eintrag: string): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.saveEntry(datum, eintrag)
-        .then(a => s.next(new TbEintragActions.EmptyTbEintrag()))
+        .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
         //.catch(e => s.error(e))
-        .catch(e => s.next(new TbEintragActions.ErrorTbEintrag(e)))
+        .catch(e => s.next(TbEintragActions.ErrorTbEintrag(e)))
         .finally(() => s.complete());
     });
     return ob;

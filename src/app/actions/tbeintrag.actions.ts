@@ -1,36 +1,14 @@
-import { Action } from '@ngrx/store'
+import { Action, createAction, union } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 
-export const SAVE_TB_EINTRAG = '[TB_EINTRAG] Save'
-export const LOAD_TB_EINTRAG = '[TB_EINTRAG] Load'
-export const EMPTY_TB_EINTRAG = '[TB_EINTRAG] Empty'
-export const ERROR_TB_EINTRAG = '[TB_EINTRAG] Error'
-
 /* Speichern eines Tagebucheintrags */
-export class SaveTbEintrag implements Action {
-    readonly type = SAVE_TB_EINTRAG
-
-    constructor(public payload: TbEintrag) {}
-}
-
-export class LoadTbEintrag implements Action {
-    readonly type = LOAD_TB_EINTRAG
-
-    constructor(public payload: number) {}
-}
+export const SaveTbEintrag = createAction('[TB_EINTRAG] Save', (payload: TbEintrag) => ({payload}));
 
 /* Action, die nichts machts. */
-export class EmptyTbEintrag implements Action {
-  readonly type = EMPTY_TB_EINTRAG
-
-  constructor() {}
-}
+export const EmptyTbEintrag = createAction('[TB_EINTRAG] Empty');
 
 /* Fehler bei der Tagebuch-Verarbeitung. */
-export class ErrorTbEintrag implements Action {
-  readonly type = ERROR_TB_EINTRAG
+export const ErrorTbEintrag = createAction('[TB_EINTRAG] Error', (payload: string = '') => ({payload}));
 
-  constructor(public payload: string) {}
-}
-
-export type Actions = SaveTbEintrag | LoadTbEintrag | EmptyTbEintrag | ErrorTbEintrag
+const all = union({SaveTbEintrag, EmptyTbEintrag, ErrorTbEintrag});
+export type TbEintragActionsUnion = typeof all;
