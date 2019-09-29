@@ -23,21 +23,13 @@ export function reducer(state: TbEintrag[] = [initialState], action: TbEintragAc
   }
 }
 
-export function reducerUserId(state: string = 'Benutzer', action: GlobalActions.GlobalActionsUnion) {
+export const reducerUserId = createReducer(
+  'Benutzer',
+);
 
-  switch(action.type) {
-    default:
-      return state;
-  }
-}
-
-export function reducerReplicationServer(state: string = '192.168.2.110', action: GlobalActions.GlobalActionsUnion) {
-
-  switch(action.type) {
-    default:
-      return state;
-  }
-}
+export const reducerReplicationServer = createReducer(
+  '192.168.2.110',
+);
 
 export const reducerGlobalError = createReducer(
   '',
