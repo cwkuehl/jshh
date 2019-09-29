@@ -38,6 +38,7 @@ import { DateComponent } from './components/comp/date/date.component';
     StoreModule.forRoot({
       globalError: DiaryReducer.reducerGlobalError,
       userId: DiaryReducer.reducerUserId,
+      replicationServer: DiaryReducer.reducerReplicationServer,
       diary: DiaryReducer.reducer
     }),
     EffectsModule.forRoot([AppEffects])

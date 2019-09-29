@@ -1,4 +1,3 @@
-import { Action } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 import * as TbEintragActions from '../actions/tbeintrag.actions'
 import * as GlobalActions from '../actions/global.actions'
@@ -23,7 +22,15 @@ export function reducer(state: TbEintrag[] = [initialState], action: TbEintragAc
   }
 }
 
-export function reducerUserId(state: string = 'Benutzer', action: TbEintragActions.Actions) {
+export function reducerUserId(state: string = 'Benutzer', action: GlobalActions.Actions) {
+
+  switch(action.type) {
+    default:
+      return state;
+  }
+}
+
+export function reducerReplicationServer(state: string = '192.168.2.110', action: GlobalActions.Actions) {
 
   switch(action.type) {
     default:
