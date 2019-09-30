@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { TbEintrag } from 'src/app/apis';
+import { TbEintrag, Parameter, MaReplikation } from 'src/app/apis';
 import { Injectable } from '@angular/core';
 import { Global } from 'src/app/services';
 import { Store } from '@ngrx/store';
@@ -11,6 +11,8 @@ const DB_NAME = 'jshh_app';
 export class JshhDatabase extends Dexie {
   userId: string;
 
+  public MaReplikation: Dexie.Table<MaReplikation, string>;
+  public Parameter: Dexie.Table<Parameter, string>;
   public TbEintrag: Dexie.Table<TbEintrag, Date>;
 
   constructor(private store: Store<AppState>) {
@@ -19,6 +21,13 @@ export class JshhDatabase extends Dexie {
     this.version(1).stores({
       TbEintrag: '&datum,eintrag' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
+    this.version(2).stores({
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      TbEintrag: '&datum,eintrag' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+    });
+    this.MaReplikation = this.table('MaReplikation');
+    this.Parameter = this.table('Parameter');
     this.TbEintrag = this.table('TbEintrag');
     //this.TbEintrag.put({datum: Global.date(26,9,2019), eintrag: 'Hallo', angelegtAm: Global.now(), angelegtVon: 'abc'});
     //this.TbEintrag.put({datum: Global.date(27,9,2019), eintrag: 'Hallo2', angelegtAm: Global.now(), angelegtVon: 'abc'});

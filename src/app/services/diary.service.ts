@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
-import { JshhDatabase } from '../components/database/database';
-import { Observable, from, of, range } from 'rxjs';
-import { TbEintrag, Kontext } from '../apis';
-import { Global } from '.';
-import Dexie from 'dexie';
 import { Action } from '@ngrx/store';
-import * as TbEintragActions from '../actions/tbeintrag.actions'
-import { reject } from 'q';
+import Dexie from 'dexie';
+import { Observable, of } from 'rxjs';
+import { Global } from '.';
+import * as TbEintragActions from '../actions/tbeintrag.actions';
+import { Kontext, TbEintrag } from '../apis';
+import { JshhDatabase } from '../components/database/database';
+import { BaseService } from './base.service';
 
 @Injectable({
   providedIn: 'root'
@@ -49,14 +48,6 @@ export class DiaryService extends BaseService {
     }
     return this.db.TbEintrag.put(e);
   }
-
-  // deleteTbEintrag(daten: Kontext, e: Date): Dexie.Promise<void> {
-
-  //   if (daten == null || e == null) {
-  //     return Dexie.Promise.reject('Parameter fehlt');
-  //   }
-  //   return this.db.TbEintrag.delete(e);
-  // }
 
   public saveEntryOb(datum: Date, eintrag: string): Observable<Action> {
     var ob = new Observable<Action>(s => {
@@ -109,9 +100,5 @@ export class DiaryService extends BaseService {
       }
       return tbEintrag;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
-  }
-
-  load(): Observable<TbEintrag> {
-    return of({datum: Global.today(), eintrag: 'Hallo', angelegtAm: Global.now(), angelegtVon: 'abc'});
   }
 }

@@ -1,4 +1,6 @@
 export { Kontext } from './kontext';
-export { Revision } from './revision';
+export { MaReplikation } from './mareplikation';
 export { Parameter } from './parameter';
+export { Revision } from './revision';
 export { TbEintrag } from './tbeintrag';
+

@@ -11,7 +11,7 @@ export const reducer = createReducer(
 
 export const reducerUserId = createReducer(
   'Benutzer',
-  on(GlobalActions.LoginGlobal, (state, { payload }) => Global.nes(payload) ? 'Benutzer' : payload),
+  on(GlobalActions.LoginOkGlobal, (state, { payload }) => Global.nes(payload) ? 'Benutzer' : payload),
 );
 
 export const reducerReplicationServer = createReducer(

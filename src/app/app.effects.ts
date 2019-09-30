@@ -6,10 +6,11 @@ import { tap, map, take, mergeMap, catchError, switchMap, mapTo } from 'rxjs/ope
 import * as TbEintragActions from './actions/tbeintrag.actions'
 import * as GlobalActions from './actions/global.actions'
 import { DiaryService } from './services/diary.service';
+import { UserService } from './services/user.service';
 
 @Injectable()
 export class AppEffects {
-  constructor(private actions$: Actions, private diaryservice: DiaryService/*, private db: JshhDatabase*/) {
+  constructor(private actions$: Actions, private diaryservice: DiaryService, private userservice: UserService) {
     // this.addTbEintrag$.subscribe(x => {
     //   //if (x instanceof TbEintragActions.AddTbEintrag) {
     //   //console.log('AppEffects addTbEintrag: xxx ' + x.payload.datum);
@@ -27,5 +28,10 @@ export class AppEffects {
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.ErrorTbEintrag),
     map(a => GlobalActions.SetErrorGlobal(a.payload)),
+  ));
+
+  loginGlobal$ = createEffect(() => this.actions$.pipe(
+    ofType(GlobalActions.LoginGlobal),
+    mergeMap(a => this.userservice.loginOb(a.payload)),
   ));
 }
