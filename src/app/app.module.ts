@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-rounting.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { environment } from '../environments/environment';
@@ -19,7 +20,7 @@ import { DiaryService } from './services/diary.service';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule, Store } from '@ngrx/store';
-import  * as DiaryReducer from './reducers/tbeintrag.reducer';
+import * as DiaryReducer from './reducers/tbeintrag.reducer';
 import * as GlobalActions from './actions/global.actions';
 import { AppEffects } from './app.effects';
 import { DateComponent } from './components/comp/date/date.component';
@@ -46,7 +47,8 @@ import { AppState } from './app.state';
       replicationServer: DiaryReducer.reducerReplicationServer,
       diary: DiaryReducer.reducer
     }),
-    EffectsModule.forRoot([AppEffects])
+    EffectsModule.forRoot([AppEffects]),
+    HttpClientModule
   ],
   providers: [
     JshhDatabase, IdbService, DiaryService, PrivateService,
@@ -62,4 +64,4 @@ export class AppModule {
     userservice.getParameter('UserId').then(p => store.dispatch(GlobalActions.LoginOkGlobal(p.wert)))
   }
 
- }
+}

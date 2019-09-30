@@ -7,13 +7,14 @@ import * as TbEintragActions from '../actions/tbeintrag.actions';
 import { Kontext, TbEintrag } from '../apis';
 import { JshhDatabase } from '../components/database/database';
 import { BaseService } from './base.service';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DiaryService extends BaseService {
 
-  constructor(db: JshhDatabase) {
+  constructor(db: JshhDatabase, private http: HttpClient) {
     super(db);
   }
 
@@ -100,5 +101,17 @@ export class DiaryService extends BaseService {
       }
       return tbEintrag;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
+  }
+
+  find(): Observable<any> {
+    //let url = 'http://www.angular.at/api/flight'; // OK
+    let url = 'http://127.0.0.1:4201/aaa';
+    //let url = '/favicon.ico';
+    let headers = new HttpHeaders().set('Accept', 'application/json');
+    let params = {
+        'table': 'TB_Eintrag',
+    };
+    //return this.http.get(url, {params, headers});
+    return this.http.get(url);
   }
 }
