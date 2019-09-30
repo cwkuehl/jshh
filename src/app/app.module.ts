@@ -22,6 +22,7 @@ import { StoreModule } from '@ngrx/store';
 import  * as DiaryReducer from './reducers/tbeintrag.reducer';
 import { AppEffects } from './app.effects';
 import { DateComponent } from './components/comp/date/date.component';
+import { Am000Component } from './components/user/am000/am000.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { DateComponent } from './components/comp/date/date.component';
     MenuComponent,
     Fz700Component,
     Tb100Component,
-    DateComponent
+    DateComponent,
+    Am000Component
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,

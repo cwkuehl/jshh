@@ -4,16 +4,17 @@
   </div>
   <div class="col-md-2">
     <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle>Benutzer</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button class="btn btn-secondary" id="dd1" ngbDropdownToggle>Benutzer</button>
+      <div ngbDropdownMenu aria-labelledby="dd1">
+        <button ngbDropdownItem [routerLink]="'/login'">Anmeldung</button>
         <button ngbDropdownItem>Einstellungen</button>
       </div>
     </div>
   </div>
   <div class="col-md-2">
     <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-secondary" id="dropdownBasic1" ngbDropdownToggle>Privat</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Privat</button>
+      <div ngbDropdownMenu aria-labelledby="dd2">
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
         <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem>Sudoku</button>
