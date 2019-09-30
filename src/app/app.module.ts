@@ -18,11 +18,14 @@ import { IdbService, PrivateService } from './services';
 import { DiaryService } from './services/diary.service';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import  * as DiaryReducer from './reducers/tbeintrag.reducer';
+import * as GlobalActions from './actions/global.actions';
 import { AppEffects } from './app.effects';
 import { DateComponent } from './components/comp/date/date.component';
 import { Am000Component } from './components/user/am000/am000.component';
+import { UserService } from './services/user.service';
+import { AppState } from './app.state';
 
 
 @NgModule({
@@ -52,10 +55,11 @@ import { Am000Component } from './components/user/am000/am000.component';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(private idbservice: IdbService) {
+  constructor(private userservice: UserService, private store: Store<AppState>) {
     console.log(environment.production ? "Produktion" : "Entwicklung");
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
+    userservice.getParameter('UserId').then(p => store.dispatch(GlobalActions.LoginOkGlobal(p.wert)))
   }
 
  }
