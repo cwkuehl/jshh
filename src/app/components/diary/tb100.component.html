@@ -2,7 +2,7 @@
 
 <form>
   <div class="form-row">
-    <div class="form-group col-3">
+    <div class="form-group col-sm-6 col-md-3">
       <label class="control-label" for="entrydate">Datum</label>
       <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
       <label class="control-label mt-3" for="created" *ngIf="angelegt">Angelegt</label>
@@ -10,7 +10,7 @@
       <label class="control-label" for="changed" *ngIf="geaendert">Geändert</label>
       <p class="form-control-static">{{geaendert}}</p>
     </div>
-    <div class="form-group col-9">
+    <div class="form-group col-sm-6 col-md-9">
       <label for="eintrag">Eintrag</label>
       <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="10" cols="30"></textarea>
     </div>
