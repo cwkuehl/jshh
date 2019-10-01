@@ -112,6 +112,8 @@ export class DiaryService extends BaseService {
         'table': 'TB_Eintrag',
     };
     //return this.http.get(url, {params, headers});
-    return this.http.get(url);
+    //return this.http.get(url);
+    let daten = this.getKontext();
+    return this.http.post(url, daten.benutzerId);
   }
 }
