@@ -1,7 +1,7 @@
 import * as TbEintragActions from '../actions/tbeintrag.actions'
 import * as GlobalActions from '../actions/global.actions'
 import { createReducer, on } from '@ngrx/store';
-import { Global } from '../services';
+import { Global } from '../services/global';
 
 
 export const reducer = createReducer(

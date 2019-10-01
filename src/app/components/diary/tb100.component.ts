@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { TbEintrag } from '../../apis';
 import { AppState } from '../../app.state';
-import { Global } from '../../services';
+import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
 
 @Component({

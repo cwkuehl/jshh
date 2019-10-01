@@ -1,9 +1,9 @@
 import Dexie from 'dexie';
-import { TbEintrag, Parameter, MaReplikation } from 'src/app/apis';
+import { TbEintrag, Parameter, MaReplikation } from '../../apis';
 import { Injectable } from '@angular/core';
-import { Global } from 'src/app/services';
+import { Global } from '../../services/global';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { AppState } from '../../app.state';
 
 const DB_NAME = 'jshh_app';
 

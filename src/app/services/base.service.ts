@@ -1,6 +1,6 @@
 import { JshhDatabase } from '../components/database/database';
 import { Kontext } from '../apis';
-import { Global } from '.';
+import { Global } from './global';
 
 export class BaseService {
 

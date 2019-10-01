@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import Dexie from 'dexie';
 import { Observable, of } from 'rxjs';
-import { Global } from '.';
+import { Global } from './global';
 import * as GlobalActions from '../actions/global.actions';
 import { Kontext, TbEintrag, Parameter } from '../apis';
 import { JshhDatabase } from '../components/database/database';

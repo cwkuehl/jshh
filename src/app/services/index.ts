@@ -1,4 +1,4 @@
-export { Global } from './global';
+//export { Global } from './global';
 export { IdbService } from './idb.service';
-//export { DiaryService } from './diary.service';
+export { DiaryService } from './diary.service';
 export { PrivateService } from './private.service';
