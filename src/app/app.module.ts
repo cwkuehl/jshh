@@ -62,6 +62,7 @@ export class AppModule {
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
     userservice.getParameter('UserId').then(p => store.dispatch(GlobalActions.LoginOkGlobal(p.wert)))
+    userservice.getParameter('ReplicationServer').then(p => store.dispatch(GlobalActions.SaveReplOkGlobal(p.wert)))
   }
 
 }

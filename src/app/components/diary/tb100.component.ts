@@ -7,6 +7,7 @@ import { TbEintrag } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
+import { HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tb100',
@@ -56,8 +57,30 @@ export class Tb100Component implements OnInit {
   }
 
   json() {
-    this.diaryservice.find().subscribe(a => console.log('json: ' + a)
-      , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
+    //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
+    //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
+    this.diaryservice.find().subscribe((event: HttpEvent<any>) => {
+      switch (event.type) {
+        case HttpEventType.Sent:
+          console.log('Request sent!');
+          break;
+        case HttpEventType.ResponseHeader:
+          console.log('Response header received!');
+          break;
+        case HttpEventType.DownloadProgress:
+          const kbLoaded = Math.round(event.loaded / 1024);
+          console.log(`Download in progress! ${kbLoaded}Kb loaded`);
+          break;
+        case HttpEventType.Response:
+          console.log('😺 Done!', event.body);
+      }
+    }, (err: HttpErrorResponse) => {
+      if (err.error instanceof ErrorEvent) {
+        console.error('An client-side or network error occurred:', err.error.message);
+      } else {
+        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`));
+      }
+    });
   }
 
   onUuid(): void {

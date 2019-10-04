@@ -64,4 +64,31 @@ export class UserService extends BaseService {
       });
     });
   }
+
+  public saveParamOb(key: string, value: string): Observable<Action> {
+    var ob = new Observable<Action>(s => {
+      this.saveParam(key, value)
+        .then(a => s.next(GlobalActions.SaveReplOkGlobal(a.wert)))
+        .catch(e => s.next(GlobalActions.SetErrorGlobal(e)))
+        .finally(() => s.complete());
+    });
+    return ob;
+  }
+
+  public saveParam(key: string, value: string): Dexie.Promise<Parameter> {
+
+    if (Global.nes(key)) {
+      return Dexie.Promise.reject('Der Schlüssel darf nicht leer sein.');
+    }
+    let daten = this.getKontext();
+    return this.getParameter(key).then((parameter: Parameter) => {
+      if (parameter == null)
+        parameter = { schluessel: key, wert: value };
+      else
+        parameter.wert = value;
+      return this.iuParameter(daten, parameter).then(r => {
+        return new Dexie.Promise<Parameter>((resolve) => { resolve(parameter); })
+      });
+    });
+  }
 }

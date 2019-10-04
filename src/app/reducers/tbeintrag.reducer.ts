@@ -9,14 +9,18 @@ export const reducer = createReducer(
   on(TbEintragActions.SaveTbEintrag, (state, { payload }) => [...state, payload]),
 );
 
+const InitUserId = 'Benutzer';
+
 export const reducerUserId = createReducer(
-  'Benutzer',
-  on(GlobalActions.LoginOkGlobal, (state, { payload }) => Global.nes(payload) ? 'Benutzer' : payload),
+  InitUserId,
+  on(GlobalActions.LoginOkGlobal, (state, { payload }) => Global.nes(payload) ? InitUserId : payload),
 );
 
+const InitReplicationServer = 'https://localhost:4202/';
+
 export const reducerReplicationServer = createReducer(
-  //'192.168.2.110',
-  'localhost:4199',
+  InitReplicationServer,
+  on(GlobalActions.SaveReplOkGlobal, (state, { payload }) => Global.nes(payload) ? InitReplicationServer : payload),
 );
 
 export const reducerGlobalError = createReducer(

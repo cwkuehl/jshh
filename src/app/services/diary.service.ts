@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import Dexie from 'dexie';
 import { Observable, of } from 'rxjs';
 import { Global } from './global';
@@ -8,14 +8,18 @@ import { Kontext, TbEintrag } from '../apis';
 import { JshhDatabase } from '../components/database/database';
 import { BaseService } from './base.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { AppState } from '../app.state';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DiaryService extends BaseService {
 
-  constructor(db: JshhDatabase, private http: HttpClient) {
+  replicationServer: string;
+
+  constructor(private store: Store<AppState>, db: JshhDatabase, private http: HttpClient) {
     super(db);
+    store.select('replicationServer').subscribe(a => this.replicationServer = a);
   }
 
   getEintrag(datum: Date): Dexie.Promise<TbEintrag> {
@@ -105,8 +109,12 @@ export class DiaryService extends BaseService {
 
   find(): Observable<any> {
     //let url = 'http://www.angular.at/api/flight'; // OK
-    let url = 'http://127.0.0.1:4201/aaa';
+    //let url = 'http://127.0.0.1:4201/aaa';
+    //let url = 'https://127.0.0.1:4202/aaa';
+    //let url = 'https://ubuntu-W65-67SR:4202/aaa';
+    //let url = 'https://localhost:4202/aaa';
     //let url = '/favicon.ico';
+    let url = this.replicationServer;
     let headers = new HttpHeaders().set('Accept', 'application/json');
     let params = {
         'table': 'TB_Eintrag',
@@ -115,5 +123,11 @@ export class DiaryService extends BaseService {
     //return this.http.get(url);
     let daten = this.getKontext();
     return this.http.post(url, daten.benutzerId);
+    //   , { reportProgress: false,
+    //   headers: new HttpHeaders({
+    //     'Content-Type':  'application/json',
+    //     'Authorization': 'my-auth-token'
+    //   })
+    // }); //, {headers});
   }
 }
