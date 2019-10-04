@@ -26,7 +26,7 @@ export class AppEffects {
     ofType(TbEintragActions.SaveTbEintrag),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload.datum, x.payload.eintrag)),
     catchError(e => of(GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
-  ));
+  ), { resubscribeOnError: false });
 
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.ErrorTbEintrag),
@@ -42,4 +42,10 @@ export class AppEffects {
     ofType(GlobalActions.LoginOkGlobal),
     tap(() => this.router.navigate(['/']))
   ), { dispatch: false });
+
+  saveReplGlobal$ = createEffect(() => this.actions$.pipe(
+    ofType(GlobalActions.SaveReplGlobal),
+    mergeMap(a => this.userservice.saveParamOb('ReplicationServer', a.payload)),
+  ));
+
 }
