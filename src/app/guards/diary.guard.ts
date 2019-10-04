@@ -5,8 +5,8 @@ export class Tb100DeactivateGuard implements CanDeactivate<Tb100Component> {
 
   canDeactivate(target: Tb100Component) {
     //if(target.hasChanges()){
-        return window.confirm('Do you really want to cancel?');
+    //    return window.confirm('Do you really want to cancel?');
     //}
-    //return true;
+    return true;
   }
 }
