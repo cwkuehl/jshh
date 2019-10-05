@@ -115,19 +115,16 @@ export class DiaryService extends BaseService {
     //let url = 'https://localhost:4202/aaa';
     //let url = '/favicon.ico';
     let url = this.replicationServer;
-    let headers = new HttpHeaders().set('Accept', 'application/json');
+    let headers = new HttpHeaders({
+      'Accept': 'application/json',
+      //'Authorization': 'my-auth-token'
+    }); // ().set('Accept', 'application/json');
     let params = {
         'table': 'TB_Eintrag',
     };
     //return this.http.get(url, {params, headers});
     //return this.http.get(url);
     let daten = this.getKontext();
-    return this.http.post(url, daten.benutzerId);
-    //   , { reportProgress: false,
-    //   headers: new HttpHeaders({
-    //     'Content-Type':  'application/json',
-    //     'Authorization': 'my-auth-token'
-    //   })
-    // }); //, {headers});
+    return this.http.post(url, daten.benutzerId, { reportProgress: false, params, headers });
   }
 }

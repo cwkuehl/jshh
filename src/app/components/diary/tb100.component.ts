@@ -59,27 +59,36 @@ export class Tb100Component implements OnInit {
   json() {
     //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
     //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
-    this.diaryservice.find().subscribe((event: HttpEvent<any>) => {
-      switch (event.type) {
-        case HttpEventType.Sent:
-          console.log('Request sent!');
-          break;
-        case HttpEventType.ResponseHeader:
-          console.log('Response header received!');
-          break;
-        case HttpEventType.DownloadProgress:
-          const kbLoaded = Math.round(event.loaded / 1024);
-          console.log(`Download in progress! ${kbLoaded}Kb loaded`);
-          break;
-        case HttpEventType.Response:
-          console.log('😺 Done!', event.body);
-      }
-    }, (err: HttpErrorResponse) => {
-      if (err.error instanceof ErrorEvent) {
-        console.error('An client-side or network error occurred:', err.error.message);
-      } else {
-        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`));
-      }
+    this.diaryservice.find().subscribe(
+    (a: any) => {
+      console.log("JSON Next: " + a);
+    },
+    // (event: HttpEvent<any>) => {
+    //   switch (event.type) {
+    //     case HttpEventType.Sent:
+    //       console.log('Request sent!');
+    //       break;
+    //     case HttpEventType.ResponseHeader:
+    //       console.log('Response header received!');
+    //       break;
+    //     case HttpEventType.DownloadProgress:
+    //       const kbLoaded = Math.round(event.loaded / 1024);
+    //       console.log(`Download in progress! ${kbLoaded}Kb loaded`);
+    //       break;
+    //     case HttpEventType.Response:
+    //       console.log('😺 Done!', event.body);
+    //       break;
+    //   }
+    // },
+    (err: HttpErrorResponse) => {
+      //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
+      //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
+      var msg: string = err.error.error ? err.error.error.message
+        : (err.message + ((err.error instanceof ProgressEvent) ? '' : ` (${err.error})`));
+      return this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.statusText} (${err.status})  Details: ${msg}`));
+    },
+    () => {
+      console.log("JSON: Ende");
     });
   }
 
