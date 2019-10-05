@@ -61,7 +61,7 @@ export class Tb100Component implements OnInit {
     //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
     this.diaryservice.find().subscribe(
     (a: any) => {
-      console.log("JSON Next: " + a);
+      console.log("JSON Next: " + JSON.stringify(a));
     },
     // (event: HttpEvent<any>) => {
     //   switch (event.type) {
