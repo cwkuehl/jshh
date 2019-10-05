@@ -56,7 +56,24 @@ export class Tb100Component implements OnInit {
     this.store.dispatch(TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
   }
 
+  handleError(err: HttpErrorResponse): string {
+      //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
+      //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
+      var msg: string = err.error.error ? err.error.error.message
+        : (err.message + ((err.error instanceof ProgressEvent) ? '' : ` (${err.error})`));
+      var msg2 = `Server error: ${err.statusText} (${err.status})  Details: ${msg}`;
+      return msg2;
+    }
+
   json() {
+    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read').subscribe(
+      (a: TbEintrag[]) => {
+        console.log("JSON Next: " + JSON.stringify(a));
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
+      },
+    );
     //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
     //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
     this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read').subscribe(
@@ -64,11 +81,7 @@ export class Tb100Component implements OnInit {
       console.log("JSON Next: " + JSON.stringify(a));
     },
     (err: HttpErrorResponse) => {
-      //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
-      //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
-      var msg: string = err.error.error ? err.error.error.message
-        : (err.message + ((err.error instanceof ProgressEvent) ? '' : ` (${err.error})`));
-      return this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.statusText} (${err.status})  Details: ${msg}`));
+      return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
     },
     () => {
       // console.log("JSON: Ende");
