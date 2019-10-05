@@ -3,7 +3,7 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
-import { TbEintrag } from '../../apis';
+import { TbEintrag, FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
@@ -59,27 +59,10 @@ export class Tb100Component implements OnInit {
   json() {
     //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
     //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
-    this.diaryservice.find().subscribe(
-    (a: any) => {
+    this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read').subscribe(
+    (a: FzNotiz[]) => {
       console.log("JSON Next: " + JSON.stringify(a));
     },
-    // (event: HttpEvent<any>) => {
-    //   switch (event.type) {
-    //     case HttpEventType.Sent:
-    //       console.log('Request sent!');
-    //       break;
-    //     case HttpEventType.ResponseHeader:
-    //       console.log('Response header received!');
-    //       break;
-    //     case HttpEventType.DownloadProgress:
-    //       const kbLoaded = Math.round(event.loaded / 1024);
-    //       console.log(`Download in progress! ${kbLoaded}Kb loaded`);
-    //       break;
-    //     case HttpEventType.Response:
-    //       console.log('😺 Done!', event.body);
-    //       break;
-    //   }
-    // },
     (err: HttpErrorResponse) => {
       //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
       //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
@@ -88,7 +71,7 @@ export class Tb100Component implements OnInit {
       return this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.statusText} (${err.status})  Details: ${msg}`));
     },
     () => {
-      console.log("JSON: Ende");
+      // console.log("JSON: Ende");
     });
   }
 

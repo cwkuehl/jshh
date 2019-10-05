@@ -107,7 +107,7 @@ export class DiaryService extends BaseService {
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
   }
 
-  find(): Observable<any> {
+  postServer<T>(table: string, mode: string): Observable<T> {
     //let url = 'http://www.angular.at/api/flight'; // OK
     //let url = 'http://127.0.0.1:4201/aaa';
     //let url = 'https://127.0.0.1:4202/aaa';
@@ -120,11 +120,12 @@ export class DiaryService extends BaseService {
       //'Authorization': 'my-auth-token'
     }); // ().set('Accept', 'application/json');
     let params = {
-        'table': 'TB_Eintrag',
+      'table': table,
+      'mode': mode,
     };
     //return this.http.get(url, {params, headers});
     //return this.http.get(url);
     let daten = this.getKontext();
-    return this.http.post(url, daten.benutzerId, { reportProgress: false, params, headers });
+    return this.http.post<T>(url, daten.benutzerId, { reportProgress: false, params, headers });
   }
 }
