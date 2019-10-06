@@ -2,7 +2,7 @@ import * as TbEintragActions from '../actions/tbeintrag.actions'
 import * as GlobalActions from '../actions/global.actions'
 import { createReducer, on } from '@ngrx/store';
 import { Global } from '../services/global';
-
+import { environment } from '../../environments/environment';
 
 export const reducer = createReducer(
   [],
@@ -19,7 +19,7 @@ export const reducerUserId = createReducer(
 const InitReplicationServer = 'https://localhost:4202/';
 
 export const reducerReplicationServer = createReducer(
-  InitReplicationServer,
+  environment.production ? InitReplicationServer : 'http://localhost:4201/',
   on(GlobalActions.SaveReplOkGlobal, (state, { payload }) => Global.nes(payload) ? InitReplicationServer : payload),
 );
 

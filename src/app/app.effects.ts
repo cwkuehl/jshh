@@ -48,4 +48,9 @@ export class AppEffects {
     mergeMap(a => this.userservice.saveParamOb('ReplicationServer', a.payload)),
   ));
 
+  saveReplOkGlobal$ = createEffect(() => this.actions$.pipe(
+    ofType(GlobalActions.SaveReplOkGlobal),
+    tap(() => this.router.navigate(['/']))
+  ), { dispatch: false });
+
 }

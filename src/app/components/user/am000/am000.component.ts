@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { LoginGlobal, SaveReplGlobal } from 'src/app/actions/global.actions';
+import { LoginGlobal } from 'src/app/actions/global.actions';
 
 @Component({
   selector: 'app-am000',
@@ -10,11 +10,9 @@ import { LoginGlobal, SaveReplGlobal } from 'src/app/actions/global.actions';
 })
 export class Am000Component implements OnInit {
   userId: string;
-  replicationServer: string;
 
   constructor(private store: Store<AppState>) {
     store.select('userId').subscribe(a => this.userId = a);
-    store.select('replicationServer').subscribe(a => this.replicationServer = a);
   }
 
   ngOnInit() {
@@ -22,6 +20,5 @@ export class Am000Component implements OnInit {
 
   login() {
     this.store.dispatch(LoginGlobal(this.userId));
-    this.store.dispatch(SaveReplGlobal(this.replicationServer));
   }
 }

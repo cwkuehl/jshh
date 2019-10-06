@@ -6,14 +6,10 @@
       <label class="control-label" for="user">Benutzer</label>
       <input type="text" class="form-control" name="user" [(ngModel)]="userId" placeholder="Angemeldeter Benutzer">
     </div>
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="url">Replikation-URL</label>
-      <input type="text" class="form-control" name="url" [(ngModel)]="replicationServer" placeholder="URL für Replikationsserver">
-    </div>
   </div>
   <div class="form-row">
     <div class="form-group col">
-      <button type="button" class="btn btn-primary" (click)="login()">Anmelden</button>
+      <button type="submit" class="btn btn-primary" (click)="login()">Anmelden</button>
     </div>
   </div>
 </form>

@@ -27,6 +27,7 @@ import { DateComponent } from './components/comp/date/date.component';
 import { Am000Component } from './components/user/am000/am000.component';
 import { UserService } from './services/user.service';
 import { AppState } from './app.state';
+import { Am500Component } from './components/user/am500/am500.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { AppState } from './app.state';
     Fz700Component,
     Tb100Component,
     DateComponent,
-    Am000Component
+    Am000Component,
+    Am500Component
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,
