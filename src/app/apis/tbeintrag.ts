@@ -1,6 +1,6 @@
 import { Revision } from './revision';
 
 export interface TbEintrag extends Revision {
-  datum: Date;
+  datum: string;
   eintrag: string;
 }

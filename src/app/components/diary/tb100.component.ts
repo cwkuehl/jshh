@@ -102,7 +102,7 @@ export class Tb100Component implements OnInit {
 
     if (datum != null) {
       this.date = datum;
-      this.diaryservice.getEintrag(this.date).then(e => {
+      this.diaryservice.getEintrag(Global.toString(this.date)).then(e => {
         if (e == null) {
           this.eintragAlt = null;
           this.entry = null;
@@ -138,7 +138,7 @@ export class Tb100Component implements OnInit {
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
         this.store.dispatch(TbEintragActions.SaveTbEintrag(
-          { datum: this.datumAlt, eintrag: this.entry }));
+          { datum: Global.toString(this.datumAlt), eintrag: this.entry }));
       }
     }
     if (laden) {

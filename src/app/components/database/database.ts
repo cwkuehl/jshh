@@ -13,7 +13,7 @@ export class JshhDatabase extends Dexie {
 
   public MaReplikation: Dexie.Table<MaReplikation, string>;
   public Parameter: Dexie.Table<Parameter, string>;
-  public TbEintrag: Dexie.Table<TbEintrag, Date>;
+  public TbEintrag: Dexie.Table<TbEintrag, string>;
 
   constructor(private store: Store<AppState>) {
     super(DB_NAME);

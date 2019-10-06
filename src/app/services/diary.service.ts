@@ -22,7 +22,7 @@ export class DiaryService extends BaseService {
     store.select('replicationServer').subscribe(a => this.replicationServer = a);
   }
 
-  getEintrag(datum: Date): Dexie.Promise<TbEintrag> {
+  getEintrag(datum: string): Dexie.Promise<TbEintrag> {
 
     if (datum == null) {
       return Dexie.Promise.resolve(null);
@@ -30,7 +30,7 @@ export class DiaryService extends BaseService {
     return Dexie.Promise.resolve(this.getTbEintrag(datum));
   }
 
-  getTbEintrag(datum: Date): Dexie.Promise<TbEintrag> {
+  getTbEintrag(datum: string): Dexie.Promise<TbEintrag> {
 
     // console.log('getEintrag: ' + datum);
     // let l = this.db.TbEintrag.where('datum').equals(datum).first().finally(
@@ -39,7 +39,7 @@ export class DiaryService extends BaseService {
     return l;
   }
 
-  iuTbEintrag(daten: Kontext, e: TbEintrag): Dexie.Promise<Date> {
+  iuTbEintrag(daten: Kontext, e: TbEintrag): Dexie.Promise<string> {
 
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
@@ -54,7 +54,7 @@ export class DiaryService extends BaseService {
     return this.db.TbEintrag.put(e);
   }
 
-  public saveEntryOb(datum: Date, eintrag: string): Observable<Action> {
+  public saveEntryOb(datum: string, eintrag: string): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.saveEntry(datum, eintrag)
         .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
@@ -65,7 +65,7 @@ export class DiaryService extends BaseService {
     return ob;
   }
 
-  public saveEntry(datum: Date, eintrag: string): Dexie.Promise<TbEintrag> {
+  public saveEntry(datum: string, eintrag: string): Dexie.Promise<TbEintrag> {
 
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);

@@ -36,6 +36,16 @@ export class Global {
     return d;
   }
 
+  /**
+   * Liefert Datum m Format yyyy-MM-dd.
+   * @param d Betroffenes Datum.
+   */
+  public static toString(d: Date): string {
+    let s = d.toISOString();
+    s = s.substring(0, 10);
+    return s;
+  }
+
   public static today(): Date {
     let d = new Date();
     //d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0));
