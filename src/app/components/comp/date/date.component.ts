@@ -10,8 +10,8 @@ import { Global } from '../../../services/global';
 })
 export class DateComponent implements OnInit {
 
-  @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
-  @Input() public date: Date;
+  @Output() dateChange = new EventEmitter<Date>();
+  @Input() date: Date;
 
   seldate: NgbDateStruct;
 
@@ -40,6 +40,15 @@ export class DateComponent implements OnInit {
     d.open();
     d.startDate = {year: this.seldate.year + 10, month: this.seldate.month, day: this.seldate.day};
     d.navigateTo({year: this.seldate.year, month: this.seldate.month, day: this.seldate.day});
+  }
+
+  onSeldateChange(x: any) {
+    if (typeof x === 'string')
+      return;
+    this.seldate = x;
+    var d = Global.date(this.seldate.day, this.seldate.month, this.seldate.year)
+    // console.log("onSeldateChange " + d);
+    this.dateChange.next(d);
   }
 
   public onChanged(t: number = 0, m: number = 0, j: number = 0) {
