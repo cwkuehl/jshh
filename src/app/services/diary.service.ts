@@ -1,14 +1,14 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import Dexie from 'dexie';
-import { Observable, of } from 'rxjs';
-import { Global } from './global';
+import { Observable } from 'rxjs';
 import * as TbEintragActions from '../actions/tbeintrag.actions';
 import { Kontext, TbEintrag } from '../apis';
+import { AppState } from '../app.state';
 import { JshhDatabase } from '../components/database/database';
 import { BaseService } from './base.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { AppState } from '../app.state';
+import { Global } from './global';
 
 @Injectable({
   providedIn: 'root'
@@ -44,19 +44,25 @@ export class DiaryService extends BaseService {
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
-    if (e.angelegtAm == null) {
-      e.angelegtAm = daten.jetzt;
-      e.angelegtVon = daten.benutzerId;
-    } else {
-      e.geaendertAm = daten.jetzt;
-      e.geaendertVon = daten.benutzerId;
+    if (e.angelegtAm !== null && typeof e.angelegtAm == 'string')
+      e.angelegtAm = new Date(Date.parse(e.angelegtAm));
+    if (e.geaendertAm !== null && typeof e.geaendertAm == 'string')
+      e.geaendertAm = new Date(Date.parse(e.geaendertAm));
+    if (e.replid == null || e.replid != 'server') {
+      if (e.angelegtAm == null) {
+        e.angelegtAm = daten.jetzt;
+        e.angelegtVon = daten.benutzerId;
+      } else {
+        e.geaendertAm = daten.jetzt;
+        e.geaendertVon = daten.benutzerId;
+      }
     }
     return this.db.TbEintrag.put(e);
   }
 
-  public saveEntryOb(datum: string, eintrag: string): Observable<Action> {
+  public saveEntryOb(eintrag: TbEintrag): Observable<Action> {
     var ob = new Observable<Action>(s => {
-      this.saveEntry(datum, eintrag)
+      this.saveEntry(eintrag)
         .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
         //.catch(e => s.error(e))
         .catch(e => s.next(TbEintragActions.ErrorTbEintrag(e)))
@@ -65,55 +71,46 @@ export class DiaryService extends BaseService {
     return ob;
   }
 
-  public saveEntry(datum: string, eintrag: string): Dexie.Promise<TbEintrag> {
+  public saveEntry(eintrag: TbEintrag): Dexie.Promise<TbEintrag> {
 
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);
-    if (datum == null) {
+    if (eintrag == null || eintrag.datum == null) {
       return Dexie.Promise.resolve(null);
     }
-    eintrag = Global.trim(eintrag);
-    let leer = Global.nes(eintrag);
-    //const x = await this.db.TbEintrag.get(datum);
-    return this.getTbEintrag(datum).then((tbEintrag: TbEintrag) => {
+    eintrag.eintrag = Global.trim(eintrag.eintrag);
+    let leer = Global.nes(eintrag.eintrag);
+    return this.getTbEintrag(eintrag.datum).then((tbEintrag: TbEintrag) => {
       // console.log('Then: ' + tbEintrag);
       if (tbEintrag == null) {
         if (!leer) {
-          tbEintrag = { datum: datum, eintrag: eintrag, angelegtAm: null, angelegtVon: null, geaendertAm: null, geaendertVon: null };
-          //this.iuTbEintrag(daten, tbEintrag);
-          return this.iuTbEintrag(daten, tbEintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+          return this.iuTbEintrag(daten, eintrag).then(r => {
+            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(eintrag); })
           });
         }
       } else if (!leer) {
-        if (eintrag !== tbEintrag.eintrag) {
-          tbEintrag.eintrag = eintrag;
+        if (eintrag.eintrag !== tbEintrag.eintrag) {
+          tbEintrag.eintrag = eintrag.eintrag;
+          tbEintrag.replid = eintrag.replid;
           //return Dexie.Promise.reject('Fehler beim Ändern.');
-          //this.iuTbEintrag(daten, tbEintrag);
           return this.iuTbEintrag(daten, tbEintrag).then(r => {
             return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
           });
         }
       } else {
         // leeren Eintrag löschen
-        if (datum == null)
+        if (eintrag.datum == null)
           return Dexie.Promise.reject('Fehler beim Löschen.');
-        return this.db.TbEintrag.delete(datum).then(r => {
+        return this.db.TbEintrag.delete(eintrag.datum).then(r => {
           return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
         });
-        //this.deleteTbEintrag(daten, datum);
       }
       return tbEintrag;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
   }
 
   postServer<T>(table: string, mode: string): Observable<T> {
-    //let url = 'http://www.angular.at/api/flight'; // OK
-    //let url = 'http://127.0.0.1:4201/aaa';
-    //let url = 'https://127.0.0.1:4202/aaa';
-    //let url = 'https://ubuntu-W65-67SR:4202/aaa';
-    //let url = 'https://localhost:4202/aaa';
-    //let url = '/favicon.ico';
+
     let url = this.replicationServer;
     let headers = new HttpHeaders({
       'Accept': 'application/json',
@@ -123,8 +120,6 @@ export class DiaryService extends BaseService {
       'table': table,
       'mode': mode,
     };
-    //return this.http.get(url, {params, headers});
-    //return this.http.get(url);
     let daten = this.getKontext();
     return this.http.post<T>(url, daten.benutzerId, { reportProgress: false, params, headers });
   }
