@@ -17,17 +17,17 @@
   </div>
 </form>
 
-<div *ngIf="guid">
+<!-- <div *ngIf="guid">
   <ngb-alert type="success" (close)="onUuid()">{{ guid }}</ngb-alert>
-</div>
+</div> -->
 
-<div class="row">
+<!-- <div class="row">
   <button type="button" class="btn btn-primary col-md-4" (click)="createError()">Fehler erzeugen</button>
   <div class="col-md-8" *ngIf="error">
     <ngb-alert type="danger" (close)="error = null">{{ error }}</ngb-alert>
   </div>
-</div>
+</div> -->
 
 <div class="row">
-  <button type="button" class="btn btn-primary col-md-4" (click)="json()">JSON</button>
+  <button type="button" class="btn btn-primary col-md-4" (click)="readServer()">Einlesen vom Server</button>
 </div>

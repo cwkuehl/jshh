@@ -35,7 +35,7 @@ export class Tb100Component implements OnInit {
     store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(ofType(TbEintragActions.ErrorTbEintrag))
       .subscribe(a => this.error = a.payload);
-    this.onUuid();
+    //this.onUuid();
   }
 
   ngOnInit() {
@@ -52,9 +52,9 @@ export class Tb100Component implements OnInit {
     this.bearbeiteEintraege(true, true);
   }
 
-  createError() {
-    this.store.dispatch(TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
-  }
+  // createError() {
+  //   this.store.dispatch(TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
+  // }
 
   handleError(err: HttpErrorResponse): string {
       //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
@@ -65,32 +65,38 @@ export class Tb100Component implements OnInit {
       return msg2;
     }
 
-  json() {
+  readServer() {
     this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read').subscribe(
       (a: TbEintrag[]) => {
-        console.log("JSON Next: " + JSON.stringify(a));
+        a.forEach((e: TbEintrag) => {
+          //console.log(e.datum + ": " + e.eintrag);
+          this.store.dispatch(TbEintragActions.SaveTbEintrag(e));
+          });
+        //console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
         return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
       },
     );
-    //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
-    //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
-    this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read').subscribe(
-    (a: FzNotiz[]) => {
-      console.log("JSON Next: " + JSON.stringify(a));
-    },
-    (err: HttpErrorResponse) => {
-      return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
-    },
-    () => {
-      // console.log("JSON: Ende");
-    });
+    if (false) {
+      //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
+      //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
+      this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read').subscribe(
+      (a: FzNotiz[]) => {
+        console.log("JSON Next: " + JSON.stringify(a));
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
+      },
+      () => {
+        // console.log("JSON: Ende");
+      });
+    }
   }
 
-  onUuid(): void {
-    this.guid = Global.getUID();
-  }
+  // onUuid(): void {
+  //   this.guid = Global.getUID();
+  // }
 
   private ladeEintraege(datum: Date) {
 

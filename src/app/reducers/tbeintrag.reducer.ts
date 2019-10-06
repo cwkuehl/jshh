@@ -12,7 +12,7 @@ export const reducer = createReducer(
 const InitUserId = 'Benutzer';
 
 export const reducerUserId = createReducer(
-  InitUserId,
+  environment.production ? InitUserId : 'Wolfgang',
   on(GlobalActions.LoginOkGlobal, (state, { payload }) => Global.nes(payload) ? InitUserId : payload),
 );
 
