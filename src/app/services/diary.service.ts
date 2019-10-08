@@ -109,6 +109,17 @@ export class DiaryService extends BaseService {
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
   }
 
+  public deleteAllOb(): Observable<Action> {
+    var ob = new Observable<Action>(s => {
+      this.db.TbEintrag.toCollection().delete()
+        .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
+        //.catch(e => s.error(e))
+        .catch(e => s.next(TbEintragActions.ErrorTbEintrag(e)))
+        .finally(() => s.complete());
+    });
+    return ob;
+  }
+
   postServer<T>(table: string, mode: string): Observable<T> {
 
     let url = this.replicationServer;

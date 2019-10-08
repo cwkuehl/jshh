@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, asyncScheduler } from 'rxjs';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
 import { TbEintrag, FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
 import { HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { last, throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tb100',
@@ -35,6 +36,10 @@ export class Tb100Component implements OnInit {
     store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(ofType(TbEintragActions.ErrorTbEintrag))
       .subscribe(a => this.error = a.payload);
+    this.actions$.pipe(
+      ofType(TbEintragActions.LoadTbEintrag),
+      throttleTime(100, asyncScheduler, { leading: false, trailing: true })
+      ).subscribe(() => this.ladeEintraege(this.date));
     //this.onUuid();
   }
 
@@ -65,18 +70,24 @@ export class Tb100Component implements OnInit {
       return msg2;
     }
 
+  deleteDiary() {
+    this.diaryservice.deleteAllOb().subscribe(() => this.ladeEintraege(this.date));
+  }
+
   readServer() {
     this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read').subscribe(
       (a: TbEintrag[]) => {
-        a.forEach((e: TbEintrag) => {
+        a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);
           this.store.dispatch(TbEintragActions.SaveTbEintrag(e));
+          this.store.dispatch(TbEintragActions.LoadTbEintrag());
           });
         //console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
         return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
       },
+      //() => this.store.dispatch(TbEintragActions.LoadTbEintrag())
     );
     if (false) {
       //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
