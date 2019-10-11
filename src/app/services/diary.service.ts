@@ -127,11 +127,16 @@ export class DiaryService extends BaseService {
       'Accept': 'application/json',
       //'Authorization': 'my-auth-token'
     }); // ().set('Accept', 'application/json');
-    let params = {
+    // let params = {
+    //   'table': table,
+    //   'mode': mode,
+    // };
+    let daten = this.getKontext();
+    let body = JSON.stringify({
+      'token': daten.benutzerId,
       'table': table,
       'mode': mode,
-    };
-    let daten = this.getKontext();
-    return this.http.post<T>(url, daten.benutzerId, { reportProgress: false, params, headers });
+    });
+    return this.http.post<T>(url, body, { reportProgress: false, /* params, */headers });
   }
 }
