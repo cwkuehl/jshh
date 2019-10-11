@@ -75,7 +75,7 @@ export class Tb100Component implements OnInit {
   }
 
   readServer() {
-    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read').subscribe(
+    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read_12m').subscribe(
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);
