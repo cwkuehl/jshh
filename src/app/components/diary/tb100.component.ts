@@ -7,8 +7,8 @@ import { TbEintrag, FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
-import { HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
-import { last, throttleTime } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tb100',
@@ -30,7 +30,6 @@ export class Tb100Component implements OnInit {
   private geladen: boolean;
 
   error: string = '';
-  guid: string = '';
 
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
@@ -75,6 +74,11 @@ export class Tb100Component implements OnInit {
   }
 
   readServer() {
+    this.diaryservice.getTbEintragListe('server').then(a => this.readServer1(a))
+    .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
+  }
+
+  readServer1(arr: TbEintrag[]) {
     let m = Math.max(1, Global.toInt(this.months));
     this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`).subscribe(
       (a: TbEintrag[]) => {
@@ -82,7 +86,7 @@ export class Tb100Component implements OnInit {
           //console.log(e.datum + ": " + e.eintrag);
           this.store.dispatch(TbEintragActions.SaveTbEintrag(e));
           this.store.dispatch(TbEintragActions.LoadTbEintrag());
-          });
+        });
         //console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
@@ -106,10 +110,6 @@ export class Tb100Component implements OnInit {
     }
   }
 
-  // onUuid(): void {
-  //   this.guid = Global.getUID();
-  // }
-
   private ladeEintraege(datum: Date) {
 
     if (datum != null) {
@@ -123,12 +123,16 @@ export class Tb100Component implements OnInit {
         } else {
           this.eintragAlt = e.eintrag;
           this.entry = e.eintrag;
-          this.angelegt = Global.formatDatumVon(e.angelegtAm, e.angelegtVon);
+          this.angelegt = e.replid + ' ' + Global.formatDatumVon(e.angelegtAm, e.angelegtVon);
           this.geaendert = Global.formatDatumVon(e.geaendertAm, e.geaendertVon);
         }
         this.datumAlt = new Date(this.date.getTime());
       });
     }
+  }
+
+  save() {
+    this.bearbeiteEintraege(true, true);
   }
 
   /**
@@ -150,7 +154,11 @@ export class Tb100Component implements OnInit {
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
         this.store.dispatch(TbEintragActions.SaveTbEintrag(
-          { datum: Global.toString(this.datumAlt), eintrag: this.entry }));
+          { datum: Global.toString(this.datumAlt), eintrag: this.entry, replid: null }));
+        if (laden) {
+          laden = false;
+          this.store.dispatch(TbEintragActions.LoadTbEintrag());
+        }
       }
     }
     if (laden) {

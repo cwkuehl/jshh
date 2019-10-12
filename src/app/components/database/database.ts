@@ -26,6 +26,11 @@ export class JshhDatabase extends Dexie {
       Parameter: '&schluessel',
       TbEintrag: '&datum,eintrag' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
+    this.version(3).stores({
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      TbEintrag: '&datum,eintrag,replid' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+    });
     this.MaReplikation = this.table('MaReplikation');
     this.Parameter = this.table('Parameter');
     this.TbEintrag = this.table('TbEintrag');

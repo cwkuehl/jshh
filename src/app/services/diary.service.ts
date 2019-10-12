@@ -39,16 +39,20 @@ export class DiaryService extends BaseService {
     return l;
   }
 
+  getTbEintragListe(replidne: string): Dexie.Promise<TbEintrag[]> {
+
+    let l = this.db.TbEintrag.where('replid').notEqual(replidne).toArray();
+    return l;
+  }
+
   iuTbEintrag(daten: Kontext, e: TbEintrag): Dexie.Promise<string> {
 
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
-    if (e.angelegtAm !== null && typeof e.angelegtAm == 'string')
-      e.angelegtAm = new Date(Date.parse(e.angelegtAm));
-    if (e.geaendertAm !== null && typeof e.geaendertAm == 'string')
-      e.geaendertAm = new Date(Date.parse(e.geaendertAm));
-    if (e.replid == null || e.replid != 'server') {
+    if (e.replid !== 'server') {
+      //if (e.replid == null)
+      //  e.replid = Global.getUID();
       if (e.angelegtAm == null) {
         e.angelegtAm = daten.jetzt;
         e.angelegtVon = daten.benutzerId;
@@ -78,29 +82,64 @@ export class DiaryService extends BaseService {
     if (eintrag == null || eintrag.datum == null) {
       return Dexie.Promise.resolve(null);
     }
+    // Korrektur aus Import vom Server
+    if (eintrag.angelegtAm !== null && typeof eintrag.angelegtAm == 'string')
+      eintrag.angelegtAm = new Date(Date.parse(eintrag.angelegtAm));
+    if (eintrag.geaendertAm !== null && typeof eintrag.geaendertAm == 'string')
+      eintrag.geaendertAm = new Date(Date.parse(eintrag.geaendertAm));
     eintrag.eintrag = Global.trim(eintrag.eintrag);
     let leer = Global.nes(eintrag.eintrag);
     return this.getTbEintrag(eintrag.datum).then((tbEintrag: TbEintrag) => {
-      // console.log('Then: ' + tbEintrag);
       if (tbEintrag == null) {
         if (!leer) {
+          if (eintrag.replid !== 'server')
+            eintrag.replid = Global.getUID();
           return this.iuTbEintrag(daten, eintrag).then(r => {
             return new Dexie.Promise<TbEintrag>((resolve) => { resolve(eintrag); })
           });
         }
       } else if (!leer) {
+        // tbEintrag.replid alt | eintrag.replid neu | Aktion
+        // server               | null               | neue Guid, Eintrag überschreiben
+        // server               | server             | Eintrag überschreiben
+        // Guid                 | null               | Eintrag überschreiben
+        // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, Einträge zusammenkopieren
+        //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
+        //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
         if (eintrag.eintrag !== tbEintrag.eintrag) {
-          tbEintrag.eintrag = eintrag.eintrag;
-          tbEintrag.replid = eintrag.replid;
+          let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
+          if (tbEintrag.replid === 'server') {
+            if (eintrag.replid !== 'server')
+              tbEintrag.replid = Global.getUID(); // neue Guid
+          } else if (eintrag.replid === 'server') {
+            if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
+              art = 1;
+            }
+            if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
+                && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
+              art = 2;
+            }
+            if (art == 0) {
+              tbEintrag.replid = eintrag.replid;
+            }
+          }
+          if (art == 0) {
+            tbEintrag.eintrag = eintrag.eintrag;
+          } else if (art == 1) {
+            let merge = `Lokal: ${tbEintrag.eintrag}\nServer: ${eintrag.eintrag}`;
+            tbEintrag.eintrag = merge;
+          }
           //return Dexie.Promise.reject('Fehler beim Ändern.');
-          return this.iuTbEintrag(daten, tbEintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
-          });
+          if (art != 2) {
+            return this.iuTbEintrag(daten, tbEintrag).then(r => {
+              return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+            });
+          }
         }
       } else {
         // leeren Eintrag löschen
-        if (eintrag.datum == null)
-          return Dexie.Promise.reject('Fehler beim Löschen.');
+        //if (eintrag.datum == null)
+        //  return Dexie.Promise.reject('Fehler beim Löschen.');
         return this.db.TbEintrag.delete(eintrag.datum).then(r => {
           return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
         });
