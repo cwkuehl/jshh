@@ -29,8 +29,8 @@
 </div> -->
 
 <div class="row">
-  <button type="button" class="btn btn-primary col-md-4" (click)="deleteDiary()">Tagebuch Löschen</button>
-</div>
-<div class="row">
-  <button type="button" class="btn btn-primary col-md-4" (click)="readServer()">Einlesen vom Server</button>
+  <label class="control-label col-sm-2" for="months">Anzahl Monate</label>&nbsp;
+  <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">&nbsp;
+  <button type="button" class="btn btn-primary col-sm-4" (click)="readServer()">Einlesen vom Server</button>&nbsp;
+  <button type="button" class="btn btn-primary col-sm-4" (click)="deleteDiary()">Tagebuch Löschen</button>
 </div>

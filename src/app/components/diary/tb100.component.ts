@@ -19,6 +19,7 @@ export class Tb100Component implements OnInit {
 
   diary: Observable<TbEintrag[]>;
   userId: string;
+  months: string;
 
   date: Date;
   entry: string;
@@ -46,8 +47,7 @@ export class Tb100Component implements OnInit {
   ngOnInit() {
     this.date = Global.today();
     this.bearbeiteEintraege(false, true); // Zuerst nur laden.
-    //this.date.setDate(this.date.getDate() + 1);
-    //this.entry = 'leeeeeer';
+    this.months = '1';
   }
 
   public onDateChange(datum: Date) {
@@ -75,7 +75,8 @@ export class Tb100Component implements OnInit {
   }
 
   readServer() {
-    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', 'read_12m').subscribe(
+    let m = Math.max(1, Global.toInt(this.months));
+    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`).subscribe(
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);
