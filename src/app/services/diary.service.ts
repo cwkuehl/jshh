@@ -50,9 +50,9 @@ export class DiaryService extends BaseService {
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
-    if (e.replid !== 'server') {
-      //if (e.replid == null)
-      //  e.replid = Global.getUID();
+      if (e.replid === 'new') {
+        e.replid = Global.getUID();
+      } else if (e.replid !== 'server') {
       if (e.angelegtAm == null) {
         e.angelegtAm = daten.jetzt;
         e.angelegtVon = daten.benutzerId;
@@ -107,7 +107,7 @@ export class DiaryService extends BaseService {
         // server               | null               | neue Guid, Eintrag überschreiben
         // server               | server             | Eintrag überschreiben
         // Guid                 | null               | Eintrag überschreiben
-        // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, Einträge zusammenkopieren
+        // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, neue Guid, Einträge zusammenkopieren
         //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
         //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
         if (eintrag.eintrag !== tbEintrag.eintrag) {
@@ -132,6 +132,11 @@ export class DiaryService extends BaseService {
           } else if (art == 1) {
             let merge = `Lokal: ${tbEintrag.eintrag}\nServer: ${eintrag.eintrag}`;
             tbEintrag.eintrag = merge;
+            tbEintrag.replid = 'new';
+            tbEintrag.angelegtAm = eintrag.angelegtAm;
+            tbEintrag.angelegtVon = eintrag.angelegtVon;
+            tbEintrag.geaendertAm = daten.jetzt;
+            tbEintrag.geaendertVon = daten.benutzerId;
           }
           //return Dexie.Promise.reject('Fehler beim Ändern.');
           if (art != 2) {
