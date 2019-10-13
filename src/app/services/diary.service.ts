@@ -83,10 +83,14 @@ export class DiaryService extends BaseService {
       return Dexie.Promise.resolve(null);
     }
     // Korrektur aus Import vom Server
-    if (eintrag.angelegtAm !== null && typeof eintrag.angelegtAm == 'string')
-      eintrag.angelegtAm = new Date(Date.parse(eintrag.angelegtAm));
-    if (eintrag.geaendertAm !== null && typeof eintrag.geaendertAm == 'string')
+    if (eintrag.angelegtAm != null && typeof eintrag.angelegtAm == 'string') {
+      let d = new Date(Date.parse(eintrag.angelegtAm));
+      //d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+      eintrag.angelegtAm = d;
+    }
+    if (eintrag.geaendertAm != null && typeof eintrag.geaendertAm == 'string') {
       eintrag.geaendertAm = new Date(Date.parse(eintrag.geaendertAm));
+    }
     eintrag.eintrag = Global.trim(eintrag.eintrag);
     let leer = Global.nes(eintrag.eintrag);
     return this.getTbEintrag(eintrag.datum).then((tbEintrag: TbEintrag) => {

@@ -123,7 +123,7 @@ export class Tb100Component implements OnInit {
         } else {
           this.eintragAlt = e.eintrag;
           this.entry = e.eintrag;
-          this.angelegt = e.replid + ' ' + Global.formatDatumVon(e.angelegtAm, e.angelegtVon);
+          this.angelegt = Global.formatDatumVon(e.angelegtAm, e.angelegtVon) + ' (' + e.replid + ')';
           this.geaendert = Global.formatDatumVon(e.geaendertAm, e.geaendertVon);
         }
         this.datumAlt = new Date(this.date.getTime());

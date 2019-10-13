@@ -113,6 +113,7 @@ export class Global {
     return a;
   }
 
+  /* Anzeige des Datums in lokaler Zeit. */
   public static formatDatumVon(datum: Date, von: string): string {
 
     if (datum == null && Global.nes(von)) {
@@ -121,7 +122,9 @@ export class Global {
     let s = '';
     if (datum !== null) {
       //s = datum.toLocaleDateString() + ' ' + datum.toLocaleTimeString();
-      s = datum.toISOString();
+      let d = new Date(datum.getTime());
+      d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+      s = d.toISOString();
       s = s.substring(0, 10) + ' ' + s.substring(11, 19);
     }
     if (!Global.nes(von)) {
