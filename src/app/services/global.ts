@@ -41,8 +41,16 @@ export class Global {
    * @param d Betroffenes Datum.
    */
   public static toString(d: Date): string {
-    let s = d.toISOString();
-    s = s.substring(0, 10);
+    if (d == null) {
+      return '';
+    }
+    let m = d.getMonth() + 1;
+    let mm = (m < 10 ? '0' : '') + m.toString();
+    let d0 = d.getDate();
+    let dd = (d0 < 10 ? '0' : '') + d0.toString();
+    let s = `${d.getFullYear()}-${mm}-${dd}`;
+    //let s = d.toISOString(); // geht nicht wegen Local Date mit 00:00
+    //s = s.substring(0, 10);
     return s;
   }
 
@@ -53,7 +61,7 @@ export class Global {
     d.setMinutes(0);
     d.setSeconds(0);
     d.setMilliseconds(0);
-    d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+    //d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
     return d;
   }
 
@@ -62,7 +70,7 @@ export class Global {
     d.setMinutes(0);
     d.setSeconds(0);
     d.setMilliseconds(0);
-    d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+    //d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
     return d;
   }
 
