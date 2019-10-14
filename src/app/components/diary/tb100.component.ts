@@ -80,7 +80,8 @@ export class Tb100Component implements OnInit {
 
   readServer1(arr: TbEintrag[]) {
     let m = Math.max(1, Global.toInt(this.months));
-    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`).subscribe(
+    let jarr = JSON.stringify(arr);
+    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`, jarr).subscribe(
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);
@@ -97,7 +98,7 @@ export class Tb100Component implements OnInit {
     if (false) {
       //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
       //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
-      this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read').subscribe(
+      this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read', null).subscribe(
       (a: FzNotiz[]) => {
         console.log("JSON Next: " + JSON.stringify(a));
       },

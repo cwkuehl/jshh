@@ -168,13 +168,13 @@ export class DiaryService extends BaseService {
     return ob;
   }
 
-  postServer<T>(table: string, mode: string): Observable<T> {
+  postServer<T>(table: string, mode: string, data: string): Observable<T> {
 
     let url = this.replicationServer;
     let headers = new HttpHeaders({
       'Accept': 'application/json',
       //'Authorization': 'my-auth-token'
-    }); // ().set('Accept', 'application/json');
+    });
     // let params = {
     //   'table': table,
     //   'mode': mode,
@@ -184,6 +184,7 @@ export class DiaryService extends BaseService {
       'token': daten.benutzerId,
       'table': table,
       'mode': mode,
+      'data': data,
     });
     return this.http.post<T>(url, body, { reportProgress: false, /* params, */headers });
   }
