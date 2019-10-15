@@ -76,6 +76,7 @@ export class Global {
 
   public static now(): Date {
     let d = new Date();
+    d.setMilliseconds(0);
     return d;
   }
 

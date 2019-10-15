@@ -50,6 +50,7 @@ export class Tb100Component implements OnInit {
   }
 
   public onDateChange(datum: Date) {
+    this.error = null;
     this.date = datum;
     //this.tbservice.setDatum(datum);
     // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
@@ -74,13 +75,14 @@ export class Tb100Component implements OnInit {
   }
 
   readServer() {
+    this.error = null;
     this.diaryservice.getTbEintragListe('server').then(a => this.readServer1(a))
     .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
   }
 
   readServer1(arr: TbEintrag[]) {
     let m = Math.max(1, Global.toInt(this.months));
-    let jarr = JSON.stringify(arr);
+    let jarr = JSON.stringify({'TB_Eintrag': arr});
     this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`, jarr).subscribe(
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
@@ -133,6 +135,7 @@ export class Tb100Component implements OnInit {
   }
 
   save() {
+    this.error = null;
     this.bearbeiteEintraege(true, true);
   }
 
@@ -143,7 +146,6 @@ export class Tb100Component implements OnInit {
  */
   private bearbeiteEintraege(speichern: boolean, laden: boolean) {
 
-    this.error = null;
     // Rekursion vermeiden
     if (speichern && this.geladen) {
       // alten Eintrag von vorher merken
