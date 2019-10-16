@@ -103,23 +103,36 @@ export class DiaryService extends BaseService {
           });
         }
       } else if (!leer) {
-        // tbEintrag.replid alt | eintrag.replid neu | Aktion
-        // server               | null               | neue Guid, Eintrag überschreiben
-        // server               | server             | Eintrag überschreiben
-        // Guid                 | null               | Eintrag überschreiben
-        // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, neue Guid, Einträge zusammenkopieren
-        //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
-        //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
-        if (eintrag.eintrag !== tbEintrag.eintrag) {
-          let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
+        let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
+        if (eintrag.eintrag === tbEintrag.eintrag) {
+          // tbEintrag.replid alt | eintrag.replid neu | Aktion
+          // Guid                 | server             | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
+          art = 2;
+          if (tbEintrag.replid !== 'server') {
+            if (eintrag.replid === 'server') {
+              art = 0;
+              tbEintrag.replid = 'server'; // neue Guid
+              tbEintrag.angelegtAm = eintrag.angelegtAm;
+              tbEintrag.angelegtVon = eintrag.angelegtVon;
+              tbEintrag.geaendertAm = eintrag.geaendertAm;
+              tbEintrag.geaendertVon = eintrag.geaendertVon;
+            }
+          }
+        } else {
+          // tbEintrag.replid alt | eintrag.replid neu | Aktion
+          // server               | null               | neue Guid, Eintrag überschreiben
+          // server               | server             | Eintrag überschreiben
+          // Guid                 | null               | Eintrag überschreiben
+          // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, neue Guid, Einträge zusammenkopieren
+          //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
+          //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
           if (tbEintrag.replid === 'server') {
             if (eintrag.replid !== 'server')
               tbEintrag.replid = Global.getUID(); // neue Guid
           } else if (eintrag.replid === 'server') {
             if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
               art = 1;
-            }
-            if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
+            } else if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
                 && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
               art = 2;
             }
@@ -139,13 +152,13 @@ export class DiaryService extends BaseService {
             tbEintrag.geaendertVon = daten.benutzerId;
           }
           //return Dexie.Promise.reject('Fehler beim Ändern.');
-          if (art != 2) {
-            return this.iuTbEintrag(daten, tbEintrag).then(r => {
-              return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
-            });
-          }
         }
-      } else {
+        if (art != 2) {
+          return this.iuTbEintrag(daten, tbEintrag).then(r => {
+            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+          });
+        }
+    } else {
         // leeren Eintrag löschen
         //if (eintrag.datum == null)
         //  return Dexie.Promise.reject('Fehler beim Löschen.');

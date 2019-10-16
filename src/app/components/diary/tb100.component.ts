@@ -29,13 +29,9 @@ export class Tb100Component implements OnInit {
   private eintragAlt: string;
   private geladen: boolean;
 
-  error: string = '';
-
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
     store.select('userId').subscribe(x => this.userId = x);
-    this.actions$.pipe(ofType(TbEintragActions.ErrorTbEintrag))
-      .subscribe(a => this.error = a.payload);
     this.actions$.pipe(
       ofType(TbEintragActions.LoadTbEintrag),
       throttleTime(100, asyncScheduler, { leading: false, trailing: true })
@@ -50,7 +46,6 @@ export class Tb100Component implements OnInit {
   }
 
   public onDateChange(datum: Date) {
-    this.error = null;
     this.date = datum;
     //this.tbservice.setDatum(datum);
     // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
@@ -71,11 +66,12 @@ export class Tb100Component implements OnInit {
     }
 
   deleteDiary() {
+    this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
     this.diaryservice.deleteAllOb().subscribe(() => this.ladeEintraege(this.date));
   }
 
   readServer() {
-    this.error = null;
+    this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
     this.diaryservice.getTbEintragListe('server').then(a => this.readServer1(a))
     .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
   }
@@ -135,7 +131,6 @@ export class Tb100Component implements OnInit {
   }
 
   save() {
-    this.error = null;
     this.bearbeiteEintraege(true, true);
   }
 
