@@ -2,25 +2,27 @@
 
 <form>
   <div class="form-row">
-    <div class="form-group col-sm-6 col-md-3">
-      <label class="control-label" for="entrydate">Datum</label>
+    <div class="form-group col-sm-4 col-md-3">
+      <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
       <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
-      <button type="button" class="btn btn-primary" (click)="save()">Speichern</button><br>
-      <label class="control-label mt-3" for="created" *ngIf="angelegt">Angelegt</label>
-      <p class="form-control-static">{{angelegt}}</p>
-      <label class="control-label" for="changed" *ngIf="geaendert">Geändert</label>
-      <p class="form-control-static">{{geaendert}}</p>
+      <button type="button" class="btn btn-primary mt-3" (click)="save()">Speichern</button><br>
     </div>
-    <div class="form-group col-sm-6 col-md-9">
-      <label for="eintrag">Eintrag</label>
-      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="10" cols="30"></textarea>
+    <div class="form-group col-sm-4 col-md-6">
+      <label class="d-none d-md-block" for="eintrag">Eintrag</label>
+      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="5" cols="20"></textarea>
+    </div>
+    <div class="form-group col-sm-4 col-md-3">
+      <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+      <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
+      <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
+      <p class="form-control-static" title="Geändert">{{geaendert}}</p>
     </div>
   </div>
 </form>
 
 <div class="row">
-  <label class="control-label col-sm-2" for="months">Anzahl Monate</label>&nbsp;
+  <label class="control-label col-sm-2 d-none d-md-block" for="months">Anzahl Monate</label>&nbsp;
   <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">&nbsp;
-  <button type="button" class="btn btn-primary col-sm-4" (click)="readServer()">Einlesen vom Server</button>&nbsp;
-  <button type="button" class="btn btn-primary col-sm-4" (click)="deleteDiary()">Tagebuch Löschen</button>
+  <button type="button" class="btn btn-primary col-sm-2" (click)="readServer()">Server-Ablgeich</button>&nbsp;
+  <button type="button" class="btn btn-primary col-sm-2" (click)="deleteDiary()">Tagebuch löschen</button>
 </div>
