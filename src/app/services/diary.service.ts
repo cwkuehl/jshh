@@ -143,7 +143,7 @@ export class DiaryService extends BaseService {
           if (art == 0) {
             tbEintrag.eintrag = eintrag.eintrag;
           } else if (art == 1) {
-            let merge = `Lokal: ${tbEintrag.eintrag}\nServer: ${eintrag.eintrag}`;
+            let merge = `Server: ${eintrag.eintrag}\nLokal: ${tbEintrag.eintrag}`;
             tbEintrag.eintrag = merge;
             tbEintrag.replid = 'new';
             tbEintrag.angelegtAm = eintrag.angelegtAm;
