@@ -22,7 +22,8 @@
 
 <div class="row">
   <label class="control-label col-sm-2 d-none d-md-block" for="months">Anzahl Monate</label>&nbsp;
-  <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">&nbsp;
+  <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">
+  <label class="control-label col-sm-2 d-md-none d-lg-none d-xl-none" for="months"> Monat(e)</label>&nbsp;
   <button type="button" class="btn btn-primary col-sm-2" (click)="readServer()">Server-Ablgeich</button>&nbsp;
   <button type="button" class="btn btn-primary col-sm-2" (click)="deleteDiary()">Tagebuch löschen</button>
 </div>
