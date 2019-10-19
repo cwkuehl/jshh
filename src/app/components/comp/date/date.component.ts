@@ -16,9 +16,6 @@ export class DateComponent implements OnInit {
   seldate: NgbDateStruct;
 
   constructor() {
-  }
-
-  ngOnInit() {
     if (this.date == null) {
       this.seldate = this.today;
       //console.log("ngOnInit date == null");
@@ -26,10 +23,13 @@ export class DateComponent implements OnInit {
       this.seldate = {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()};
   }
 
+  ngOnInit() {
+  }
+
   get today() {
     var d = Global.today();
-    //return new Date();
-    return new NgbDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    //return new NgbDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+    return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
   }
 
   openSelection(d: any) {
@@ -45,6 +45,10 @@ export class DateComponent implements OnInit {
   onSeldateChange(x: any) {
     if (typeof x === 'string')
       return;
+    //if (x instanceof Date) {
+    //  //this.seldate = { year: x.getFullYear(), month: x.getMonth() + 1, day: x.getDate() };
+    //  return;
+    //} else
     this.seldate = x;
     var d = Global.date(this.seldate.day, this.seldate.month, this.seldate.year)
     // console.log("onSeldateChange " + d);
