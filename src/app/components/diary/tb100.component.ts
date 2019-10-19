@@ -3,6 +3,7 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Observable, asyncScheduler } from 'rxjs';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
+import * as GlobalActions from '../../actions/global.actions'
 import { TbEintrag, FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
@@ -71,6 +72,11 @@ export class Tb100Component implements OnInit {
   }
 
   readServer() {
+    if (Global.toInt(this.months) <= 0) {
+      //this.store.dispatch(GlobalActions.SetErrorGlobal('Monate müssen größer 0 sein. Global'));
+      this.store.dispatch(TbEintragActions.ErrorTbEintrag('Monate müssen größer 0 sein.'));
+      return;
+    }
     this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
     this.diaryservice.getTbEintragListe('server').then(a => this.readServer1(a))
     .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
