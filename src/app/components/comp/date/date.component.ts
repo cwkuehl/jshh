@@ -57,13 +57,13 @@ export class DateComponent implements OnInit {
 
   public onChanged(t: number = 0, m: number = 0, j: number = 0) {
     var d = Global.date(this.seldate.day, this.seldate.month, this.seldate.year)
-    if (t !== 0) {
+    if (t != 0) {
       d.setDate(d.getDate() + t);
     }
-    if (m !== 0) {
+    if (m != 0) {
       d.setMonth(d.getMonth() + m);
     }
-    if (j !== 0) {
+    if (j != 0) {
       d.setFullYear(d.getFullYear() + j);
     }
     if (t == 0 && m == 0 && j == 0)

@@ -91,7 +91,7 @@ export class Global {
 
   public static toInt(s: any): number {
 
-    if (s === null) {
+    if (s == null) {
       return 0;
     }
     if (typeof s === 'number') {
@@ -129,7 +129,7 @@ export class Global {
       return null;
     }
     let s = '';
-    if (datum !== null) {
+    if (datum != null) {
       //s = datum.toLocaleDateString() + ' ' + datum.toLocaleTimeString();
       let d = new Date(datum.getTime());
       d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
