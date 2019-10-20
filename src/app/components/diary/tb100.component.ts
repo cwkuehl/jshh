@@ -19,7 +19,7 @@ import { throttleTime } from 'rxjs/operators';
 export class Tb100Component implements OnInit {
 
   diary: Observable<TbEintrag[]>;
-  userId: string;
+  //userId: string;
   months: string;
 
   date: Date;
@@ -32,12 +32,11 @@ export class Tb100Component implements OnInit {
 
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
     this.diary = store.select('diary');
-    store.select('userId').subscribe(x => this.userId = x);
+    //store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(
       ofType(TbEintragActions.LoadTbEintrag),
       throttleTime(100, asyncScheduler, { leading: false, trailing: true })
-      ).subscribe(() => this.ladeEintraege(this.date));
-    //this.onUuid();
+    ).subscribe(() => this.ladeEintraege(this.date));
   }
 
   ngOnInit() {

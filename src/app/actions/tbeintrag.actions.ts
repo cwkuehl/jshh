@@ -1,4 +1,4 @@
-import { Action, createAction, union } from '@ngrx/store'
+import { createAction, union } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 
 /* Speichern eines Tagebucheintrags */

@@ -1,12 +1,18 @@
+import * as FzNotizActions from '../actions/fznotiz.actions'
 import * as TbEintragActions from '../actions/tbeintrag.actions'
 import * as GlobalActions from '../actions/global.actions'
 import { createReducer, on } from '@ngrx/store';
 import { Global } from '../services/global';
 import { environment } from '../../environments/environment';
 
-export const reducer = createReducer(
+export const reducerDiary = createReducer(
   [],
   on(TbEintragActions.SaveTbEintrag, (state, { payload }) => [...state, payload]),
+);
+
+export const reducerMemos = createReducer(
+  [],
+  on(FzNotizActions.SaveFzNotiz, (state, { payload }) => [...state, payload]),
 );
 
 const InitUserId = 'Benutzer';

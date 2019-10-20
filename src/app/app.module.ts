@@ -20,7 +20,7 @@ import { DiaryService } from './services/diary.service';
 
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import { StoreModule, Store } from '@ngrx/store';
-import * as DiaryReducer from './reducers/tbeintrag.reducer';
+import * as Reducer from './reducers/reducer';
 import * as GlobalActions from './actions/global.actions';
 import { AppEffects } from './app.effects';
 import { DateComponent } from './components/comp/date/date.component';
@@ -44,10 +44,11 @@ import { Am500Component } from './components/user/am500/am500.component';
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot({
-      globalError: DiaryReducer.reducerGlobalError,
-      userId: DiaryReducer.reducerUserId,
-      replicationServer: DiaryReducer.reducerReplicationServer,
-      diary: DiaryReducer.reducer
+      globalError: Reducer.reducerGlobalError,
+      userId: Reducer.reducerUserId,
+      replicationServer: Reducer.reducerReplicationServer,
+      memos: Reducer.reducerMemos,
+      diary: Reducer.reducerDiary,
     }),
     EffectsModule.forRoot([AppEffects]),
     HttpClientModule
