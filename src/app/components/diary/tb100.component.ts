@@ -18,7 +18,7 @@ import { throttleTime } from 'rxjs/operators';
 })
 export class Tb100Component implements OnInit {
 
-  diary: Observable<TbEintrag[]>;
+  //diary: Observable<TbEintrag[]>;
   //userId: string;
   months: string;
 
@@ -31,7 +31,7 @@ export class Tb100Component implements OnInit {
   private geladen: boolean;
 
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
-    this.diary = store.select('diary');
+    //this.diary = store.select('diary');
     //store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(
       ofType(TbEintragActions.LoadTbEintrag),

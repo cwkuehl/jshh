@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { from, empty, EMPTY, throwError, of, pipe, Observable } from 'rxjs';
-import { tap, map, take, mergeMap, catchError, switchMap, mapTo } from 'rxjs/operators';
-
-import * as TbEintragActions from './actions/tbeintrag.actions'
-import * as GlobalActions from './actions/global.actions'
+import { of } from 'rxjs';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import * as FzNotizActions from './actions/fznotiz.actions'
+import * as GlobalActions from './actions/global.actions';
+import * as TbEintragActions from './actions/tbeintrag.actions';
 import { DiaryService } from './services/diary.service';
 import { UserService } from './services/user.service';
-import { dispatch } from 'rxjs/internal/observable/range';
-import { Router } from '@angular/router';
 
 @Injectable()
 export class AppEffects {

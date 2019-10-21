@@ -1,7 +1,7 @@
 import { createAction, union } from '@ngrx/store'
 import { TbEintrag } from './../apis'
 
-/* Speichern eines Tagebucheintrags */
+/* Laden des aktuellen Tagebucheintrags */
 export const LoadTbEintrag = createAction('[TB_EINTRAG] Load');
 
 /* Speichern eines Tagebucheintrags */
