@@ -15,11 +15,8 @@ import { Global } from './global';
 })
 export class DiaryService extends BaseService {
 
-  replicationServer: string;
-
-  constructor(private store: Store<AppState>, db: JshhDatabase, private http: HttpClient) {
-    super(db);
-    store.select('replicationServer').subscribe(a => this.replicationServer = a);
+  constructor(store: Store<AppState>, db: JshhDatabase, http: HttpClient) {
+    super(store, db, http);
   }
 
   getEintrag(datum: string): Dexie.Promise<TbEintrag> {
@@ -179,26 +176,5 @@ export class DiaryService extends BaseService {
         .finally(() => s.complete());
     });
     return ob;
-  }
-
-  postServer<T>(table: string, mode: string, data: string): Observable<T> {
-
-    let url = this.replicationServer;
-    let headers = new HttpHeaders({
-      'Accept': 'application/json',
-      //'Authorization': 'my-auth-token'
-    });
-    // let params = {
-    //   'table': table,
-    //   'mode': mode,
-    // };
-    let daten = this.getKontext();
-    let body = JSON.stringify({
-      'token': daten.benutzerId,
-      'table': table,
-      'mode': mode,
-      'data': data,
-    });
-    return this.http.post<T>(url, body, { reportProgress: false, /* params, */headers });
   }
 }

@@ -1,6 +1,11 @@
-<p>Notizen</p>
+<h3>Notizen</h3>
 
-<div class="card" *ngIf="memos.length > 0">
+<div class="row">
+  <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+  <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
+</div>
+
+<div class="cardxxx" *ngIf="memos.length > 0">
 
   <table class="table table-contensed" >
     <thead>
@@ -26,7 +31,6 @@
         </td> -->
     </tr>
   </table>
-
 </div>
 <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
   <ngb-panel title="Simple">
@@ -63,4 +67,3 @@
     </ng-template>
   </ngb-panel>
 </ngb-accordion>
-

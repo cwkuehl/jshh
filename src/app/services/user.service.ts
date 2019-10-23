@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import Dexie from 'dexie';
 import { Observable, of } from 'rxjs';
 import { Global } from './global';
@@ -7,14 +7,16 @@ import * as GlobalActions from '../actions/global.actions';
 import { Kontext, TbEintrag, Parameter } from '../apis';
 import { JshhDatabase } from '../components/database/database';
 import { BaseService } from './base.service';
+import { AppState } from '../app.state';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService extends BaseService {
 
-  constructor(db: JshhDatabase) {
-    super(db);
+  constructor(store: Store<AppState>, db: JshhDatabase, http: HttpClient) {
+    super(store, db, http);
   }
 
   getParameter(key: string): Dexie.Promise<Parameter> {

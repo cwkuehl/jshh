@@ -56,32 +56,23 @@ export class Tb100Component implements OnInit {
   //   this.store.dispatch(TbEintragActions.ErrorTbEintrag('ErrorTbEintrag'));
   // }
 
-  handleError(err: HttpErrorResponse): string {
-      //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
-      //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
-      var msg: string = err.error.error ? err.error.error.message
-        : (err.message + ((err.error instanceof ProgressEvent) ? '' : ` (${err.error})`));
-      var msg2 = `Server error: ${err.statusText} (${err.status})  Details: ${msg}`;
-      return msg2;
-    }
-
-  deleteDiary() {
+  delete() {
     this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
     this.diaryservice.deleteAllOb().subscribe(() => this.ladeEintraege(this.date));
   }
 
-  readServer() {
+  replicate() {
     if (Global.toInt(this.months) <= 0) {
       //this.store.dispatch(GlobalActions.SetErrorGlobal('Monate müssen größer 0 sein. Global'));
       this.store.dispatch(TbEintragActions.ErrorTbEintrag('Monate müssen größer 0 sein.'));
       return;
     }
     this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
-    this.diaryservice.getTbEintragListe('server').then(a => this.readServer1(a))
+    this.diaryservice.getTbEintragListe('server').then(a => this.postReadServer(a))
     .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
   }
 
-  readServer1(arr: TbEintrag[]) {
+  postReadServer(arr: TbEintrag[]) {
     let m = Math.max(1, Global.toInt(this.months));
     let jarr = JSON.stringify({'TB_Eintrag': arr});
     this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`, jarr).subscribe(
@@ -94,7 +85,7 @@ export class Tb100Component implements OnInit {
         //console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
+        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(Global.handleError(err)));
       },
       //() => this.store.dispatch(TbEintragActions.LoadTbEintrag())
     );
@@ -106,7 +97,7 @@ export class Tb100Component implements OnInit {
         console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(this.handleError(err)));
+        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(Global.handleError(err)));
       },
       () => {
         // console.log("JSON: Ende");

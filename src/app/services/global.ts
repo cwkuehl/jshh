@@ -1,9 +1,15 @@
 import { v4 as uuid } from 'uuid';
+import { HttpErrorResponse } from '@angular/common/http';
 
 /** Globale Funktionen */
 export class Global {
 
   constructor() { }
+
+  /** Macht nichts. */
+  public static machNichts(): number {
+    return 0;
+  }
 
   /**
    * Liefert Datum aus Einzeldaten.
@@ -147,5 +153,14 @@ export class Global {
     if (s.length > 35)
       s = s.substring(0,8) + s.substring(9); // Erstes - entfernen.
     return s;
+  }
+
+  public static handleError(err: HttpErrorResponse): string {
+    //var errortype: string = err.error.constructor.toString().match(/\w+/g)[1];
+    //var errorstring: string = (err.error instanceof ProgressEvent) ? 'PE' : err.error.toString();
+    var msg: string = err.error.error ? err.error.error.message
+      : (err.message + ((err.error instanceof ProgressEvent) ? '' : ` (${err.error})`));
+    var msg2 = `Server error: ${err.statusText} (${err.status})  Details: ${msg}`;
+    return msg2;
   }
 }
