@@ -12,7 +12,7 @@ export const reducerDiary = createReducer(
 
 export const reducerMemos = createReducer(
   [],
-  on(FzNotizActions.SaveFzNotiz, (state, { payload }) => [...state, payload]),
+  on(FzNotizActions.Save, (state, { payload }) => [...state, payload]),
 );
 
 const InitUserId = 'Benutzer';

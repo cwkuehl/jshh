@@ -1,14 +1,14 @@
 import { createAction, union } from '@ngrx/store'
 import { FzNotiz } from './../apis'
 
-/* Speichern eines Tagebucheintrags */
-export const LoadFzNotiz = createAction('[FZ_NOTIZ] Load');
+/* Lesen aller Notizen. */
+export const Load = createAction('[FZ_NOTIZ] Load');
 
-/* Speichern eines Tagebucheintrags */
-export const SaveFzNotiz = createAction('[FZ_NOTIZ] Save', (payload: FzNotiz) => ({payload}));
+/* Speichern einer Notiz. */
+export const Save = createAction('[FZ_NOTIZ] Save', (payload: FzNotiz) => ({payload}));
 
 /* Action, die nichts machts. */
-export const EmptyFzNotiz = createAction('[FZ_NOTIZ] Empty');
+export const Empty = createAction('[FZ_NOTIZ] Empty');
 
-const all = union({LoadFzNotiz, SaveFzNotiz, EmptyFzNotiz});
+const all = union({Load, Save, Empty});
 export type FzNotizActionsUnion = typeof all;

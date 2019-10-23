@@ -8,11 +8,12 @@ import * as GlobalActions from './actions/global.actions';
 import * as TbEintragActions from './actions/tbeintrag.actions';
 import { DiaryService } from './services/diary.service';
 import { UserService } from './services/user.service';
+import { PrivateService } from './services';
 
 @Injectable()
 export class AppEffects {
   constructor(private actions$: Actions, private router: Router,
-    private diaryservice: DiaryService, private userservice: UserService) {
+    private diaryservice: DiaryService, private privateservice: PrivateService, private userservice: UserService) {
     // this.addTbEintrag$.subscribe(x => {
     //   //if (x instanceof TbEintragActions.AddTbEintrag) {
     //   //console.log('AppEffects addTbEintrag: xxx ' + x.payload.datum);
@@ -20,6 +21,12 @@ export class AppEffects {
     //   //}
     // }, e => { console.log('AppEffects addTbEintrag Fehler: ' + e) });
   }
+
+  saveFzNotiz$ = createEffect(() => this.actions$.pipe(
+    ofType(FzNotizActions.Save),
+    mergeMap(x => this.privateservice.saveMemoOb(x.payload)),
+    catchError(e => of(GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
+  ), { resubscribeOnError: false });
 
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.SaveTbEintrag),
