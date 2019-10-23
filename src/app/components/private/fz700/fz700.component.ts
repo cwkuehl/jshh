@@ -44,12 +44,12 @@ export class Fz700Component implements OnInit {
   }
 
   public delete() {
-    this.store.dispatch(GlobalActions.SetErrorGlobal(null));
+    this.store.dispatch(GlobalActions.SetError(null));
     this.privateservice.deleteAllMemosOb().subscribe(() => this.reload());
   }
 
   public replicate() {
-    this.store.dispatch(GlobalActions.SetErrorGlobal(null));
+    this.store.dispatch(GlobalActions.SetError(null));
     //this.privateservice.getMemoList('server').then(a => this.postReadServer(a))
     //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
     this.postReadServer(this.memos);
@@ -65,7 +65,7 @@ export class Fz700Component implements OnInit {
         });
       },
       (err: HttpErrorResponse) => {
-        return this.store.dispatch(GlobalActions.SetErrorGlobal(Global.handleError(err)));
+        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
       },
     );
   }

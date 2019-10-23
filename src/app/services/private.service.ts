@@ -37,7 +37,7 @@ export class PrivateService extends BaseService {
 
   public loadMemos(): void {
     this.getNotizListe(null).then(l => { if (l != null) this.memos = l; })
-      .catch(e => this.store.dispatch(GlobalActions.SetErrorGlobal(e)));
+      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
   }
 
   private iuFzNotiz(daten: Kontext, e: FzNotiz): Dexie.Promise<string> {
@@ -63,7 +63,7 @@ export class PrivateService extends BaseService {
     var ob = new Observable<Action>(s => {
       this.saveMemo(eintrag)
         .then(a => s.next(FzNotizActions.Empty()))
-        .catch(e => s.next(GlobalActions.SetErrorGlobal(e)))
+        .catch(e => s.next(GlobalActions.SetError(e)))
         .finally(() => s.complete());
     });
     return ob;
@@ -160,7 +160,7 @@ export class PrivateService extends BaseService {
     var ob = new Observable<Action>(s => {
       this.db.FzNotiz.toCollection().delete()
         .then(a => s.next(FzNotizActions.Empty()))
-        .catch(e => s.next(GlobalActions.SetErrorGlobal(e)))
+        .catch(e => s.next(GlobalActions.SetError(e)))
         .finally(() => s.complete());
     });
     return ob;

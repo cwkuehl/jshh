@@ -64,9 +64,9 @@ export class AppModule {
     console.log(environment.production ? "Produktion" : "Entwicklung");
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     //idbservice.createDB(); // .then(e => console.log('AppModule ' + e.benutzerId));
-    userservice.getParameter('UserId').then(p => { if (p != null) store.dispatch(GlobalActions.LoginOkGlobal(p.wert)); })
+    userservice.getParameter('UserId').then(p => { if (p != null) store.dispatch(GlobalActions.LoginOk(p.wert)); })
       .catch(e => console.error(e));
-    userservice.getParameter('ReplicationServer').then(p => { if (p != null) store.dispatch(GlobalActions.SaveReplOkGlobal(p.wert)); })
+    userservice.getParameter('ReplicationServer').then(p => { if (p != null) store.dispatch(GlobalActions.SaveReplOk(p.wert)); })
       .catch(e => console.error(e));
   }
 

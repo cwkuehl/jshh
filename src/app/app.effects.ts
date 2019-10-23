@@ -25,37 +25,37 @@ export class AppEffects {
   saveFzNotiz$ = createEffect(() => this.actions$.pipe(
     ofType(FzNotizActions.Save),
     mergeMap(x => this.privateservice.saveMemoOb(x.payload)),
-    catchError(e => of(GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
   ), { resubscribeOnError: false });
 
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.SaveTbEintrag),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload)),
-    catchError(e => of(GlobalActions.SetErrorGlobal(e))) // Effect wird beendet.
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
   ), { resubscribeOnError: false });
 
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.ErrorTbEintrag),
-    map(a => GlobalActions.SetErrorGlobal(a.payload)),
+    map(a => GlobalActions.SetError(a.payload)),
   ));
 
   loginGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.LoginGlobal),
+    ofType(GlobalActions.Login),
     mergeMap(a => this.userservice.loginOb(a.payload)),
   ));
 
   loginOkGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.LoginOkGlobal),
+    ofType(GlobalActions.LoginOk),
     tap(() => this.router.navigate(['/']))
   ), { dispatch: false });
 
   saveReplGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.SaveReplGlobal),
+    ofType(GlobalActions.SaveRepl),
     mergeMap(a => this.userservice.saveParamOb('ReplicationServer', a.payload)),
   ));
 
   saveReplOkGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.SaveReplOkGlobal),
+    ofType(GlobalActions.SaveReplOk),
     tap(() => this.router.navigate(['/']))
   ), { dispatch: false });
 
