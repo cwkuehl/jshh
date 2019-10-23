@@ -34,7 +34,7 @@ export class Tb100Component implements OnInit {
     //this.diary = store.select('diary');
     //store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(
-      ofType(TbEintragActions.LoadTbEintrag),
+      ofType(TbEintragActions.Load),
       throttleTime(100, asyncScheduler, { leading: false, trailing: true })
     ).subscribe(() => this.ladeEintraege(this.date));
   }
@@ -57,19 +57,19 @@ export class Tb100Component implements OnInit {
   // }
 
   delete() {
-    this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
+    this.store.dispatch(TbEintragActions.Error(null));
     this.diaryservice.deleteAllOb().subscribe(() => this.ladeEintraege(this.date));
   }
 
   replicate() {
     if (Global.toInt(this.months) <= 0) {
-      //this.store.dispatch(GlobalActions.SetErrorGlobal('Monate müssen größer 0 sein. Global'));
-      this.store.dispatch(TbEintragActions.ErrorTbEintrag('Monate müssen größer 0 sein.'));
+      //this.store.dispatch(GlobalActions.SetError('Monate müssen größer 0 sein. Global'));
+      this.store.dispatch(TbEintragActions.Error('Monate müssen größer 0 sein.'));
       return;
     }
-    this.store.dispatch(TbEintragActions.ErrorTbEintrag(null));
+    this.store.dispatch(TbEintragActions.Error(null));
     this.diaryservice.getTbEintragListe('server').then(a => this.postReadServer(a))
-    .catch(a => this.store.dispatch(TbEintragActions.ErrorTbEintrag(a)));
+    .catch(a => this.store.dispatch(TbEintragActions.Error(a)));
   }
 
   postReadServer(arr: TbEintrag[]) {
@@ -79,15 +79,15 @@ export class Tb100Component implements OnInit {
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);
-          this.store.dispatch(TbEintragActions.SaveTbEintrag(e));
-          this.store.dispatch(TbEintragActions.LoadTbEintrag());
+          this.store.dispatch(TbEintragActions.Save(e));
+          this.store.dispatch(TbEintragActions.Load());
         });
         //console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(Global.handleError(err)));
+        return this.store.dispatch(TbEintragActions.Error(Global.handleError(err)));
       },
-      //() => this.store.dispatch(TbEintragActions.LoadTbEintrag())
+      //() => this.store.dispatch(TbEintragActions.Load())
     );
     if (false) {
       //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
@@ -97,7 +97,7 @@ export class Tb100Component implements OnInit {
         console.log("JSON Next: " + JSON.stringify(a));
       },
       (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.ErrorTbEintrag(Global.handleError(err)));
+        return this.store.dispatch(TbEintragActions.Error(Global.handleError(err)));
       },
       () => {
         // console.log("JSON: Ende");
@@ -147,11 +147,11 @@ export class Tb100Component implements OnInit {
         /////this.diaryservice.speichereEintrag(this.datumAlt, this.eintrag);
         // this.store.dispatch(new TbEintragActions.SaveTbEintrag(
         //   { datum: this.datumAlt, eintrag: this.entry, angelegtAm: Global.now(), angelegtVon: this.userId }));
-        this.store.dispatch(TbEintragActions.SaveTbEintrag(
+        this.store.dispatch(TbEintragActions.Save(
           { datum: Global.toString(this.datumAlt), eintrag: this.entry, replid: null }));
         if (laden) {
           laden = false;
-          this.store.dispatch(TbEintragActions.LoadTbEintrag());
+          this.store.dispatch(TbEintragActions.Load());
         }
       }
     }

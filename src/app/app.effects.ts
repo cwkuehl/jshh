@@ -29,13 +29,13 @@ export class AppEffects {
   ), { resubscribeOnError: false });
 
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
-    ofType(TbEintragActions.SaveTbEintrag),
+    ofType(TbEintragActions.Save),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload)),
     catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
   ), { resubscribeOnError: false });
 
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
-    ofType(TbEintragActions.ErrorTbEintrag),
+    ofType(TbEintragActions.Error),
     map(a => GlobalActions.SetError(a.payload)),
   ));
 

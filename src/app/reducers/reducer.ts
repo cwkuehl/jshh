@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 
 export const reducerDiary = createReducer(
   [],
-  on(TbEintragActions.SaveTbEintrag, (state, { payload }) => [...state, payload]),
+  on(TbEintragActions.Save, (state, { payload }) => [...state, payload]),
 );
 
 export const reducerMemos = createReducer(

@@ -64,9 +64,9 @@ export class DiaryService extends BaseService {
   public saveEntryOb(eintrag: TbEintrag): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.saveEntry(eintrag)
-        .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
+        .then(a => s.next(TbEintragActions.Empty()))
         //.catch(e => s.error(e))
-        .catch(e => s.next(TbEintragActions.ErrorTbEintrag(e)))
+        .catch(e => s.next(TbEintragActions.Error(e)))
         .finally(() => s.complete());
     });
     return ob;
@@ -170,9 +170,9 @@ export class DiaryService extends BaseService {
   public deleteAllOb(): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.db.TbEintrag.toCollection().delete()
-        .then(a => s.next(TbEintragActions.EmptyTbEintrag()))
+        .then(a => s.next(TbEintragActions.Empty()))
         //.catch(e => s.error(e))
-        .catch(e => s.next(TbEintragActions.ErrorTbEintrag(e)))
+        .catch(e => s.next(TbEintragActions.Error(e)))
         .finally(() => s.complete());
     });
     return ob;
