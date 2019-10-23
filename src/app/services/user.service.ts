@@ -43,8 +43,8 @@ export class UserService extends BaseService {
   public loginOb(userId: string): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.login(userId)
-        .then(a => s.next(GlobalActions.LoginOkGlobal(a.wert)))
-        .catch(e => s.next(GlobalActions.SetErrorGlobal(e)))
+        .then(a => s.next(GlobalActions.LoginOk(a.wert)))
+        .catch(e => s.next(GlobalActions.SetError(e)))
         .finally(() => s.complete());
     });
     return ob;
@@ -70,8 +70,8 @@ export class UserService extends BaseService {
   public saveParamOb(key: string, value: string): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.saveParam(key, value)
-        .then(a => s.next(GlobalActions.SaveReplOkGlobal(a.wert)))
-        .catch(e => s.next(GlobalActions.SetErrorGlobal(e)))
+        .then(a => s.next(GlobalActions.SaveReplOk(a.wert)))
+        .catch(e => s.next(GlobalActions.SetError(e)))
         .finally(() => s.complete());
     });
     return ob;

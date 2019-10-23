@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from 'src/app/app.state';
 import { Store } from '@ngrx/store';
-import { SaveReplGlobal } from 'src/app/actions/global.actions';
+import { SaveRepl } from 'src/app/actions/global.actions';
 
 @Component({
   selector: 'app-am500',
@@ -19,6 +19,6 @@ export class Am500Component implements OnInit {
   }
 
   save() {
-    this.store.dispatch(SaveReplGlobal(this.replicationServer));
+    this.store.dispatch(SaveRepl(this.replicationServer));
   }
 }

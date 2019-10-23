@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
-import { LoginGlobal } from 'src/app/actions/global.actions';
+import { Login } from 'src/app/actions/global.actions';
 
 @Component({
   selector: 'app-am000',
@@ -19,6 +19,6 @@ export class Am000Component implements OnInit {
   }
 
   login() {
-    this.store.dispatch(LoginGlobal(this.userId));
+    this.store.dispatch(Login(this.userId));
   }
 }
