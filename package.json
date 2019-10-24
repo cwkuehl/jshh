@@ -26,7 +26,6 @@
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
     "@ngrx/effects": "^8.4.0",
     "@ngrx/store": "^8.4.0",
-    "@ngx-pwa/local-storage": "^8.2.2",
     "bootstrap": "^4.3.1",
     "dexie": "^2.0.4",
     "rxjs": "^6.5.3",
