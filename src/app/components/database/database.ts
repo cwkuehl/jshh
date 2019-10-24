@@ -43,8 +43,8 @@ export class JshhDatabase extends Dexie {
     this.Parameter = this.table('Parameter');
     this.TbEintrag = this.table('TbEintrag');
 
-    this.FzNotiz.put({uid: Global.getUID(), thema: 'Hallo', notiz: 'nix', angelegtAm: Global.now(), angelegtVon: 'abcd'});
-    this.FzNotiz.put({uid: Global.getUID(), thema: 'Hallo2', notiz: 'nix2', angelegtAm: Global.now(), angelegtVon: 'abcd'});
+    //this.FzNotiz.put({uid: Global.getUID(), thema: 'Hallo', notiz: 'nix', angelegtAm: Global.now(), angelegtVon: 'abcd'});
+    //this.FzNotiz.put({uid: Global.getUID(), thema: 'Hallo2', notiz: 'nix2', angelegtAm: Global.now(), angelegtVon: 'abcd'});
     //this.TbEintrag.put({datum: Global.date(26,9,2019), eintrag: 'Hallo', angelegtAm: Global.now(), angelegtVon: 'abc'});
     //this.TbEintrag.put({datum: Global.date(27,9,2019), eintrag: 'Hallo2', angelegtAm: Global.now(), angelegtVon: 'abc'});
   }
