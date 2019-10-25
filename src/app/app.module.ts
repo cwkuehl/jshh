@@ -15,7 +15,7 @@ import { AppState } from './app.state';
 import { DateComponent } from './components/comp/date.component';
 import { JshhDatabase } from './services/database';
 import { Tb100Component } from './components/diary/tb100.component';
-import { MenuComponent } from './components/menu/menu.component';
+import { MenuComponent } from './components/menu.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500/am500.component';

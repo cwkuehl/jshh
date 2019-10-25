@@ -1,3 +1,9 @@
+import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
+
+@Component({
+  selector: 'app-menu',
+  template: `
 <div class="row navbar">
   <div class="col-sm-6 col-md-4">
     <a class="navbar-brand" href="#"><img src="favicon.ico" width="20px"> {{ title }}</a>
@@ -25,3 +31,16 @@
   <div class="col text-right">
   </div>
 </div>
+  `,
+  styles: [``]
+})
+export class MenuComponent implements OnInit {
+  title:string = '';
+
+  constructor() { }
+
+  ngOnInit() {
+    this.title = 'JSHH ' + environment.date;
+  }
+
+}
