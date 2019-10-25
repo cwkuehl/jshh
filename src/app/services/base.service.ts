@@ -1,4 +1,4 @@
-import { JshhDatabase } from '../components/database/database';
+import { JshhDatabase } from './database';
 import { Kontext } from '../apis';
 import { Global } from './global';
 import { Observable } from 'rxjs';

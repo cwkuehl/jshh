@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Global } from './global';
 import * as GlobalActions from '../actions/global.actions';
 import { Kontext, TbEintrag, Parameter } from '../apis';
-import { JshhDatabase } from '../components/database/database';
+import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
 import { AppState } from '../app.state';
 import { HttpClient } from '@angular/common/http';

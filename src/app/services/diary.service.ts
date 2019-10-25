@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import * as TbEintragActions from '../actions/tbeintrag.actions';
 import { Kontext, TbEintrag } from '../apis';
 import { AppState } from '../app.state';
-import { JshhDatabase } from '../components/database/database';
+import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
 import { Global } from './global';
 

@@ -1,9 +1,9 @@
 import Dexie from 'dexie';
-import { FzNotiz, TbEintrag, Parameter, MaReplikation } from '../../apis';
+import { FzNotiz, TbEintrag, Parameter, MaReplikation } from '../apis';
 import { Injectable } from '@angular/core';
-import { Global } from '../../services/global';
+import { Global } from './global';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../app.state';
+import { AppState } from '../app.state';
 
 const DB_NAME = 'jshh_app';
 

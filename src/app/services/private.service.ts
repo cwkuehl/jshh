@@ -3,7 +3,7 @@ import { Store, Action } from '@ngrx/store';
 import Dexie from 'dexie';
 import { FzNotiz, Kontext } from '../apis';
 import { AppState } from '../app.state';
-import { JshhDatabase } from '../components/database/database';
+import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
 import { Global } from './global';
 import * as GlobalActions from '../actions/global.actions';
