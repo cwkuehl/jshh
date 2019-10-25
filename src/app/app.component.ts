@@ -6,8 +6,16 @@ import * as GlobalActions from './actions/global.actions'
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: `
+<div class="container">
+  <app-menu></app-menu>
+  <div *ngIf="globalError$ | async as globalError">
+    <ngb-alert type="danger" (close)="clearErrorGlobal()">{{ globalError }}</ngb-alert>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+  `,
+  styles: [``]
 })
 export class AppComponent {
   title: string = 'JSHH';
