@@ -1,11 +1,20 @@
 import { Component, OnInit, Injectable, Output, Input, EventEmitter } from '@angular/core';
 import { NgbDateAdapter, NgbDateStruct, NgbDate, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
-import { Global } from '../../../services/global';
+import { Global } from '../../services/global';
 
 @Component({
   selector: 'app-date',
-  templateUrl: './date.component.html',
-  styleUrls: ['./date.component.css'],
+  template: `
+<div class="input-group">
+  <input class="form-control" placeholder="yyyy-mm-dd" (focus)="openSelection(d)" name="d" [ngModel]="seldate" (ngModelChange)="onSeldateChange($event)" ngbDatepicker #d="ngbDatepicker" />
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button" title="Vorheriger Tag">-</button>
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button" title="Heute">o</button>
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged(1)" type="button" title="Nächster Tag">+</button>
+  </div>
+</div>
+  `,
+  styles: [``],
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
 })
 export class DateComponent implements OnInit {

@@ -12,7 +12,7 @@ import { AppRoutingModule } from './app-rounting.module';
 import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { AppState } from './app.state';
-import { DateComponent } from './components/comp/date/date.component';
+import { DateComponent } from './components/comp/date.component';
 import { JshhDatabase } from './services/database';
 import { Tb100Component } from './components/diary/tb100.component';
 import { MenuComponent } from './components/menu/menu.component';
