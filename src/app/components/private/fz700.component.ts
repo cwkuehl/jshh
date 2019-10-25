@@ -1,21 +1,55 @@
-import { Component, OnInit } from '@angular/core';
-import { FzNotiz } from '../../../apis';
-import { Observable, asyncScheduler } from 'rxjs';
-import { AppState } from '../../../app.state';
-import { Store } from '@ngrx/store';
-import { Actions, ofType } from '@ngrx/effects';
-import { PrivateService } from '../../../services';
-import * as FzNotizActions from '../../../actions/fznotiz.actions'
-import * as GlobalActions from '../../../actions/global.actions'
 import { HttpErrorResponse } from '@angular/common/http';
-import { Global } from '../../../services/global';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { asyncScheduler } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
+import * as FzNotizActions from '../../actions/fznotiz.actions';
+import * as GlobalActions from '../../actions/global.actions';
+import { FzNotiz } from '../../apis';
+import { AppState } from '../../app.state';
+import { PrivateService } from '../../services';
+import { Global } from '../../services/global';
 
 @Component({
   selector: 'app-fz700',
-  templateUrl: './fz700.component.html',
-  styleUrls: ['./fz700.component.css']
+  template: `
+  <h3>Notizen</h3>
+
+  <div class="row mb-1">
+    <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+    <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
+  </div>
+
+  <div class="row card" *ngIf="memos.length > 0">
+
+    <table class="table table-contensed" >
+      <thead>
+      <tr>
+          <th>Nr.</th>
+          <th>Thema</th>
+          <th>Geändert am</th>
+          <th>Geändert von</th>
+          <th>Angelegt am</th>
+          <th>Angelegt von</th>
+      </tr>
+      </thead>
+      <tr *ngFor="let item of memos"> <!-- [class.active]="item === selectedFlight"> -->
+          <td>{{item.uid}}</td>
+          <td>{{item.thema}}</td>
+          <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+          <td>{{item.geaendertVon}}</td>
+          <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+          <td>{{item.angelegtVon}}</td>
+          <!-- <td>
+              <a [routerLink]="['../flight', item.id ]">Details</a> |
+              <a (click)="select(item)">Select</a>
+          </td> -->
+      </tr>
+    </table>
+  </div>
+    `,
+  styles: [``]
 })
 export class Fz700Component implements OnInit {
 

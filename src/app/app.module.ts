@@ -16,7 +16,7 @@ import { DateComponent } from './components/comp/date/date.component';
 import { JshhDatabase } from './components/database/database';
 import { Tb100Component } from './components/diary/tb100.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { Fz700Component } from './components/private/fz700/fz700.component';
+import { Fz700Component } from './components/private/fz700.component';
 import { Am000Component } from './components/user/am000/am000.component';
 import { Am500Component } from './components/user/am500/am500.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
