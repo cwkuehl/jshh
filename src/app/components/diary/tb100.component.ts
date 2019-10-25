@@ -13,8 +13,38 @@ import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tb100',
-  templateUrl: './tb100.component.html',
-  styleUrls: ['./tb100.component.css']
+  template: `
+<h3>Tagebuch</h3>
+
+<form>
+  <div class="form-row">
+    <div class="form-group col-sm-4 col-md-3">
+      <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
+      <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
+      <button type="button" class="btn btn-primary mt-3" (click)="save()">Speichern</button><br>
+    </div>
+    <div class="form-group col-sm-4 col-md-6">
+      <label class="d-none d-md-block" for="eintrag">Eintrag</label>
+      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="5" cols="20"></textarea>
+    </div>
+    <div class="form-group col-sm-4 col-md-3">
+      <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+      <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
+      <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
+      <p class="form-control-static" title="Geändert">{{geaendert}}</p>
+    </div>
+  </div>
+</form>
+
+<div class="row">
+  <label class="control-label col-sm-2 d-none d-md-block" for="months">Anzahl Monate</label>&nbsp;
+  <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">
+  <label class="control-label col-sm-2 d-md-none d-lg-none d-xl-none" for="months"> Monat(e)</label>&nbsp;
+  <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Tagebuch-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+  <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Tagebuch löschen">Löschen</button>
+</div>
+  `,
+  styles: [``]
 })
 export class Tb100Component implements OnInit {
 
