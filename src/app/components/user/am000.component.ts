@@ -6,21 +6,21 @@ import { Login } from 'src/app/actions/global.actions';
 @Component({
   selector: 'app-am000',
   template: `
-  <h3>Anmeldung</h3>
+<h3>Anmeldung</h3>
 
-  <form>
-    <div class="form-row">
-      <div class="form-group col-sm-6">
-        <label class="control-label" for="user">Benutzer</label>
-        <input type="text" class="form-control" name="user" [(ngModel)]="userId" placeholder="Angemeldeter Benutzer">
-      </div>
+<form>
+  <div class="form-row">
+    <div class="form-group col-sm-6">
+      <label class="control-label" for="user">Benutzer</label>
+      <input type="text" class="form-control" name="user" [(ngModel)]="userId" placeholder="Angemeldeter Benutzer">
     </div>
-    <div class="form-row">
-      <div class="form-group col">
-        <button type="submit" class="btn btn-primary" (click)="login()">Anmelden</button>
-      </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <button type="submit" class="btn btn-primary" (click)="login()">Anmelden</button>
     </div>
-  </form>
+  </div>
+</form>
   `,
   styles: [``]
 })

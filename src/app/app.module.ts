@@ -17,6 +17,7 @@ import { JshhDatabase } from './services/database';
 import { Tb100Component } from './components/diary/tb100.component';
 import { MenuComponent } from './components/menu.component';
 import { Fz700Component } from './components/private/fz700.component';
+import { Fz710Component } from './components/private/fz710.component';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
@@ -29,6 +30,7 @@ import { DiaryService, PrivateService, UserService } from './services';
     AppComponent,
     MenuComponent,
     Fz700Component,
+    Fz710Component,
     Tb100Component,
     DateComponent,
     Am000Component,

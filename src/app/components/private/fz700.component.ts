@@ -16,39 +16,35 @@ import { Global } from '../../services/global';
   template: `
   <h3>Notizen</h3>
 
-  <div class="row mb-1">
+  <div class="row">
     <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
     <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
   </div>
 
-  <div class="row card" *ngIf="memos.length > 0">
+  <div class="row card mt-1" *ngIf="memos.length > 0">
 
     <table class="table table-contensed" >
       <thead>
       <tr>
-          <th>Nr.</th>
-          <th>Thema</th>
-          <th>Geändert am</th>
-          <th>Geändert von</th>
-          <th>Angelegt am</th>
-          <th>Angelegt von</th>
+        <th>Nr.</th>
+        <th>Thema</th>
+        <th>Geändert am</th>
+        <th>Geändert von</th>
+        <th>Angelegt am</th>
+        <th>Angelegt von</th>
       </tr>
       </thead>
       <tr *ngFor="let item of memos"> <!-- [class.active]="item === selectedFlight"> -->
-          <td>{{item.uid}}</td>
-          <td>{{item.thema}}</td>
-          <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
-          <td>{{item.geaendertVon}}</td>
-          <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
-          <td>{{item.angelegtVon}}</td>
-          <!-- <td>
-              <a [routerLink]="['../flight', item.id ]">Details</a> |
-              <a (click)="select(item)">Select</a>
-          </td> -->
+        <td><a [routerLink]="['/memo', item.uid]">{{item.uid}}</a></td>
+        <td>{{item.thema}}</td>
+        <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+        <td>{{item.geaendertVon}}</td>
+        <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+        <td>{{item.angelegtVon}}</td>
       </tr>
     </table>
   </div>
-    `,
+  `,
   styles: [``]
 })
 export class Fz700Component implements OnInit {
