@@ -36,13 +36,13 @@ import { Global } from '../../services/global';
 })
 export class Fz710Component implements OnInit {
 
-  item: FzNotiz = { uid: '', thema: '', notiz: ''};
+  item: FzNotiz = { uid: '', thema: '', notiz: '' };
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions, private privateservice: PrivateService) {
     this.route.params.subscribe(
       params => this.privateservice.getMemo(params['id'])
-      .then(a => { if (a != null) this.item = a; })
-      .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Notiz nicht gefunden.'));})
+        .then(a => { if (a != null) this.item = a; })
+        .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Notiz nicht gefunden.')); })
     );
   }
 
@@ -53,5 +53,9 @@ export class Fz710Component implements OnInit {
   public delete() {
     this.store.dispatch(GlobalActions.SetError(null));
     //this.privateservice.deleteAllMemosOb().subscribe(() => this.reload());
+  }
+
+  public save() {
+    // nix
   }
 }

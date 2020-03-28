@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   version: '0.0.0',
-  date: '2019-10-24'
+  date: '2020-03-28'
 };

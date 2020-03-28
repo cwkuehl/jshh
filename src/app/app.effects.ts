@@ -26,13 +26,13 @@ export class AppEffects {
     ofType(FzNotizActions.Save),
     mergeMap(x => this.privateservice.saveMemoOb(x.payload)),
     catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
-  ), { resubscribeOnError: false });
+  ), { useEffectsErrorHandler: false });
 
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.Save),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload)),
     catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
-  ), { resubscribeOnError: false });
+  ), { useEffectsErrorHandler: false });
 
   errorTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.Error),
