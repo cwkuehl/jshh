@@ -59,4 +59,14 @@ export class AppEffects {
     tap(() => this.router.navigate(['/']))
   ), { dispatch: false });
 
+  saveOptionsGlobal$ = createEffect(() => this.actions$.pipe(
+    ofType(GlobalActions.SaveOptions),
+    mergeMap(a => this.userservice.saveOptionsOb(a.options)),
+  ));
+
+  saveOptionsOkGlobal$ = createEffect(() => this.actions$.pipe(
+    ofType(GlobalActions.SaveOptionsOk),
+    tap(() => this.router.navigate(['/']))
+  ), { dispatch: false });
+
 }

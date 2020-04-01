@@ -9,16 +9,17 @@ import { Tb100DeactivateGuard } from './guards/diary.guard';
 //import { NotFoundPageComponent } from './containers/not-found-page';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'memos', pathMatch: 'full' },
-    { path: 'login', component: Am000Component },
-    { path: 'options', component: Am500Component },
-    { path: 'memos', component: Fz700Component },
-    { path: 'memo/:id', component: Fz710Component },
-    { path: 'diary', component: Tb100Component, canDeactivate: [ Tb100DeactivateGuard ] },
-    // { path: '**', component: NotFoundPageComponent }
+  { path: '', redirectTo: 'memos', pathMatch: 'full' },
+  { path: 'login', component: Am000Component },
+  { path: 'options', component: Am500Component },
+  { path: 'memos', component: Fz700Component },
+  { path: 'memo/:id', component: Fz710Component },
+  { path: 'diary', component: Tb100Component, canDeactivate: [Tb100DeactivateGuard] },
+  { path: 'bookings', component: Fz700Component },
+  // { path: '**', component: NotFoundPageComponent }
 ];
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {useHash: true})],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

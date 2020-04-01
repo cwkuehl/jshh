@@ -43,6 +43,7 @@ import { DiaryService, PrivateService, UserService } from './services';
       globalError: Reducer.reducerGlobalError,
       userId: Reducer.reducerUserId,
       replicationServer: Reducer.reducerReplicationServer,
+      options: Reducer.reducerOptions,
       memos: Reducer.reducerMemos,
       diary: Reducer.reducerDiary,
     }),
@@ -61,7 +62,9 @@ export class AppModule {
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
     userservice.getParameter('UserId').then(p => { if (p != null) store.dispatch(GlobalActions.LoginOk(p.wert)); })
       .catch(e => console.error(e));
-    userservice.getParameter('ReplicationServer').then(p => { if (p != null) store.dispatch(GlobalActions.SaveReplOk(p.wert)); })
+    // userservice.getParameter('ReplicationServer').then(p => { if (p != null) store.dispatch(GlobalActions.SaveReplOk(p.wert)); })
+    //   .catch(e => console.error(e));
+    userservice.getOptions().then(p => { if (p != null) store.dispatch(GlobalActions.SaveOptionsOk({ options: p })); })
       .catch(e => console.error(e));
   }
 }

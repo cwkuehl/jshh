@@ -19,10 +19,11 @@ import { environment } from '../../environments/environment';
   </div>
   <div class="col-sm-3 col-md-2">
     <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Privat</button>
+      <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Funkionen</button>
       <div ngbDropdownMenu aria-labelledby="dd2">
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
         <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
+        <button ngbDropdownItem [routerLink]="'/bookings'">Buchungen</button>
         <button ngbDropdownItem>Sudoku</button>
       </div>
     </div>
@@ -35,7 +36,7 @@ import { environment } from '../../environments/environment';
   styles: [``]
 })
 export class MenuComponent implements OnInit {
-  title:string = '';
+  title: string = '';
 
   constructor() { }
 

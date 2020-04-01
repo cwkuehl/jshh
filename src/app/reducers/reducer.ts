@@ -4,6 +4,7 @@ import * as GlobalActions from '../actions/global.actions'
 import { createReducer, on } from '@ngrx/store';
 import { Global } from '../services/global';
 import { environment } from '../../environments/environment';
+import { Options } from '../apis';
 
 export const reducerDiary = createReducer(
   [],
@@ -27,6 +28,20 @@ const InitReplicationServer = 'https://localhost:4202/';
 export const reducerReplicationServer = createReducer(
   environment.production ? InitReplicationServer : 'http://localhost:4201/',
   on(GlobalActions.SaveReplOk, (state, { payload }) => Global.nes(payload) ? InitReplicationServer : payload),
+);
+
+const InitOptions: Options = {
+  replicationServer: environment.production ? InitReplicationServer : 'http://localhost:4201/',
+  replicationMonths: '1'
+};
+
+export const reducerOptions = createReducer(
+  InitOptions,
+  on(GlobalActions.SaveOptionsOk,
+    (state, { options }) => ({
+      replicationServer: options.replicationServer == null ? state.replicationServer : options.replicationServer,
+      replicationMonths: options.replicationMonths == null ? state.replicationMonths : options.replicationMonths
+    }))
 );
 
 export const reducerGlobalError = createReducer(
