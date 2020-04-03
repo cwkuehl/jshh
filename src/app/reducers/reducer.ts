@@ -25,11 +25,6 @@ export const reducerUserId = createReducer(
 
 const InitReplicationServer = 'https://localhost:4202/';
 
-export const reducerReplicationServer = createReducer(
-  environment.production ? InitReplicationServer : 'http://localhost:4201/',
-  on(GlobalActions.SaveReplOk, (state, { payload }) => Global.nes(payload) ? InitReplicationServer : payload),
-);
-
 const InitOptions: Options = {
   replicationServer: environment.production ? InitReplicationServer : 'http://localhost:4201/',
   replicationMonths: '1'

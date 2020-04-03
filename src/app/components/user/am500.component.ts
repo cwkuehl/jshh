@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { SaveRepl, SaveOptions } from '../../actions/global.actions';
+import { SaveOptions } from '../../actions/global.actions';
 import { AppState } from '../../app.state';
-import { Options } from 'src/app/apis';
-import { reducerReplicationServer } from 'src/app/reducers/reducer';
 
 @Component({
   selector: 'app-am500',
@@ -35,11 +33,8 @@ import { reducerReplicationServer } from 'src/app/reducers/reducer';
 export class Am500Component implements OnInit {
   server: string;
   months: string;
-  //options: Options;
 
   constructor(private store: Store<AppState>) {
-    //store.select('replicationServer').subscribe(a => this.replicationServer = a);
-    //this.months = '1';
     store.select('options').subscribe(a => {
       this.server = a.replicationServer;
       this.months = a.replicationMonths;
@@ -50,7 +45,6 @@ export class Am500Component implements OnInit {
   }
 
   save() {
-    //this.store.dispatch(SaveRepl(this.replicationServer));
     this.store.dispatch(SaveOptions({ options: { replicationServer: this.server, replicationMonths: this.months } }));
   }
 }

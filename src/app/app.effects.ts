@@ -49,16 +49,6 @@ export class AppEffects {
     tap(() => this.router.navigate(['/']))
   ), { dispatch: false });
 
-  saveReplGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.SaveRepl),
-    mergeMap(a => this.userservice.saveParamOb('ReplicationServer', a.payload)),
-  ));
-
-  saveReplOkGlobal$ = createEffect(() => this.actions$.pipe(
-    ofType(GlobalActions.SaveReplOk),
-    tap(() => this.router.navigate(['/']))
-  ), { dispatch: false });
-
   saveOptionsGlobal$ = createEffect(() => this.actions$.pipe(
     ofType(GlobalActions.SaveOptions),
     mergeMap(a => this.userservice.saveOptionsOb(a.options)),

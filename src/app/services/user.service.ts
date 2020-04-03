@@ -95,16 +95,6 @@ export class UserService extends BaseService {
       .then(() => new Dexie.Promise<Options>((resolve) => { resolve(options); }));
   }
 
-  public saveParamOb(key: string, value: string): Observable<Action> {
-    var ob = new Observable<Action>(s => {
-      this.saveParam(key, value)
-        .then(a => s.next(GlobalActions.SaveReplOk(a.wert)))
-        .catch(e => s.next(GlobalActions.SetError(e)))
-        .finally(() => s.complete());
-    });
-    return ob;
-  }
-
   public saveParam(key: string, value: string): Dexie.Promise<Parameter> {
     if (Global.nes(key)) {
       return Dexie.Promise.reject('Der Schlüssel darf nicht leer sein.');
