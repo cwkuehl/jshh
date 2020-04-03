@@ -45,9 +45,9 @@ export class PrivateService extends BaseService {
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
-      if (e.replid === 'new') {
-        e.replid = Global.getUID();
-      } else if (e.replid !== 'server') {
+    if (e.replid === 'new') {
+      e.replid = Global.getUID();
+    } else if (e.replid !== 'server') {
       if (e.angelegtAm == null) {
         e.angelegtAm = daten.jetzt;
         e.angelegtVon = daten.benutzerId;
@@ -91,7 +91,7 @@ export class PrivateService extends BaseService {
         if (eintrag.replid !== 'server')
           eintrag.replid = Global.getUID();
         return this.iuFzNotiz(daten, eintrag).then(r => {
-          return new Dexie.Promise<FzNotiz>((resolve) => { resolve(eintrag); })
+          return new Dexie.Promise<FzNotiz>(resolve => resolve(eintrag))
         });
       } else {
         let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
@@ -124,7 +124,7 @@ export class PrivateService extends BaseService {
             if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
               art = 1;
             } else if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
-                && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
+              && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
               art = 2;
             }
             if (art == 0) {
@@ -148,7 +148,7 @@ export class PrivateService extends BaseService {
         }
         if (art != 2) {
           return this.iuFzNotiz(daten, tbEintrag).then(r => {
-            return new Dexie.Promise<FzNotiz>((resolve) => { resolve(tbEintrag); })
+            return new Dexie.Promise<FzNotiz>(resolve => resolve(tbEintrag))
           });
         }
       }

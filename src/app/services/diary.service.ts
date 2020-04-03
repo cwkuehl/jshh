@@ -47,9 +47,9 @@ export class DiaryService extends BaseService {
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
-      if (e.replid === 'new') {
-        e.replid = Global.getUID();
-      } else if (e.replid !== 'server') {
+    if (e.replid === 'new') {
+      e.replid = Global.getUID();
+    } else if (e.replid !== 'server') {
       if (e.angelegtAm == null) {
         e.angelegtAm = daten.jetzt;
         e.angelegtVon = daten.benutzerId;
@@ -96,7 +96,7 @@ export class DiaryService extends BaseService {
           if (eintrag.replid !== 'server')
             eintrag.replid = Global.getUID();
           return this.iuTbEintrag(daten, eintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(eintrag); })
+            return new Dexie.Promise<TbEintrag>(resolve => resolve(eintrag))
           });
         }
       } else if (!leer) {
@@ -130,7 +130,7 @@ export class DiaryService extends BaseService {
             if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
               art = 1;
             } else if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
-                && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
+              && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
               art = 2;
             }
             if (art == 0) {
@@ -152,15 +152,15 @@ export class DiaryService extends BaseService {
         }
         if (art != 2) {
           return this.iuTbEintrag(daten, tbEintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+            return new Dexie.Promise<TbEintrag>(resolve => resolve(tbEintrag))
           });
         }
-    } else {
+      } else {
         // leeren Eintrag löschen
         //if (eintrag.datum == null)
         //  return Dexie.Promise.reject('Fehler beim Löschen.');
         return this.db.TbEintrag.delete(eintrag.datum).then(r => {
-          return new Dexie.Promise<TbEintrag>((resolve) => { resolve(tbEintrag); })
+          return new Dexie.Promise<TbEintrag>(resolve => resolve(tbEintrag))
         });
       }
       return tbEintrag;

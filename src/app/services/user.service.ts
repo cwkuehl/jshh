@@ -62,7 +62,7 @@ export class UserService extends BaseService {
       else
         parameter.wert = userId;
       return this.iuParameter(daten, parameter).then(r => {
-        return new Dexie.Promise<Parameter>((resolve) => { resolve(parameter); })
+        return new Dexie.Promise<Parameter>(resolve => resolve(parameter))
       });
     });
   }
@@ -73,7 +73,7 @@ export class UserService extends BaseService {
       .then(a => { if (a != null) options.replicationServer = a.wert; })
       .then(() => this.db.Parameter.get('ReplicationMonths'))
       .then(a => { if (a != null) options.replicationMonths = a.wert; })
-      .then(() => new Dexie.Promise<Options>((resolve) => { resolve(options); }));
+      .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
   }
 
   public saveOptionsOb(options: Options): Observable<Action> {
@@ -92,7 +92,7 @@ export class UserService extends BaseService {
     }
     return this.saveParam('ReplicationServer', options.replicationServer)
       .then(() => this.saveParam('ReplicationMonths', options.replicationMonths))
-      .then(() => new Dexie.Promise<Options>((resolve) => { resolve(options); }));
+      .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
   }
 
   public saveParam(key: string, value: string): Dexie.Promise<Parameter> {
@@ -106,7 +106,7 @@ export class UserService extends BaseService {
       else
         parameter.wert = value;
       return this.iuParameter(daten, parameter)
-        .then(r => new Dexie.Promise<Parameter>((resolve) => { resolve(parameter); }));
+        .then(r => new Dexie.Promise<Parameter>(resolve => resolve(parameter)));
     });
   }
 }
