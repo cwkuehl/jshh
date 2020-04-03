@@ -14,12 +14,13 @@ import { AppEffects } from './app.effects';
 import { AppState } from './app.state';
 import { DateComponent } from './components/comp/date.component';
 import { JshhDatabase } from './services/database';
-import { Tb100Component } from './components/diary/tb100.component';
 import { MenuComponent } from './components/menu.component';
-import { Fz700Component } from './components/private/fz700.component';
-import { Fz710Component } from './components/private/fz710.component';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500.component';
+import { Fz700Component } from './components/private/fz700.component';
+import { Fz710Component } from './components/private/fz710.component';
+import { Hh400Component } from './components/budget/hh400.component';
+import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
 import { DiaryService, PrivateService, UserService } from './services';
@@ -29,12 +30,13 @@ import { DiaryService, PrivateService, UserService } from './services';
   declarations: [
     AppComponent,
     MenuComponent,
-    Fz700Component,
-    Fz710Component,
-    Tb100Component,
     DateComponent,
     Am000Component,
-    Am500Component
+    Am500Component,
+    Fz700Component,
+    Fz710Component,
+    Hh400Component,
+    Tb100Component,
   ],
   imports: [
     BrowserModule, FormsModule, NgbModule, AppRoutingModule,
