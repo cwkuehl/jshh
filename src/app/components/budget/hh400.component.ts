@@ -13,7 +13,7 @@ import { Component, OnInit } from '@angular/core';
     </div>
   </div>
   <div class="form-row">
-      <div class="form-group col-sm-6">
+    <div class="form-group col-sm-6">
       <label class="control-label" for="months">Anzahl Monate</label>&nbsp;
       <input type="text" class="form-control" name="months" [(ngModel)]="months" title="Anzahl Monate">
     </div>

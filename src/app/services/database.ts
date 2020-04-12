@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { FzNotiz, TbEintrag, Parameter, MaReplikation } from '../apis';
+import { FzNotiz, HhBuchung, TbEintrag, Parameter, MaReplikation } from '../apis';
 import { Injectable } from '@angular/core';
 import { Global } from './global';
 import { Store } from '@ngrx/store';
@@ -12,6 +12,7 @@ export class JshhDatabase extends Dexie {
   userId: string;
 
   public FzNotiz: Dexie.Table<FzNotiz, string>;
+  public HhBuchung: Dexie.Table<HhBuchung, string>;
   public MaReplikation: Dexie.Table<MaReplikation, string>;
   public Parameter: Dexie.Table<Parameter, string>;
   public TbEintrag: Dexie.Table<TbEintrag, string>;
@@ -20,25 +21,14 @@ export class JshhDatabase extends Dexie {
     super(DB_NAME);
     store.select('userId').subscribe(x => this.userId = x);
     this.version(1).stores({
-      TbEintrag: '&datum,eintrag' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
-    });
-    this.version(2).stores({
-      MaReplikation: '&replikationUid,tabellenNr',
-      Parameter: '&schluessel',
-      TbEintrag: '&datum,eintrag' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
-    });
-    this.version(3).stores({
-      MaReplikation: '&replikationUid,tabellenNr',
-      Parameter: '&schluessel',
-      TbEintrag: '&datum,eintrag,replid' // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
-    });
-    this.version(4).stores({
       FzNotiz: '&uid,thema,replid',
+      HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
       MaReplikation: '&replikationUid,tabellenNr',
       Parameter: '&schluessel',
       TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
     this.FzNotiz = this.table('FzNotiz');
+    this.HhBuchung = this.table('HhBuchung');
     this.MaReplikation = this.table('MaReplikation');
     this.Parameter = this.table('Parameter');
     this.TbEintrag = this.table('TbEintrag');
