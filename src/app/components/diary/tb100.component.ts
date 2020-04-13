@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Observable, asyncScheduler } from 'rxjs';
+import { asyncScheduler } from 'rxjs';
 import * as TbEintragActions from '../../actions/tbeintrag.actions';
-import * as GlobalActions from '../../actions/global.actions'
-import { TbEintrag, FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { Global } from '../../services/global';
 import { DiaryService } from '../../services/diary.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { throttleTime } from 'rxjs/operators';
 
 @Component({
@@ -37,9 +34,6 @@ import { throttleTime } from 'rxjs/operators';
 </form>
 
 <div class="row">
-  <label class="control-label col-sm-2 d-none d-md-block" for="months">Anzahl Monate</label>&nbsp;
-  <input type="text" class="form-control col-sm-1" name="months" [(ngModel)]="months" title="Anzahl Monate">
-  <label class="control-label col-sm-2 d-md-none d-lg-none d-xl-none" for="months"> Monat(e)</label>&nbsp;
   <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Tagebuch-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
   <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Tagebuch löschen">Löschen</button>
 </div>
@@ -47,10 +41,6 @@ import { throttleTime } from 'rxjs/operators';
   styles: [``]
 })
 export class Tb100Component implements OnInit {
-
-  //diary: Observable<TbEintrag[]>;
-  //userId: string;
-  months: string;
 
   date: Date;
   entry: string;
@@ -61,8 +51,6 @@ export class Tb100Component implements OnInit {
   private geladen: boolean;
 
   constructor(private store: Store<AppState>, private actions$: Actions, private diaryservice: DiaryService) {
-    //this.diary = store.select('diary');
-    //store.select('userId').subscribe(x => this.userId = x);
     this.actions$.pipe(
       ofType(TbEintragActions.Load),
       throttleTime(100, asyncScheduler, { leading: false, trailing: true })
@@ -72,7 +60,6 @@ export class Tb100Component implements OnInit {
   ngOnInit() {
     this.date = Global.today();
     this.bearbeiteEintraege(false, true); // Zuerst nur laden.
-    this.months = '1';
   }
 
   public onDateChange(datum: Date) {
@@ -92,47 +79,9 @@ export class Tb100Component implements OnInit {
   }
 
   replicate() {
-    if (Global.toInt(this.months) <= 0) {
-      //this.store.dispatch(GlobalActions.SetError('Monate müssen größer 0 sein. Global'));
-      this.store.dispatch(TbEintragActions.Error('Monate müssen größer 0 sein.'));
-      return;
-    }
     this.store.dispatch(TbEintragActions.Error(null));
-    this.diaryservice.getTbEintragListe('server').then(a => this.postReadServer(a))
-    .catch(a => this.store.dispatch(TbEintragActions.Error(a)));
-  }
-
-  postReadServer(arr: TbEintrag[]) {
-    let m = Math.max(1, Global.toInt(this.months));
-    let jarr = JSON.stringify({'TB_Eintrag': arr});
-    this.diaryservice.postServer<TbEintrag[]>('TB_Eintrag', `read_${m}m`, jarr).subscribe(
-      (a: TbEintrag[]) => {
-        a.reverse().forEach((e: TbEintrag) => {
-          //console.log(e.datum + ": " + e.eintrag);
-          this.store.dispatch(TbEintragActions.Save(e));
-          this.store.dispatch(TbEintragActions.Load());
-        });
-        //console.log("JSON Next: " + JSON.stringify(a));
-      },
-      (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.Error(Global.handleError(err)));
-      },
-      //() => this.store.dispatch(TbEintragActions.Load())
-    );
-    if (false) {
-      //this.diaryservice.find().subscribe(a => console.log('json: ' + a)
-      //  , err => this.store.dispatch(TbEintragActions.ErrorTbEintrag(`Server error: ${err.status} - Details: ${err.error}`)));
-      this.diaryservice.postServer<FzNotiz[]>('FZ_Notiz', 'read', null).subscribe(
-      (a: FzNotiz[]) => {
-        console.log("JSON Next: " + JSON.stringify(a));
-      },
-      (err: HttpErrorResponse) => {
-        return this.store.dispatch(TbEintragActions.Error(Global.handleError(err)));
-      },
-      () => {
-        // console.log("JSON: Ende");
-      });
-    }
+    this.diaryservice.getTbEintragListe('server').then(a => this.diaryservice.postReadServer(a))
+      .catch(a => this.store.dispatch(TbEintragActions.Error(a)));
   }
 
   private ladeEintraege(datum: Date) {

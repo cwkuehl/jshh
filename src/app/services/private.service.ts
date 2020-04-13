@@ -9,7 +9,7 @@ import { Global } from './global';
 import * as GlobalActions from '../actions/global.actions';
 import * as FzNotizActions from '../actions/fznotiz.actions'
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -69,44 +69,44 @@ export class PrivateService extends BaseService {
     return ob;
   }
 
-  public saveMemo(eintrag: FzNotiz): Dexie.Promise<FzNotiz> {
-
+  public saveMemo(e0: FzNotiz): Dexie.Promise<FzNotiz> {
+    var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);
-    if (eintrag == null || eintrag.uid == null) {
+    if (e == null || e.uid == null) {
       return Dexie.Promise.resolve(null);
     }
     // Korrektur aus Import vom Server
-    if (eintrag.angelegtAm != null && typeof eintrag.angelegtAm == 'string') {
-      let d = new Date(Date.parse(eintrag.angelegtAm));
+    if (e.angelegtAm != null && typeof e.angelegtAm == 'string') {
+      let d = new Date(Date.parse(e.angelegtAm));
       //d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
-      eintrag.angelegtAm = d;
+      e.angelegtAm = d;
     }
-    if (eintrag.geaendertAm != null && typeof eintrag.geaendertAm == 'string') {
-      eintrag.geaendertAm = new Date(Date.parse(eintrag.geaendertAm));
+    if (e.geaendertAm != null && typeof e.geaendertAm == 'string') {
+      e.geaendertAm = new Date(Date.parse(e.geaendertAm));
     }
-    eintrag.notiz = Global.trim(eintrag.notiz);
-    return this.getMemo(eintrag.uid).then((tbEintrag: FzNotiz) => {
+    e.notiz = Global.trim(e.notiz);
+    return this.getMemo(e.uid).then((tbEintrag: FzNotiz) => {
       if (tbEintrag == null) {
-        if (eintrag.replid !== 'server')
-          eintrag.replid = Global.getUID();
-        return this.iuFzNotiz(daten, eintrag).then(r => {
-          return new Dexie.Promise<FzNotiz>(resolve => resolve(eintrag))
+        if (e.replid !== 'server')
+          e.replid = Global.getUID();
+        return this.iuFzNotiz(daten, e).then(r => {
+          return new Dexie.Promise<FzNotiz>(resolve => resolve(e))
         });
       } else {
         let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
-        if (eintrag.thema === tbEintrag.thema && eintrag.notiz === tbEintrag.notiz) {
+        if (e.thema === tbEintrag.thema && e.notiz === tbEintrag.notiz) {
           // tbEintrag.replid alt | eintrag.replid neu | Aktion
           // Guid                 | server             | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
           art = 2;
           if (tbEintrag.replid !== 'server') {
-            if (eintrag.replid === 'server') {
+            if (e.replid === 'server') {
               art = 0;
               tbEintrag.replid = 'server'; // neue Guid
-              tbEintrag.angelegtAm = eintrag.angelegtAm;
-              tbEintrag.angelegtVon = eintrag.angelegtVon;
-              tbEintrag.geaendertAm = eintrag.geaendertAm;
-              tbEintrag.geaendertVon = eintrag.geaendertVon;
+              tbEintrag.angelegtAm = e.angelegtAm;
+              tbEintrag.angelegtVon = e.angelegtVon;
+              tbEintrag.geaendertAm = e.geaendertAm;
+              tbEintrag.geaendertVon = e.geaendertVon;
             }
           }
         } else {
@@ -118,29 +118,29 @@ export class PrivateService extends BaseService {
           //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
           //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
           if (tbEintrag.replid === 'server') {
-            if (eintrag.replid !== 'server')
+            if (e.replid !== 'server')
               tbEintrag.replid = Global.getUID(); // neue Guid
-          } else if (eintrag.replid === 'server') {
-            if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
+          } else if (e.replid === 'server') {
+            if (tbEintrag.angelegtAm != null && (e.angelegtAm == null || tbEintrag.angelegtAm.getTime() != e.angelegtAm.getTime())) {
               art = 1;
-            } else if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
-              && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
+            } else if (tbEintrag.angelegtAm != null && e.angelegtAm != null && tbEintrag.angelegtAm.getTime() == e.angelegtAm.getTime()
+              && tbEintrag.geaendertAm != null && (e.geaendertAm == null || tbEintrag.geaendertAm.getTime() > e.geaendertAm.getTime())) {
               art = 2;
             }
             if (art == 0) {
-              tbEintrag.replid = eintrag.replid;
+              tbEintrag.replid = e.replid;
             }
           }
           if (art == 0) {
-            tbEintrag.thema = eintrag.thema;
-            tbEintrag.notiz = eintrag.notiz;
+            tbEintrag.thema = e.thema;
+            tbEintrag.notiz = e.notiz;
           } else if (art == 1) {
-            tbEintrag.thema = eintrag.thema;
-            let merge = `Server: ${eintrag.notiz}\nLokal: ${tbEintrag.notiz}`;
+            tbEintrag.thema = e.thema;
+            let merge = `Server: ${e.notiz}\nLokal: ${tbEintrag.notiz}`;
             tbEintrag.notiz = merge;
             tbEintrag.replid = 'new';
-            tbEintrag.angelegtAm = eintrag.angelegtAm;
-            tbEintrag.angelegtVon = eintrag.angelegtVon;
+            tbEintrag.angelegtAm = e.angelegtAm;
+            tbEintrag.angelegtVon = e.angelegtVon;
             tbEintrag.geaendertAm = daten.jetzt;
             tbEintrag.geaendertVon = daten.benutzerId;
           }
@@ -153,7 +153,7 @@ export class PrivateService extends BaseService {
         }
       }
       return tbEintrag;
-    }); // .catch((e) => console.log('speichereEintrag: ' + e));
+    }); // .catch((ex) => console.log('speichereEintrag: ' + ex));
   }
 
   public deleteAllMemosOb(): Observable<Action> {
@@ -166,4 +166,18 @@ export class PrivateService extends BaseService {
     return ob;
   }
 
+  public postReadServer(arr: FzNotiz[]) {
+    let jarr = JSON.stringify({ 'FZ_Notiz': arr });
+    this.postServer<FzNotiz[]>('FZ_Notiz', jarr).subscribe(
+      (a: FzNotiz[]) => {
+        a.reverse().forEach((e: FzNotiz) => {
+          this.store.dispatch(FzNotizActions.Save(e));
+          this.store.dispatch(FzNotizActions.Load());
+        });
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
+      },
+    );
+  }
 }

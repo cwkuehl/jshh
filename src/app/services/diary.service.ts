@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import Dexie from 'dexie';
@@ -72,8 +72,8 @@ export class DiaryService extends BaseService {
     return ob;
   }
 
-  public saveEntry(eintrag: TbEintrag): Dexie.Promise<TbEintrag> {
-
+  public saveEntry(eintrag0: TbEintrag): Dexie.Promise<TbEintrag> {
+    var eintrag = Object.assign({}, eintrag0); // Clone erzeugen
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);
     if (eintrag == null || eintrag.datum == null) {
@@ -177,4 +177,23 @@ export class DiaryService extends BaseService {
     });
     return ob;
   }
+
+  postReadServer(arr: TbEintrag[]) {
+    let jarr = JSON.stringify({ 'TB_Eintrag': arr });
+    this.postServer<TbEintrag[]>('TB_Eintrag', jarr).subscribe(
+      (a: TbEintrag[]) => {
+        a.reverse().forEach((e: TbEintrag) => {
+          //console.log(e.datum + ": " + e.eintrag);
+          this.store.dispatch(TbEintragActions.Save(e));
+          this.store.dispatch(TbEintragActions.Load());
+        });
+        //console.log("JSON Next: " + JSON.stringify(a));
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(TbEintragActions.Error(Global.handleError(err)));
+      },
+      //() => this.store.dispatch(TbEintragActions.Load())
+    );
+  }
+
 }

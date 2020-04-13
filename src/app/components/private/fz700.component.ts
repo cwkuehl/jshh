@@ -82,21 +82,6 @@ export class Fz700Component implements OnInit {
     this.store.dispatch(GlobalActions.SetError(null));
     //this.privateservice.getMemoList('server').then(a => this.postReadServer(a))
     //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
-    this.postReadServer(this.memos);
-  }
-
-  postReadServer(arr: FzNotiz[]) {
-    let jarr = JSON.stringify({'FZ_Notiz': arr});
-    this.privateservice.postServer<FzNotiz[]>('FZ_Notiz', 'read', jarr).subscribe(
-      (a: FzNotiz[]) => {
-        a.reverse().forEach((e: FzNotiz) => {
-          this.store.dispatch(FzNotizActions.Save(e));
-          this.store.dispatch(FzNotizActions.Load());
-        });
-      },
-      (err: HttpErrorResponse) => {
-        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
-      },
-    );
+    this.privateservice.postReadServer(this.memos);
   }
 }

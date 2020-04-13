@@ -1,5 +1,5 @@
 import { JshhDatabase } from './database';
-import { Kontext } from '../apis';
+import { Kontext, Options } from '../apis';
 import { Global } from './global';
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -8,10 +8,10 @@ import { Store } from '@ngrx/store';
 
 export class BaseService {
 
-  replicationServer: string;
+  protected options: Options;
 
   constructor(protected store: Store<AppState>, protected db: JshhDatabase, protected http: HttpClient) {
-    store.select('options').subscribe(a => this.replicationServer = a.replicationServer);
+    store.select('options').subscribe(a => this.options = a);
   }
 
   // Globale Konstanten
@@ -24,9 +24,11 @@ export class BaseService {
     return { benutzerId: this.db.userId, jetzt: Global.now(), heute: Global.today() };
   }
 
-  public postServer<T>(table: string, mode: string, data: string): Observable<T> {
+  public postServer<T>(table: string, data: string): Observable<T> {
 
-    let url = this.replicationServer;
+    let url = this.options.replicationServer;
+    let m = Math.max(1, Global.toInt(this.options.replicationMonths));
+    let mode = `read_${m}m`;
     let headers = new HttpHeaders({
       'Accept': 'application/json',
       //'Authorization': 'my-auth-token'

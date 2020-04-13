@@ -90,6 +90,12 @@ export class UserService extends BaseService {
     if (options == null) {
       return Dexie.Promise.reject('Die Optionen dürfen nicht leer sein.');
     }
+    if (Global.nes(options.replicationServer)) {
+      return Dexie.Promise.reject('Die URL für den Replikationsserver muss angegeben werden.');
+    }
+    if (Global.toInt(options.replicationMonths) <= 0) {
+      return Dexie.Promise.reject('Die Monate müssen größer 0 sein.');
+    }
     return this.saveParam('ReplicationServer', options.replicationServer)
       .then(() => this.saveParam('ReplicationMonths', options.replicationMonths))
       .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));

@@ -37,7 +37,7 @@ export class JshhDatabase extends Dexie {
     //this.FzNotiz.put({uid: Global.getUID(), thema: 'Hallo2', notiz: 'nix2', angelegtAm: Global.now(), angelegtVon: 'abcd'});
     //this.TbEintrag.put({datum: Global.date(26,9,2019), eintrag: 'Hallo', angelegtAm: Global.now(), angelegtVon: 'abc'});
     //this.TbEintrag.put({datum: Global.date(27,9,2019), eintrag: 'Hallo2', angelegtAm: Global.now(), angelegtVon: 'abc'});
-    this.HhBuchung.put({ uid: Global.getUID(), sollValuta: Global.date(13, 4, 2020), habenValuta: Global.date(13, 4, 2020), kz: 'A', betrag: 1.95583, ebetrag: 1, sollKontoUid: 'Soll', habenKontoUid: 'Haben', btext: 'Darum', belegDatum: Global.date(13, 4, 2020), belegNr: '1', angelegtAm: Global.now(), angelegtVon: 'abc' });
-    this.HhBuchung.put({ uid: Global.getUID(), sollValuta: Global.date(13, 4, 2020), habenValuta: Global.date(13, 4, 2020), kz: 'A', betrag: 1.95583, ebetrag: 1, sollKontoUid: 'Soll', habenKontoUid: 'Haben', btext: 'Darum', belegDatum: Global.date(13, 4, 2020), belegNr: '2', angelegtAm: Global.now(), angelegtVon: 'abc' });
+    //this.HhBuchung.put({ uid: Global.getUID(), sollValuta: Global.date(13, 4, 2020), habenValuta: Global.date(13, 4, 2020), kz: 'A', betrag: 1.95583, ebetrag: 1, sollKontoUid: 'Soll', habenKontoUid: 'Haben', btext: 'Darum', belegDatum: Global.date(13, 4, 2020), belegNr: '1', angelegtAm: Global.now(), angelegtVon: 'abc' });
+    //this.HhBuchung.put({ uid: Global.getUID(), sollValuta: Global.date(13, 4, 2020), habenValuta: Global.date(13, 4, 2020), kz: 'A', betrag: 1.95583, ebetrag: 1, sollKontoUid: 'Soll', habenKontoUid: 'Haben', btext: 'Darum', belegDatum: Global.date(13, 4, 2020), belegNr: '2', angelegtAm: Global.now(), angelegtVon: 'abc' });
   }
 }
