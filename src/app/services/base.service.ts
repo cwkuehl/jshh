@@ -11,7 +11,7 @@ export class BaseService {
   replicationServer: string;
 
   constructor(protected store: Store<AppState>, protected db: JshhDatabase, protected http: HttpClient) {
-    store.select('replicationServer').subscribe(a => this.replicationServer = a);
+    store.select('options').subscribe(a => this.replicationServer = a.replicationServer);
   }
 
   // Globale Konstanten

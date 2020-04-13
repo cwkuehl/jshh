@@ -10,7 +10,7 @@ export interface HhBuchung extends Revision {
   sollKontoUid: string;
   habenKontoUid: string;
   btext: string;
-  belegNr: string;
+  belegNr?: string;
   belegDatum: Date;
   replid?: string;
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HhBuchung } from 'src/app/apis';
 
 @Component({
   selector: 'app-hh400',
@@ -28,6 +29,7 @@ import { Component, OnInit } from '@angular/core';
   styles: [``]
 })
 export class Hh400Component implements OnInit {
+  bookings: HhBuchung[] = [];
   server: string;
   months: string;
 
