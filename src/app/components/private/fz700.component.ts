@@ -66,11 +66,8 @@ export class Fz700Component implements OnInit {
     //this.store.dispatch(FzNotizActions.LoadFzNotiz());
   }
 
-  //get memos(): FzNotiz[] {
-  //  return this.privateservice.memos;
-  //}
   public reload() {
-    this.privateservice.getNotizListe(null).then(l => { if (l != null) this.memos = l; });
+    this.privateservice.getMemoList(null).then(l => { if (l != null) this.memos = l; });
   }
 
   public delete() {
@@ -80,8 +77,8 @@ export class Fz700Component implements OnInit {
 
   public replicate() {
     this.store.dispatch(GlobalActions.SetError(null));
-    //this.privateservice.getMemoList('server').then(a => this.postReadServer(a))
+    //this.privateservice.getMemoList('server').then(a => this.postServer(a))
     //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
-    this.privateservice.postReadServer(this.memos);
+    this.privateservice.postServer(this.memos);
   }
 }

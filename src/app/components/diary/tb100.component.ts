@@ -80,7 +80,7 @@ export class Tb100Component implements OnInit {
 
   replicate() {
     this.store.dispatch(TbEintragActions.Error(null));
-    this.diaryservice.getTbEintragListe('server').then(a => this.diaryservice.postReadServer(a))
+    this.diaryservice.getTbEintragListe('server').then(a => this.diaryservice.postServer(a))
       .catch(a => this.store.dispatch(TbEintragActions.Error(a)));
   }
 

@@ -20,9 +20,9 @@ export class PrivateService extends BaseService {
     super(store, db, http);
   }
 
-  memos: FzNotiz[] = [];
+  // memos: FzNotiz[] = [];
 
-  getNotizListe(replidne: string): Dexie.Promise<FzNotiz[]> {
+  getMemoList(replidne: string): Dexie.Promise<FzNotiz[]> {
 
     if (Global.nes(replidne))
       return this.db.FzNotiz.toArray();
@@ -35,13 +35,12 @@ export class PrivateService extends BaseService {
     return l;
   }
 
-  public loadMemos(): void {
-    this.getNotizListe(null).then(l => { if (l != null) this.memos = l; })
-      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
-  }
+  // public loadMemos(): void {
+  //   this.getMemoList(null).then(l => { if (l != null) this.memos = l; })
+  //     .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
+  // }
 
   private iuFzNotiz(daten: Kontext, e: FzNotiz): Dexie.Promise<string> {
-
     if (daten == null || e == null) {
       return Dexie.Promise.reject('Parameter fehlt');
     }
@@ -166,9 +165,9 @@ export class PrivateService extends BaseService {
     return ob;
   }
 
-  public postReadServer(arr: FzNotiz[]) {
+  public postServer(arr: FzNotiz[]) {
     let jarr = JSON.stringify({ 'FZ_Notiz': arr });
-    this.postServer<FzNotiz[]>('FZ_Notiz', jarr).subscribe(
+    this.postReadServer<FzNotiz[]>('FZ_Notiz', jarr).subscribe(
       (a: FzNotiz[]) => {
         a.reverse().forEach((e: FzNotiz) => {
           this.store.dispatch(FzNotizActions.Save(e));

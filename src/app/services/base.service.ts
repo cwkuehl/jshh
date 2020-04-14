@@ -24,7 +24,7 @@ export class BaseService {
     return { benutzerId: this.db.userId, jetzt: Global.now(), heute: Global.today() };
   }
 
-  public postServer<T>(table: string, data: string): Observable<T> {
+  protected postReadServer<T>(table: string, data: string): Observable<T> {
 
     let url = this.options.replicationServer;
     let m = Math.max(1, Global.toInt(this.options.replicationMonths));

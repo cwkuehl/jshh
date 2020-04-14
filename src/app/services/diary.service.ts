@@ -178,9 +178,9 @@ export class DiaryService extends BaseService {
     return ob;
   }
 
-  postReadServer(arr: TbEintrag[]) {
+  postServer(arr: TbEintrag[]) {
     let jarr = JSON.stringify({ 'TB_Eintrag': arr });
-    this.postServer<TbEintrag[]>('TB_Eintrag', jarr).subscribe(
+    this.postReadServer<TbEintrag[]>('TB_Eintrag', jarr).subscribe(
       (a: TbEintrag[]) => {
         a.reverse().forEach((e: TbEintrag) => {
           //console.log(e.datum + ": " + e.eintrag);

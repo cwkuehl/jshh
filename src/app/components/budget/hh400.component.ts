@@ -6,26 +6,35 @@ import { HhBuchung } from 'src/app/apis';
   template: `
 <h3>Buchungen</h3>
 
-<form>
-  <div class="form-row">
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="url">Replikation-URL</label>
-      <input type="text" class="form-control" name="url" [(ngModel)]="server" placeholder="URL für Replikationsserver">
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col-sm-6">
-      <label class="control-label" for="months">Anzahl Monate</label>&nbsp;
-      <input type="text" class="form-control" name="months" [(ngModel)]="months" title="Anzahl Monate">
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <button type="submit" class="btn btn-primary" (click)="save()">Speichern</button>
-    </div>
-  </div>
-</form>
-  `,
+<div class="row">
+<button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+<button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
+</div>
+
+<div class="row card mt-1" *ngIf="bookings.length > 0">
+
+<table class="table table-contensed" >
+  <thead>
+  <tr>
+    <th>Nr.</th>
+    <th>Thema</th>
+    <th>Geändert am</th>
+    <th>Geändert von</th>
+    <th>Angelegt am</th>
+    <th>Angelegt von</th>
+  </tr>
+  </thead>
+  <tr *ngFor="let item of bookings"> <!-- [class.active]="item === selectedFlight"> -->
+    <td><a [routerLink]="['/booking', item.uid]">{{item.uid}}</a></td>
+    <td>{{item.btext}}</td>
+    <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+    <td>{{item.geaendertVon}}</td>
+    <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
+    <td>{{item.angelegtVon}}</td>
+  </tr>
+</table>
+</div>
+`,
   styles: [``]
 })
 export class Hh400Component implements OnInit {
@@ -41,5 +50,17 @@ export class Hh400Component implements OnInit {
 
   save() {
     ;
+  }
+
+  public delete() {
+    // this.store.dispatch(GlobalActions.SetError(null));
+    // this.privateservice.deleteAllMemosOb().subscribe(() => this.reload());
+  }
+
+  public replicate() {
+    // this.store.dispatch(GlobalActions.SetError(null));
+    // //this.privateservice.getMemoList('server').then(a => this.postServer(a))
+    // //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
+    // this.privateservice.postServer(this.memos);
   }
 }

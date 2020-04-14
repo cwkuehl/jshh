@@ -27,8 +27,8 @@ import { Global } from '../../services/global';
     </div>
   </div>
   <div class="form-row">
-    <button type="submit" class="btn btn-primary col-sm-2" (click)="save()">Speichern</button>
-    <a class="btn btn-primary col-sm-2 ml-1" [routerLink]="'/memos'">Abbrechen</a>
+    <!--button type="submit" class="btn btn-primary col-sm-2" title="Schließen mit Speichern." (click)="save()">Speichern</button-->
+    <a class="btn btn-primary col-sm-2 ml-1" title="Schließen ohne Speichern." [routerLink]="'/memos'">Abbrechen</a>
   </div>
 </form>
   `,
