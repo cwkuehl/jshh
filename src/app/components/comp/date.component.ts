@@ -1,12 +1,63 @@
 import { Component, OnInit, Injectable, Output, Input, EventEmitter } from '@angular/core';
-import { NgbDateAdapter, NgbDateStruct, NgbDate, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { Global } from '../../services/global';
+
+// /**
+//  * This Service handles how the date is represented in scripts i.e. ngModel.
+//  */
+// @Injectable()
+// export class CustomAdapter extends NgbDateAdapter<string> {
+
+//   readonly DELIMITER = '-';
+
+//   fromModel(value: string | null): NgbDateStruct | null {
+//     if (value) {
+//       let date = value.split(this.DELIMITER);
+//       return {
+//         day: parseInt(date[0], 10),
+//         month: parseInt(date[1], 10),
+//         year: parseInt(date[2], 10)
+//       };
+//     }
+//     return null;
+//   }
+
+//   toModel(date: NgbDateStruct | null): string | null {
+//     return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : null;
+//   }
+// }
+
+// /**
+//  * This Service handles how the date is rendered and parsed from keyboard i.e. in the bound input field.
+//  */
+// @Injectable()
+// export class CustomDateParserFormatter extends NgbDateParserFormatter {
+
+//   readonly DELIMITER = '/';
+
+//   parse(value: string): NgbDateStruct | null {
+//     if (value) {
+//       let date = value.split(this.DELIMITER);
+//       return {
+//         day: parseInt(date[0], 10),
+//         month: parseInt(date[1], 10),
+//         year: parseInt(date[2], 10)
+//       };
+//     }
+//     return null;
+//   }
+
+//   format(date: NgbDateStruct | null): string {
+//     return date ? date.day + this.DELIMITER + date.month + this.DELIMITER + date.year : '';
+//   }
+// }
 
 @Component({
   selector: 'app-date',
   template: `
 <div class="input-group">
-  <input class="form-control" placeholder="yyyy-mm-dd" (focus)="openSelection(d)" name="d" [ngModel]="seldate" (ngModelChange)="onSeldateChange($event)" ngbDatepicker #d="ngbDatepicker" />
+  <input class="form-control" placeholder="yyyy-mm-dd" (focus)="d.toggle()" name="d"
+    [ngModel]="seldate" (ngModelChange)="onSeldateChange($event)" ngbDatepicker #d="ngbDatepicker" />
   <div class="input-group-append">
     <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button" title="Vorheriger Tag">-</button>
     <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button" title="Heute">o</button>
@@ -15,7 +66,11 @@ import { Global } from '../../services/global';
 </div>
   `,
   styles: [``],
-  providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }]
+  providers: [
+    //{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter },
+    //{ provide: NgbDateAdapter, useClass: CustomAdapter },
+    //{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
+  ]
 })
 export class DateComponent implements OnInit {
 
@@ -24,31 +79,32 @@ export class DateComponent implements OnInit {
 
   seldate: NgbDateStruct;
 
-  constructor() {
+  constructor(private calendar: NgbCalendar) {
     if (this.date == null) {
-      this.seldate = this.today;
+      //this.seldate = this.today;
+      this.seldate = this.calendar.getToday();
       //console.log("ngOnInit date == null");
     } else
-      this.seldate = {year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate()};
+      this.seldate = { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() };
   }
 
   ngOnInit() {
   }
 
-  get today() {
-    var d = Global.today();
-    //return new NgbDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
-    return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
-  }
+  // get today() {
+  //   var d = Global.today();
+  //   //return new NgbDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
+  //   return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+  // }
 
   openSelection(d: any) {
-    if (this.seldate.month == 12)
-      d.startDate = {year: this.seldate.year + 11, month: 1, day: this.seldate.day};
-    else
-      d.startDate = {year: this.seldate.year + 10, month: this.seldate.month + 1, day: 1};
+    // if (this.seldate.month == 12)
+    //   d.startDate = {year: this.seldate.year + 11, month: 1, day: this.seldate.day};
+    // else
+    //   d.startDate = {year: this.seldate.year + 10, month: this.seldate.month + 1, day: 1};
     d.open();
-    d.startDate = {year: this.seldate.year + 10, month: this.seldate.month, day: this.seldate.day};
-    d.navigateTo({year: this.seldate.year, month: this.seldate.month, day: this.seldate.day});
+    d.startDate = { year: this.seldate.year + 10, month: this.seldate.month, day: this.seldate.day };
+    d.navigateTo({ year: this.seldate.year, month: this.seldate.month, day: this.seldate.day });
   }
 
   onSeldateChange(x: any) {
