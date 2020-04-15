@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HhBuchung } from 'src/app/apis';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.state';
+import { Actions, ofType } from '@ngrx/effects';
+import { BudgetService } from 'src/app/services';
+import * as HhBuchungActions from '../../actions/hhbuchung.actions';
+import * as GlobalActions from '../../actions/global.actions';
+import { throttleTime } from 'rxjs/operators';
+import { asyncScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-hh400',
@@ -7,8 +15,8 @@ import { HhBuchung } from 'src/app/apis';
 <h3>Buchungen</h3>
 
 <div class="row">
-<button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
-<button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
+<button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Buchungen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+<button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Alle Buchungen löschen">Löschen</button>
 </div>
 
 <div class="row card mt-1" *ngIf="bookings.length > 0">
@@ -39,28 +47,29 @@ import { HhBuchung } from 'src/app/apis';
 })
 export class Hh400Component implements OnInit {
   bookings: HhBuchung[] = [];
-  server: string;
-  months: string;
 
-  constructor() {
+  constructor(private store: Store<AppState>, private actions$: Actions, private budgetservice: BudgetService) {
+    this.actions$.pipe(
+      ofType(HhBuchungActions.Load),
+      throttleTime(100, asyncScheduler, { leading: false, trailing: true })
+    ).subscribe(() => this.reload());
+    this.reload();
   }
 
   ngOnInit(): void {
   }
 
-  save() {
-    ;
+  public reload() {
+    this.budgetservice.getBookingList(null).then(l => { if (l != null) this.bookings = l; });
   }
 
   public delete() {
-    // this.store.dispatch(GlobalActions.SetError(null));
-    // this.privateservice.deleteAllMemosOb().subscribe(() => this.reload());
+    this.store.dispatch(GlobalActions.SetError(null));
+    this.budgetservice.deleteAllBookingsOb().subscribe(() => this.reload());
   }
 
   public replicate() {
-    // this.store.dispatch(GlobalActions.SetError(null));
-    // //this.privateservice.getMemoList('server').then(a => this.postServer(a))
-    // //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
-    // this.privateservice.postServer(this.memos);
+    this.store.dispatch(GlobalActions.SetError(null));
+    this.budgetservice.postServer(this.bookings);
   }
 }
