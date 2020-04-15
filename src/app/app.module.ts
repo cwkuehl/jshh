@@ -23,8 +23,7 @@ import { Hh400Component } from './components/budget/hh400.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
-import { DiaryService, PrivateService, UserService } from './services';
-
+import { BudgetService, DiaryService, PrivateService, UserService } from './services';
 
 @NgModule({
   declarations: [
@@ -52,7 +51,7 @@ import { DiaryService, PrivateService, UserService } from './services';
     HttpClientModule
   ],
   providers: [
-    JshhDatabase, DiaryService, PrivateService, UserService,
+    JshhDatabase, BudgetService, DiaryService, PrivateService, UserService,
     Tb100DeactivateGuard
   ],
   bootstrap: [AppComponent]

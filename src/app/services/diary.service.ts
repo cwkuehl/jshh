@@ -73,25 +73,23 @@ export class DiaryService extends BaseService {
   }
 
   public saveEntry(eintrag0: TbEintrag): Dexie.Promise<TbEintrag> {
+    if (eintrag0 == null || eintrag0.datum == null) {
+      return Dexie.Promise.resolve(null);
+    }
     var eintrag = Object.assign({}, eintrag0); // Clone erzeugen
     let daten = this.getKontext();
     // console.log('DiaryService saveEntry: ' + daten.benutzerId);
-    if (eintrag == null || eintrag.datum == null) {
-      return Dexie.Promise.resolve(null);
-    }
     // Korrektur aus Import vom Server
     if (eintrag.angelegtAm != null && typeof eintrag.angelegtAm == 'string') {
-      let d = new Date(Date.parse(eintrag.angelegtAm));
-      //d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
-      eintrag.angelegtAm = d;
+      eintrag.angelegtAm = new Date(Date.parse(eintrag.angelegtAm));
     }
     if (eintrag.geaendertAm != null && typeof eintrag.geaendertAm == 'string') {
       eintrag.geaendertAm = new Date(Date.parse(eintrag.geaendertAm));
     }
     eintrag.eintrag = Global.trim(eintrag.eintrag);
     let leer = Global.nes(eintrag.eintrag);
-    return this.getTbEintrag(eintrag.datum).then((tbEintrag: TbEintrag) => {
-      if (tbEintrag == null) {
+    return this.getTbEintrag(eintrag.datum).then((alt: TbEintrag) => {
+      if (alt == null) {
         if (!leer) {
           if (eintrag.replid !== 'server')
             eintrag.replid = Global.getUID();
@@ -101,58 +99,58 @@ export class DiaryService extends BaseService {
         }
       } else if (!leer) {
         let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
-        if (eintrag.eintrag === tbEintrag.eintrag) {
-          // tbEintrag.replid alt | eintrag.replid neu | Aktion
-          // Guid                 | server             | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
+        if (eintrag.eintrag === alt.eintrag) {
+          // alt.replid alt | eintrag.replid neu | Aktion
+          // Guid           | server             | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
           art = 2;
-          if (tbEintrag.replid !== 'server') {
+          if (alt.replid !== 'server') {
             if (eintrag.replid === 'server') {
               art = 0;
-              tbEintrag.replid = 'server'; // neue Guid
-              tbEintrag.angelegtAm = eintrag.angelegtAm;
-              tbEintrag.angelegtVon = eintrag.angelegtVon;
-              tbEintrag.geaendertAm = eintrag.geaendertAm;
-              tbEintrag.geaendertVon = eintrag.geaendertVon;
+              alt.replid = 'server'; // neue Guid
+              alt.angelegtAm = eintrag.angelegtAm;
+              alt.angelegtVon = eintrag.angelegtVon;
+              alt.geaendertAm = eintrag.geaendertAm;
+              alt.geaendertVon = eintrag.geaendertVon;
             }
           }
         } else {
-          // tbEintrag.replid alt | eintrag.replid neu | Aktion
-          // server               | null               | neue Guid, Eintrag überschreiben
-          // server               | server             | Eintrag überschreiben
-          // Guid                 | null               | Eintrag überschreiben
-          // Guid                 | server             | Wenn tbEintrag.angelegtAm != eintrag.angelegtAm, neue Guid, Einträge zusammenkopieren
-          //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und tbEintrag.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
-          //                      |                    | Wenn tbEintrag.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder tbEintrag.geaendertAm > eintrag.geaendertAm), Eintrag lassen
-          if (tbEintrag.replid === 'server') {
+          // alt.replid alt | eintrag.replid neu | Aktion
+          // server         | null               | neue Guid, Eintrag überschreiben
+          // server         | server             | Eintrag überschreiben
+          // Guid           | null               | Eintrag überschreiben
+          // Guid           | server             | Wenn alt.angelegtAm != eintrag.angelegtAm, neue Guid, Einträge zusammenkopieren
+          //                |                    | Wenn alt.angelegtAm == eintrag.angelegtAm und alt.geaendertAm <= eintrag.geaendertAm, Eintrag überschreiben
+          //                |                    | Wenn alt.angelegtAm == eintrag.angelegtAm und (eintrag.geaendertAm == null oder alt.geaendertAm > eintrag.geaendertAm), Eintrag lassen
+          if (alt.replid === 'server') {
             if (eintrag.replid !== 'server')
-              tbEintrag.replid = Global.getUID(); // neue Guid
+              alt.replid = Global.getUID(); // neue Guid
           } else if (eintrag.replid === 'server') {
-            if (tbEintrag.angelegtAm != null && (eintrag.angelegtAm == null || tbEintrag.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
+            if (alt.angelegtAm != null && (eintrag.angelegtAm == null || alt.angelegtAm.getTime() != eintrag.angelegtAm.getTime())) {
               art = 1;
-            } else if (tbEintrag.angelegtAm != null && eintrag.angelegtAm != null && tbEintrag.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
-              && tbEintrag.geaendertAm != null && (eintrag.geaendertAm == null || tbEintrag.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
+            } else if (alt.angelegtAm != null && eintrag.angelegtAm != null && alt.angelegtAm.getTime() == eintrag.angelegtAm.getTime()
+              && alt.geaendertAm != null && (eintrag.geaendertAm == null || alt.geaendertAm.getTime() > eintrag.geaendertAm.getTime())) {
               art = 2;
             }
             if (art == 0) {
-              tbEintrag.replid = eintrag.replid;
+              alt.replid = eintrag.replid;
             }
           }
           if (art == 0) {
-            tbEintrag.eintrag = eintrag.eintrag;
+            alt.eintrag = eintrag.eintrag;
           } else if (art == 1) {
-            let merge = `Server: ${eintrag.eintrag}\nLokal: ${tbEintrag.eintrag}`;
-            tbEintrag.eintrag = merge;
-            tbEintrag.replid = 'new';
-            tbEintrag.angelegtAm = eintrag.angelegtAm;
-            tbEintrag.angelegtVon = eintrag.angelegtVon;
-            tbEintrag.geaendertAm = daten.jetzt;
-            tbEintrag.geaendertVon = daten.benutzerId;
+            let merge = `Server: ${eintrag.eintrag}\nLokal: ${alt.eintrag}`;
+            alt.eintrag = merge;
+            alt.replid = 'new';
+            alt.angelegtAm = eintrag.angelegtAm;
+            alt.angelegtVon = eintrag.angelegtVon;
+            alt.geaendertAm = daten.jetzt;
+            alt.geaendertVon = daten.benutzerId;
           }
           //return Dexie.Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
-          return this.iuTbEintrag(daten, tbEintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>(resolve => resolve(tbEintrag))
+          return this.iuTbEintrag(daten, alt).then(r => {
+            return new Dexie.Promise<TbEintrag>(resolve => resolve(alt))
           });
         }
       } else {
@@ -160,10 +158,10 @@ export class DiaryService extends BaseService {
         //if (eintrag.datum == null)
         //  return Dexie.Promise.reject('Fehler beim Löschen.');
         return this.db.TbEintrag.delete(eintrag.datum).then(r => {
-          return new Dexie.Promise<TbEintrag>(resolve => resolve(tbEintrag))
+          return new Dexie.Promise<TbEintrag>(resolve => resolve(alt))
         });
       }
-      return tbEintrag;
+      return alt;
     }); // .catch((e) => console.log('speichereEintrag: ' + e));
   }
 

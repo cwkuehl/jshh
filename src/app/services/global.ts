@@ -36,7 +36,7 @@ export class Global {
     if (parts.length > 0)
       d.setFullYear(parseInt(parts[0]));
     if (parts.length > 1)
-      d.setMonth(parseInt(parts[1])-1);
+      d.setMonth(parseInt(parts[1]) - 1);
     if (parts.length > 2)
       d.setDate(parseInt(parts[2]));
     return d;
@@ -95,6 +95,11 @@ export class Global {
       str.trim() : str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
   }
 
+  public static trimNull(str: string): string {
+    var t = Global.trim(str);
+    return t.length <= 0 ? null : t;
+  }
+
   public static toInt(s: any): number {
 
     if (s == null) {
@@ -138,7 +143,7 @@ export class Global {
     if (datum != null) {
       //s = datum.toLocaleDateString() + ' ' + datum.toLocaleTimeString();
       let d = new Date(datum.getTime());
-      d.setTime(d.getTime() - d.getTimezoneOffset()*60*1000);
+      d.setTime(d.getTime() - d.getTimezoneOffset() * 60 * 1000);
       s = d.toISOString();
       s = s.substring(0, 10) + ' ' + s.substring(11, 19);
     }
@@ -151,7 +156,7 @@ export class Global {
   public static getUID(): string {
     var s = uuid();
     if (s.length > 35)
-      s = s.substring(0,8) + s.substring(9); // Erstes - entfernen.
+      s = s.substring(0, 8) + s.substring(9); // Erstes - entfernen.
     return s;
   }
 

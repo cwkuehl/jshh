@@ -5,7 +5,9 @@ import { of } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 import * as FzNotizActions from './actions/fznotiz.actions'
 import * as GlobalActions from './actions/global.actions';
+import * as HhBuchungActions from './actions/hhbuchung.actions'
 import * as TbEintragActions from './actions/tbeintrag.actions';
+import { BudgetService } from './services/budget.service';
 import { DiaryService } from './services/diary.service';
 import { UserService } from './services/user.service';
 import { PrivateService } from './services';
@@ -13,7 +15,8 @@ import { PrivateService } from './services';
 @Injectable()
 export class AppEffects {
   constructor(private actions$: Actions, private router: Router,
-    private diaryservice: DiaryService, private privateservice: PrivateService, private userservice: UserService) {
+    private budgetservice: BudgetService, private diaryservice: DiaryService, private privateservice: PrivateService,
+    private userservice: UserService) {
     // this.addTbEintrag$.subscribe(x => {
     //   //if (x instanceof TbEintragActions.AddTbEintrag) {
     //   //console.log('AppEffects addTbEintrag: xxx ' + x.payload.datum);
@@ -25,6 +28,12 @@ export class AppEffects {
   saveFzNotiz$ = createEffect(() => this.actions$.pipe(
     ofType(FzNotizActions.Save),
     mergeMap(x => this.privateservice.saveMemoOb(x.payload)),
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
+  ), { useEffectsErrorHandler: false });
+
+  saveHhBuchung$ = createEffect(() => this.actions$.pipe(
+    ofType(HhBuchungActions.Save),
+    mergeMap(x => this.budgetservice.saveBookingOb(x.booking)),
     catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
   ), { useEffectsErrorHandler: false });
 
