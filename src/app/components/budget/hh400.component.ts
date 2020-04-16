@@ -25,7 +25,13 @@ import { asyncScheduler } from 'rxjs';
   <thead>
   <tr>
     <th>Nr.</th>
-    <th>Thema</th>
+    <th>Valuta</th>
+    <th>K.</th>
+    <th class='text-right'>Betrag</th>
+    <th>Buchungstext</th>
+    <th>Sollkonto</th>
+    <th>Habenkonto</th>
+    <th>Beleg</th>
     <th>Geändert am</th>
     <th>Geändert von</th>
     <th>Angelegt am</th>
@@ -34,7 +40,13 @@ import { asyncScheduler } from 'rxjs';
   </thead>
   <tr *ngFor="let item of bookings"> <!-- [class.active]="item === selectedFlight"> -->
     <td><a [routerLink]="['/booking', item.uid]">{{item.uid}}</a></td>
+    <td>{{item.sollValuta | date:'yyyy-MM-dd'}}</td>
+    <td>{{item.kz}}</td>
+    <td class='text-right'>{{item.ebetrag | number:'1.2'}}</td>
     <td>{{item.btext}}</td>
+    <td>{{item.sollKontoUid}}</td>
+    <td>{{item.habenKontoUid}}</td>
+    <td>{{item.belegNr}}</td>
     <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
     <td>{{item.geaendertVon}}</td>
     <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>

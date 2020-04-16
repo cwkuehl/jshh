@@ -68,12 +68,22 @@ export class BudgetService extends BaseService {
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
     // Korrektur aus Import vom Server
-    if (e.angelegtAm != null && typeof e.angelegtAm == 'string') {
+    if (e.sollValuta != null && typeof e.sollValuta == 'string')
+      e.sollValuta = new Date(Date.parse(e.sollValuta));
+    if (e.habenValuta != null && typeof e.habenValuta == 'string')
+      e.habenValuta = new Date(Date.parse(e.habenValuta));
+    if (e.betrag != null && typeof e.betrag == 'string') {
+      var b = Number((<string>e.betrag).replace(',', ''));
+      e.betrag = b;
+    }
+    if (e.ebetrag != null && typeof e.ebetrag == 'string')
+      e.ebetrag = Number((<string>e.ebetrag).replace(',', ''));
+    if (e.belegDatum != null && typeof e.belegDatum == 'string')
+      e.belegDatum = new Date(Date.parse(e.belegDatum));
+    if (e.angelegtAm != null && typeof e.angelegtAm == 'string')
       e.angelegtAm = new Date(Date.parse(e.angelegtAm));
-    }
-    if (e.geaendertAm != null && typeof e.geaendertAm == 'string') {
+    if (e.geaendertAm != null && typeof e.geaendertAm == 'string')
       e.geaendertAm = new Date(Date.parse(e.geaendertAm));
-    }
     if (Global.nes(e.uid))
       e.uid = Global.getUID();
     e.btext = Global.trim(e.btext);

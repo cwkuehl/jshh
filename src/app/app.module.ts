@@ -1,3 +1,6 @@
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -51,6 +54,7 @@ import { BudgetService, DiaryService, PrivateService, UserService } from './serv
     HttpClientModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'de' },
     JshhDatabase, BudgetService, DiaryService, PrivateService, UserService,
     Tb100DeactivateGuard
   ],
@@ -60,6 +64,7 @@ export class AppModule {
   constructor(private userservice: UserService, private store: Store<AppState>) {
     console.log(environment.production ? "Produktion" : "Entwicklung");
     // console.log('AppModule ' + this.dbservice.getId().getMilliseconds());
+    registerLocaleData(localeDe); // , 'de-DE');
     userservice.getParameter('UserId').then(p => { if (p != null) store.dispatch(GlobalActions.LoginOk(p.wert)); })
       .catch(e => console.error(e));
     userservice.getOptions().then(p => { if (p != null) store.dispatch(GlobalActions.SaveOptionsOk({ options: p })); })
