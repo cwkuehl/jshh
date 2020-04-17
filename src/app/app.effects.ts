@@ -37,6 +37,12 @@ export class AppEffects {
     catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
   ), { useEffectsErrorHandler: false });
 
+  saveHhKonto$ = createEffect(() => this.actions$.pipe(
+    ofType(HhBuchungActions.SaveAccount),
+    mergeMap(x => this.budgetservice.saveAccountOb(x.account)),
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
+  ), { useEffectsErrorHandler: false });
+
   saveTbEintrag$ = createEffect(() => this.actions$.pipe(
     ofType(TbEintragActions.Save),
     mergeMap(x => this.diaryservice.saveEntryOb(x.payload)),
