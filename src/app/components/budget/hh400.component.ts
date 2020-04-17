@@ -86,7 +86,10 @@ export class Hh400Component implements OnInit {
 
   public replicate() {
     this.store.dispatch(GlobalActions.SetError(null));
-    this.budgetservice.getBookingListJoin('server')
-      .then(l => { this.budgetservice.postServer(l || []); })
+    this.budgetservice.getAccountList('server')
+      .then(l => { this.budgetservice.postServerAccount(l || []); })
+      .then(() => this.budgetservice.getBookingList('server'))
+      .then(l => { this.budgetservice.postServerBooking(l || []); })
+      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
   }
 }

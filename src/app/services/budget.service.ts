@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
 import Dexie from 'dexie';
-import { FzNotiz, Kontext, HhBuchung } from '../apis';
+import { FzNotiz, Kontext, HhBuchung, HhKonto } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
@@ -10,6 +10,7 @@ import * as GlobalActions from '../actions/global.actions';
 import * as HhBuchungActions from '../actions/hhbuchung.actions';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -167,9 +168,16 @@ export class BudgetService extends BaseService {
     }); // .catch((ex) => console.log('speichereEintrag: ' + ex));
   }
 
+  /**
+   * Löschen aller Buchungen, Ereignisse und Konten.
+   */
   public deleteAllBookingsOb(): Observable<Action> {
     var ob = new Observable<Action>(s => {
-      this.db.HhBuchung.toCollection().delete()
+      this.db.transaction('rw', this.db.HhBuchung, this.db.HhEreignis, this.db.HhKonto, async () => {
+        await this.db.HhBuchung.toCollection().delete();
+        await this.db.HhEreignis.toCollection().delete();
+        await this.db.HhKonto.toCollection().delete();
+      })
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))
         .finally(() => s.complete());
@@ -177,12 +185,34 @@ export class BudgetService extends BaseService {
     return ob;
   }
 
-  public postServer(arr: HhBuchung[]): void {
+  public postServerBooking(arr: HhBuchung[]): void {
     let jarr = JSON.stringify({ 'HH_Buchung': arr });
     this.postReadServer<HhBuchung[]>('HH_Buchung', jarr).subscribe(
       (a: HhBuchung[]) => {
-        a.reverse().forEach((e: HhBuchung) => {
+        a.forEach((e: HhBuchung) => {
           this.store.dispatch(HhBuchungActions.Save({ booking: e }));
+          this.store.dispatch(HhBuchungActions.Load());
+        });
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
+      },
+    );
+  }
+
+  getAccountList(replidne: string): Promise<HhKonto[]> {
+    if (Global.nes(replidne)) {
+      return this.db.HhKonto.toArray();
+    } else
+      return this.db.HhKonto.where('replid').notEqual(replidne).toArray();
+  }
+
+  public postServerAccount(arr: HhKonto[]): void {
+    let jarr = JSON.stringify({ 'HH_Konto': arr });
+    this.postReadServer<HhKonto[]>('HH_Konto', jarr).subscribe(
+      (a: HhKonto[]) => {
+        a.forEach((e: HhKonto) => {
+          this.store.dispatch(HhBuchungActions.SaveAccount({ account: e }));
           this.store.dispatch(HhBuchungActions.Load());
         });
       },

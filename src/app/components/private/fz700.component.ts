@@ -77,8 +77,8 @@ export class Fz700Component implements OnInit {
 
   public replicate() {
     this.store.dispatch(GlobalActions.SetError(null));
-    //this.privateservice.getMemoList('server').then(a => this.postServer(a))
-    //.catch(a => this.store.dispatch(GlobalActions.SetErrorGlobal(a)));
-    this.privateservice.postServer(this.memos);
+    this.privateservice.getMemoList('server')
+      .then(l => this.privateservice.postServer(l || []))
+      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
   }
 }
