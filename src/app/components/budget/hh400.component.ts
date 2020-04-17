@@ -75,8 +75,8 @@ export class Hh400Component implements OnInit {
     this.budgetservice.getBookingListJoin(null)
       //.then(l => this.budgetservice.getBookingListJoin(l || []))
       .then(l => { this.bookings = l || []; })
-      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
-    //.catch(e => console.log(e));
+      //.catch(e => this.store.dispatch(GlobalActions.SetError(e)));
+      .catch(e => console.log(e));
   }
 
   public delete() {
@@ -86,6 +86,7 @@ export class Hh400Component implements OnInit {
 
   public replicate() {
     this.store.dispatch(GlobalActions.SetError(null));
-    this.budgetservice.postServer(this.bookings);
+    this.budgetservice.getBookingListJoin('server')
+      .then(l => { this.budgetservice.postServer(l || []); })
   }
 }

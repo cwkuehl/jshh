@@ -23,7 +23,7 @@ export class AppComponent {
 
   constructor(private store: Store<AppState>, @Inject(LOCALE_ID) locale: string) {
     this.globalError$ = store.pipe(select('globalError'));
-    console.log('locale', locale);
+    console.log('locale: ' + locale);
   }
 
   clearErrorGlobal() {
