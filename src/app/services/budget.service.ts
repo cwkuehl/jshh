@@ -20,12 +20,22 @@ export class BudgetService extends BaseService {
     super(store, db, http);
   }
 
-  getBookingList(replidne: string): Dexie.Promise<HhBuchung[]> {
-
-    if (Global.nes(replidne))
+  getBookingList(replidne: string): Promise<HhBuchung[]> {
+    if (Global.nes(replidne)) {
       return this.db.HhBuchung.orderBy('sollValuta').reverse().toArray();
-    else
-      return this.db.HhBuchung.where('replid').notEqual(replidne).toArray();
+    } else
+      return this.db.HhBuchung.where('replid').notEqual(replidne).reverse().sortBy('sollValuta');
+  }
+
+  async getBookingListJoin(replidne: string): Promise<HhBuchung[]> {
+    const list = await this.getBookingList(replidne);
+    await Promise.all(list.map(async a => {
+      [a.sollKontoName, a.habenKontoName] = await Promise.all([
+        this.db.HhKonto.get(a.sollKontoUid).then(b => { return b == null ? "soll" : b.name; }),
+        this.db.HhKonto.get(a.habenKontoUid).then(b => { return b == null ? "haben" : b.name; })
+      ]);
+    }));
+    return list;
   }
 
   getBooking(uid: string): Dexie.Promise<HhBuchung> {

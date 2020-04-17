@@ -44,8 +44,8 @@ import { asyncScheduler } from 'rxjs';
     <td>{{item.kz}}</td>
     <td class='text-right'>{{item.ebetrag | number:'1.2'}}</td>
     <td>{{item.btext}}</td>
-    <td>{{item.sollKontoUid}}</td>
-    <td>{{item.habenKontoUid}}</td>
+    <td>{{item.sollKontoName}}</td>
+    <td>{{item.habenKontoName}}</td>
     <td>{{item.belegNr}}</td>
     <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
     <td>{{item.geaendertVon}}</td>
@@ -72,7 +72,11 @@ export class Hh400Component implements OnInit {
   }
 
   public reload() {
-    this.budgetservice.getBookingList(null).then(l => { if (l != null) this.bookings = l; });
+    this.budgetservice.getBookingListJoin(null)
+      //.then(l => this.budgetservice.getBookingListJoin(l || []))
+      .then(l => { this.bookings = l || []; })
+      .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
+    //.catch(e => console.log(e));
   }
 
   public delete() {
