@@ -23,7 +23,7 @@ export class BudgetService extends BaseService {
   getBookingList(replidne: string): Dexie.Promise<HhBuchung[]> {
 
     if (Global.nes(replidne))
-      return this.db.HhBuchung.toArray();
+      return this.db.HhBuchung.orderBy('sollValuta').reverse().toArray();
     else
       return this.db.HhBuchung.where('replid').notEqual(replidne).toArray();
   }
