@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { FzNotiz, HhBuchung, TbEintrag, Parameter, MaReplikation } from '../apis';
+import { FzNotiz, HhBuchung, TbEintrag, Parameter, MaReplikation, HhKonto, HhEreignis } from '../apis';
 import { Injectable } from '@angular/core';
 import { Global } from './global';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,8 @@ export class JshhDatabase extends Dexie {
 
   public FzNotiz: Dexie.Table<FzNotiz, string>;
   public HhBuchung: Dexie.Table<HhBuchung, string>;
+  public HhEreignis: Dexie.Table<HhEreignis, string>;
+  public HhKonto: Dexie.Table<HhKonto, string>;
   public MaReplikation: Dexie.Table<MaReplikation, string>;
   public Parameter: Dexie.Table<Parameter, string>;
   public TbEintrag: Dexie.Table<TbEintrag, string>;
@@ -27,8 +29,19 @@ export class JshhDatabase extends Dexie {
       Parameter: '&schluessel',
       TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
+    this.version(2).stores({
+      FzNotiz: '&uid,thema,replid',
+      HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
+      HhEreignis: '&uid,bezeichnung,etext,replid',
+      HhKonto: '&uid,sortierung,name,replid',
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+    });
     this.FzNotiz = this.table('FzNotiz');
     this.HhBuchung = this.table('HhBuchung');
+    this.HhEreignis = this.table('HhEreignis');
+    this.HhKonto = this.table('HhKonto');
     this.MaReplikation = this.table('MaReplikation');
     this.Parameter = this.table('Parameter');
     this.TbEintrag = this.table('TbEintrag');

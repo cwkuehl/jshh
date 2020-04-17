@@ -1,5 +1,7 @@
 export { FzNotiz } from './fznotiz';
 export { HhBuchung } from './hhbuchung';
+export { HhEreignis } from './hhereignis';
+export { HhKonto } from './hhkonto';
 export { Kontext } from './kontext';
 export { MaReplikation } from './mareplikation';
 export { Options } from './options';
