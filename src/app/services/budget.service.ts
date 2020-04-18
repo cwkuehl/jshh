@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
 import Dexie from 'dexie';
-import { FzNotiz, Kontext, HhBuchung, HhKonto } from '../apis';
+import { Kontext, HhBuchung, HhKonto } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
@@ -10,7 +10,6 @@ import * as GlobalActions from '../actions/global.actions';
 import * as HhBuchungActions from '../actions/hhbuchung.actions';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'

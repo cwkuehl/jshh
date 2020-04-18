@@ -23,6 +23,7 @@ import { Am500Component } from './components/user/am500.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
+import { Hh410Component } from './components/budget/hh410.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
@@ -38,6 +39,7 @@ import { BudgetService, DiaryService, PrivateService, UserService } from './serv
     Fz700Component,
     Fz710Component,
     Hh400Component,
+    Hh410Component,
     Tb100Component,
   ],
   imports: [

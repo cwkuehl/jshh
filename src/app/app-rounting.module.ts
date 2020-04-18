@@ -5,6 +5,7 @@ import { Am500Component } from './components/user/am500.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
+import { Hh410Component } from './components/budget/hh410.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 //import { NotFoundPageComponent } from './containers/not-found-page';
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'memo/:id', component: Fz710Component },
   { path: 'diary', component: Tb100Component, canDeactivate: [Tb100DeactivateGuard] },
   { path: 'bookings', component: Hh400Component },
+  { path: 'booking/:id', component: Hh410Component },
   // { path: '**', component: NotFoundPageComponent }
 ];
 @NgModule({
