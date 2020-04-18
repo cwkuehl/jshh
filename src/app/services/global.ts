@@ -100,8 +100,12 @@ export class Global {
     return t.length <= 0 ? null : t;
   }
 
+  /**
+   * Wandelt einen Wert in einen Integer.
+   * @param s Betroffener Wert.
+   * @returns Umgewandelter Integer.
+   */
   public static toInt(s: any): number {
-
     if (s == null) {
       return 0;
     }
@@ -110,11 +114,45 @@ export class Global {
     }
     if (typeof s === 'string') {
       let i = parseInt(s, 10);
-      if (!isNaN(i)) {
+      if (!isNaN(i))
         return i;
-      }
     }
     return 0;
+  }
+
+  /**
+   * Wandelt einen Wert in eine Zahl.
+   * @param s Betroffener Wert.
+   * @param de Ist es eine deutsche Zahl mit Komma?
+   * @returns Umgewandelte Zahl.
+   */
+  public static toNumber(s: any, de: boolean = true): number {
+    if (s == null) {
+      return 0;
+    }
+    if (typeof s === 'number') {
+      return s;
+    }
+    if (typeof s === 'string') {
+      let s1 = de ? s.replace('.', '').replace(',', '.') : s.replace(',', '');
+      let i = parseFloat(s1);
+      if (!isNaN(i))
+        return i;
+    }
+    return 0;
+  }
+
+  /**
+   * Rundet eine Zahl.
+   * @param s Betroffene Zahl.
+   * @param digits Anzahl Nachkommastellen.
+   * @returns Gerundete Zahl.
+   */
+  public static round(n: number, digits: number = 2): number {
+    if (digits <= 0)
+      return Math.round(n);
+    var p10 = Math.pow(10, digits);
+    return Math.round(n * p10) / p10;
   }
 
   public static getRandomInt(min: number, max: number): number {
@@ -122,7 +160,6 @@ export class Global {
   }
 
   public static getNumberArray(anzahl: number): number[] {
-
     if (anzahl < 0) {
       return null;
     }
@@ -135,7 +172,6 @@ export class Global {
 
   /* Anzeige des Datums in lokaler Zeit. */
   public static formatDatumVon(datum: Date, von: string): string {
-
     if (datum == null && Global.nes(von)) {
       return null;
     }

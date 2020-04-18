@@ -21,7 +21,8 @@ import { Global } from '../../services/global';
     </div>
     <div class="form-group col">
       <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
-      <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag" (ngModelChange)="item.ebetrag=$event" title="Betrag" placeholder="Betrag">
+      <!--input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag" (ngModelChange)="item.ebetrag=$event" title="Betrag" placeholder="Betrag"-->
+      <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag | number:'1.2-2'" title="Betrag" placeholder="Betrag">
     </div>
   </div>
   <div class="form-row">
@@ -79,7 +80,7 @@ export class Hh410Component implements OnInit, AfterViewChecked {
         this.betragField.nativeElement.focus();
         this.betragField.nativeElement.setSelectionRange(0, this.betragField.nativeElement.value.length);
       }
-    }, 100);
+    }, 10);
   }
 
   public onValutaChange(datum: Date) {
@@ -96,6 +97,8 @@ export class Hh410Component implements OnInit, AfterViewChecked {
   }
 
   public save() {
-    // nix
+    if (this.betragField != null) {
+      this.item.ebetrag = Global.round(Global.toNumber(this.betragField.nativeElement.value), 2);
+    }
   }
 }
