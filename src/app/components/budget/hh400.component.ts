@@ -8,6 +8,7 @@ import * as HhBuchungActions from '../../actions/hhbuchung.actions';
 import * as GlobalActions from '../../actions/global.actions';
 import { throttleTime } from 'rxjs/operators';
 import { asyncScheduler } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hh400',
@@ -15,8 +16,9 @@ import { asyncScheduler } from 'rxjs';
 <h3>Buchungen</h3>
 
 <div class="row">
-<button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Buchungen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
-<button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Alle Buchungen löschen">Löschen</button>
+  <button type="button" class="btn btn-primary col" (click)="replicate()" title="Buchungen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
+  <button type="button" class="btn btn-primary col" (click)="delete()" title="Alle Buchungen löschen">Löschen</button>&nbsp;
+  <button type="button" class="btn btn-primary col" (click)="newbooking()" title="Neue Buchung erstellen">Neu</button>
 </div>
 
 <div class="row card mt-1" *ngIf="bookings.length > 0">
@@ -60,7 +62,7 @@ import { asyncScheduler } from 'rxjs';
 export class Hh400Component implements OnInit {
   bookings: HhBuchung[] = [];
 
-  constructor(private store: Store<AppState>, private actions$: Actions, private budgetservice: BudgetService) {
+  constructor(private store: Store<AppState>, private actions$: Actions, private budgetservice: BudgetService, private router: Router) {
     this.actions$.pipe(
       ofType(HhBuchungActions.Load),
       throttleTime(100, asyncScheduler, { leading: false, trailing: true })
@@ -79,11 +81,6 @@ export class Hh400Component implements OnInit {
       .catch(e => console.log(e));
   }
 
-  public delete() {
-    this.store.dispatch(GlobalActions.SetError(null));
-    this.budgetservice.deleteAllBookingsOb().subscribe(() => this.reload());
-  }
-
   public replicate() {
     this.store.dispatch(GlobalActions.SetError(null));
     this.budgetservice.getAccountList('server')
@@ -91,5 +88,15 @@ export class Hh400Component implements OnInit {
       .then(() => this.budgetservice.getBookingList('server'))
       .then(l => { this.budgetservice.postServerBooking(l || []); })
       .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
+  }
+
+  public delete() {
+    this.store.dispatch(GlobalActions.SetError(null));
+    this.budgetservice.deleteAllBookingsOb().subscribe(() => this.reload());
+  }
+
+  public newbooking() {
+    this.router.navigate(['/', 'booking', ''])
+      .then(nav => { console.log(nav); }, err => { console.log(err) });
   }
 }

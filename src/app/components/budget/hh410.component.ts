@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
@@ -15,14 +15,14 @@ import { Global } from '../../services/global';
 
 <form>
   <div class="form-row">
-  <div class="form-group col-sm-4 col-md-3">
-    <label class="control-label d-none d-md-block" for="valuta">Valuta</label>
-    <app-date [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date>
-  </div>
-  <!--div class="form-group col">
-      <label class="control-label d-none d-md-block" for="theme">Thema</label>
-      <input type="text" class="form-control" name="theme" [(ngModel)]="item.thema" title="Thema" placeholder="Thema">
-  </div-->
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="valuta">Valuta</label>
+      <app-date [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date>
+    </div>
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
+      <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag" (ngModelChange)="item.ebetrag=$event" title="Betrag" placeholder="Betrag">
+    </div>
   </div>
   <div class="form-row">
     <div class="form-group col">
@@ -31,35 +31,55 @@ import { Global } from '../../services/global';
     </div>
   </div>
   <div class="form-row">
-    <!--button type="submit" class="btn btn-primary col-sm-2" title="Schließen mit Speichern." (click)="save()">Speichern</button-->
+    <button type="submit" class="btn btn-primary col-sm-2" title="Schließen mit Speichern." (click)="save()">Speichern</button>
     <a class="btn btn-primary col-sm-2 ml-1" title="Schließen ohne Speichern." [routerLink]="'/bookings'">Abbrechen</a>
   </div>
 </form>
   `,
   styles: [``]
 })
-export class Hh410Component implements OnInit {
+export class Hh410Component implements OnInit, AfterViewChecked {
 
-  item: HhBuchung;
-  // {
-  //   uid: '', sollValuta: new Date(), habenValuta: new Date(), betrag: 0, ebetrag: 0,
-  //   sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: new Date()
-  // };
+  item: HhBuchung = {
+    uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
+    sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
+  };
+
+  @ViewChild("betrag") betragField: ElementRef;
+  first: boolean = true;
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions, private budgetservice: BudgetService) {
     this.route.params.subscribe(
-      params => this.budgetservice.getBooking(params['id'])
-        .then(a => { if (a != null) this.item = a; })
-        .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); })
+      params => {
+        if (!Global.nes(params['id']))
+          this.budgetservice.getBooking(params['id'])
+            .then(a => { if (a != null) this.item = a; })
+            .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
+        // this.first = true;
+        // this.ngAfterViewChecked();
+      }
     );
   }
 
+  ngAfterViewChecked(): void {
+    // if (this.first) {
+    //   this.first = false;
+    //   if (this.betragField != null) {
+    //     setTimeout(() => {
+    //       this.betragField.nativeElement.focus();
+    //       this.betragField.nativeElement.setSelectionRange(0, this.betragField.nativeElement.value.length);
+    //     }, 100);
+    //   }
+    // }
+  }
+
   ngOnInit() {
-    this.item = {
-      uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
-      sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
-    };
-    //this.store.dispatch(FzNotizActions.LoadFzNotiz());
+    setTimeout(() => {
+      if (this.betragField != null) {
+        this.betragField.nativeElement.focus();
+        this.betragField.nativeElement.setSelectionRange(0, this.betragField.nativeElement.value.length);
+      }
+    }, 100);
   }
 
   public onValutaChange(datum: Date) {
