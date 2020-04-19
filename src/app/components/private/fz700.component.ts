@@ -71,6 +71,8 @@ export class Fz700Component implements OnInit {
   }
 
   public delete() {
+    if (!confirm('Sollen wirklich alle Notizen gelöscht werden?'))
+      return;
     this.store.dispatch(GlobalActions.SetError(null));
     this.privateservice.deleteAllMemosOb().subscribe(() => this.reload());
   }

@@ -74,6 +74,8 @@ export class Tb100Component implements OnInit {
   // }
 
   delete() {
+    if (!confirm('Sollen wirklich alle Einträge gelöscht werden?'))
+      return;
     this.store.dispatch(TbEintragActions.Error(null));
     this.diaryservice.deleteAllOb().subscribe(() => this.ladeEintraege(this.date));
   }

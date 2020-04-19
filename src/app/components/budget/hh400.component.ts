@@ -93,6 +93,8 @@ export class Hh400Component implements OnInit {
   }
 
   public delete() {
+    if (!confirm('Sollen wirklich alle Buchungen gelöscht werden?'))
+      return;
     this.store.dispatch(GlobalActions.SetError(null));
     this.budgetservice.deleteAllBookingsOb().subscribe(() => this.reload());
   }
