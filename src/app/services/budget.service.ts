@@ -222,9 +222,9 @@ export class BudgetService extends BaseService {
 
   getAccountList(replidne: string): Promise<HhKonto[]> {
     if (Global.nes(replidne)) {
-      return this.db.HhKonto.toArray();
+      return this.db.HhKonto.orderBy('name').toArray();
     } else
-      return this.db.HhKonto.where('replid').notEqual(replidne).toArray();
+      return this.db.HhKonto.where('replid').notEqual(replidne).sortBy('name');
   }
 
   /**

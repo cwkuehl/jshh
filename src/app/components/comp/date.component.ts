@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { Global } from '../../services/global';
 
@@ -57,7 +57,7 @@ import { Global } from '../../services/global';
   template: `
 <div class="input-group">
   <input class="form-control" placeholder="yyyy-mm-dd" (focus)="d.toggle()" name="d"
-    [ngModel]="seldate" (ngModelChange)="onSeldateChange($event)" ngbDatepicker #d="ngbDatepicker" />
+    [(ngModel)]="seldate" (ngModelChange)="onSeldateChange($event)" ngbDatepicker #d="ngbDatepicker" />
   <div class="input-group-append">
     <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button" title="Vorheriger Tag">-</button>
     <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button" title="Heute">o</button>
@@ -72,18 +72,24 @@ import { Global } from '../../services/global';
     //{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
   ]
 })
-export class DateComponent implements OnInit {
+export class DateComponent implements OnInit, OnChanges {
 
   @Output() dateChange = new EventEmitter<Date>();
-  @Input() date: Date;
+  @Input('date') date: Date = Global.today();
 
   seldate: NgbDateStruct;
 
   constructor(private calendar: NgbCalendar) {
+    // if (this.date == null) {
+    //   //this.seldate = this.today;
+    //   this.seldate = this.calendar.getToday();
+    // } else
+    //   this.seldate = { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() };
+  }
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+    // console.log('ngOnChanges: ' + this.date);
     if (this.date == null) {
-      //this.seldate = this.today;
       this.seldate = this.calendar.getToday();
-      //console.log("ngOnInit date == null");
     } else
       this.seldate = { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() };
   }

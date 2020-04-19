@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as GlobalActions from '../../actions/global.actions';
-import { HhBuchung } from '../../apis';
+import { HhBuchung, HhKonto } from '../../apis';
 import { AppState } from '../../app.state';
 import { BudgetService } from '../../services';
 import { Global } from '../../services/global';
@@ -27,8 +27,28 @@ import { Global } from '../../services/global';
   </div>
   <div class="form-row">
     <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="sollkonto">Sollkonto</label>
+      <select class="form-control" name="Sollkonto" [(ngModel)]="item.sollKontoUid" size="5" title="Sollkonto" placeholder="Sollkonto">
+        <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
+      </select>
+    </div>
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="habenkonto">Habenkonto</label>
+      <select class="form-control" name="Habenkonto" [(ngModel)]="item.habenKontoUid" size="5" title="Habenkonto" placeholder="Habenkonto">
+        <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
       <label class="control-label d-none d-md-block" for="btext">Buchungstext</label>
-      <textarea class="form-control" name="btext" [(ngModel)]="item.btext" rows="5" cols="20" title="Buchungstext" placeholder="Buchungstext"></textarea>
+      <input type="text" class="form-control" name="btext" [(ngModel)]="item.btext" title="Buchungstext" placeholder="Buchungstext">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="belegdatum">Datum</label>
+      <app-date [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date>
     </div>
   </div>
   <div class="form-row">
@@ -39,12 +59,13 @@ import { Global } from '../../services/global';
   `,
   styles: [``]
 })
-export class Hh410Component implements OnInit, AfterViewChecked {
+export class Hh410Component implements OnInit {
 
   item: HhBuchung = {
     uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
     sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
   };
+  accounts: HhKonto[] = [];
 
   @ViewChild("betrag") betragField: ElementRef;
   first: boolean = true;
@@ -56,22 +77,9 @@ export class Hh410Component implements OnInit, AfterViewChecked {
           this.budgetservice.getBooking(params['id'])
             .then(a => { if (a != null) this.item = a; })
             .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
-        // this.first = true;
-        // this.ngAfterViewChecked();
+        this.budgetservice.getAccountList(null).then(l => this.accounts = l || []);
       }
     );
-  }
-
-  ngAfterViewChecked(): void {
-    // if (this.first) {
-    //   this.first = false;
-    //   if (this.betragField != null) {
-    //     setTimeout(() => {
-    //       this.betragField.nativeElement.focus();
-    //       this.betragField.nativeElement.setSelectionRange(0, this.betragField.nativeElement.value.length);
-    //     }, 100);
-    //   }
-    // }
   }
 
   ngOnInit() {
@@ -86,9 +94,6 @@ export class Hh410Component implements OnInit, AfterViewChecked {
   public onValutaChange(datum: Date) {
     this.item.habenValuta = datum;
     this.item.belegDatum = datum;
-    //this.tbservice.setDatum(datum);
-    // console.log('Datum: ' + this.datum + ' Eintrag: ' + this.eintrag + ' Alt: ' + this.datumAlt + ' Eintrag: ' + this.eintragAlt);
-    //this.bearbeiteEintraege(true, true);
   }
 
   public delete() {
