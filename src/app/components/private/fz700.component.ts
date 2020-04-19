@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
@@ -9,7 +8,6 @@ import * as GlobalActions from '../../actions/global.actions';
 import { FzNotiz } from '../../apis';
 import { AppState } from '../../app.state';
 import { PrivateService } from '../../services';
-import { Global } from '../../services/global';
 
 @Component({
   selector: 'app-fz700',

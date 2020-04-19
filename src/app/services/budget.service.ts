@@ -195,8 +195,8 @@ export class BudgetService extends BaseService {
     var ob = new Observable<Action>(s => {
       this.db.transaction('rw', this.db.HhBuchung, this.db.HhEreignis, this.db.HhKonto, async () => {
         await this.db.HhBuchung.toCollection().delete();
-        await this.db.HhEreignis.toCollection().delete();
-        await this.db.HhKonto.toCollection().delete();
+        //await this.db.HhEreignis.toCollection().delete();
+        //await this.db.HhKonto.toCollection().delete();
       })
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))

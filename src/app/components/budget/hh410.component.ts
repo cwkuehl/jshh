@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as GlobalActions from '../../actions/global.actions';
-import { HhBuchung, HhKonto } from '../../apis';
+import { HhBuchung, HhKonto, HhEreignis } from '../../apis';
 import { AppState } from '../../app.state';
 import { BudgetService } from '../../services';
 import { Global } from '../../services/global';
@@ -21,8 +21,15 @@ import { Global } from '../../services/global';
     </div>
     <div class="form-group col">
       <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
-      <!--input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag" (ngModelChange)="item.ebetrag=$event" title="Betrag" placeholder="Betrag"-->
       <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag | number:'1.2-2'" title="Betrag" placeholder="Betrag">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="ereignis">Ereignis</label>
+      <select class="form-control" name="ereignis" [ngModel]="eventuid" (ngModelChange)="onEreignisChange($event)" size="5" title="Ereignis" placeholder="Ereignis">
+        <option *ngFor="let k of events" [value]="k.uid">{{ k.bezeichnung }}</option>
+      </select>
     </div>
   </div>
   <div class="form-row">
@@ -47,7 +54,11 @@ import { Global } from '../../services/global';
   </div>
   <div class="form-row">
     <div class="form-group col">
-      <label class="control-label d-none d-md-block" for="belegdatum">Datum</label>
+      <label class="control-label d-none d-md-block" for="belegnr">Belegnummer</label>
+      <input type="text" class="form-control" name="belegnr" [(ngModel)]="item.belegNr" title="Belegnummer" placeholder="Belegnummer">
+    </div>
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="belegdatum">Belegdatum</label>
       <app-date [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date>
     </div>
   </div>
@@ -65,6 +76,8 @@ export class Hh410Component implements OnInit {
     uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
     sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
   };
+  eventuid: string;
+  events: HhEreignis[] = [];
   accounts: HhKonto[] = [];
 
   @ViewChild("betrag") betragField: ElementRef;
@@ -77,6 +90,7 @@ export class Hh410Component implements OnInit {
           this.budgetservice.getBooking(params['id'])
             .then(a => { if (a != null) this.item = a; })
             .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
+        this.budgetservice.getEventList(null).then(l => this.events = l || []);
         this.budgetservice.getAccountList(null).then(l => this.accounts = l || []);
       }
     );
@@ -94,6 +108,15 @@ export class Hh410Component implements OnInit {
   public onValutaChange(datum: Date) {
     this.item.habenValuta = datum;
     this.item.belegDatum = datum;
+  }
+
+  public onEreignisChange(uid: string) {
+    var e = this.events.find(a => a.uid == uid);
+    if (e != null) {
+      this.item.sollKontoUid = e.sollKontoUid;
+      this.item.habenKontoUid = e.habenKontoUid;
+      this.item.btext = e.etext;
+    }
   }
 
   public delete() {
