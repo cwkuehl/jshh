@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
 import Dexie from 'dexie';
-import { Kontext, HhBuchung, HhKonto } from '../apis';
+import { Kontext, HhBuchung, HhKonto, HhEreignis } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
@@ -205,6 +205,10 @@ export class BudgetService extends BaseService {
     return ob;
   }
 
+  /**
+   * Senden und Empfangen von Buchung-Listen zur Replikation.
+   * @param arr Liste von geänderten Entities.
+   */
   public postServerBooking(arr: HhBuchung[]): void {
     let jarr = JSON.stringify({ 'HH_Buchung': arr });
     this.postReadServer<HhBuchung[]>('HH_Buchung', jarr).subscribe(
@@ -220,6 +224,11 @@ export class BudgetService extends BaseService {
     );
   }
 
+  /**
+   * Lesen einer Liste von Konten.
+   * @param uid Betroffene ID.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
   getAccountList(replidne: string): Promise<HhKonto[]> {
     if (Global.nes(replidne)) {
       return this.db.HhKonto.orderBy('name').toArray();
@@ -371,12 +380,177 @@ export class BudgetService extends BaseService {
     }); // .catch((ex) => console.log('speichereEintrag: ' + ex));
   }
 
+  /**
+   * Senden und Empfangen von Konto-Listen zur Replikation.
+   * @param arr Liste von geänderten Entities.
+   */
   public postServerAccount(arr: HhKonto[]): void {
     let jarr = JSON.stringify({ 'HH_Konto': arr });
     this.postReadServer<HhKonto[]>('HH_Konto', jarr).subscribe(
       (a: HhKonto[]) => {
         a.forEach((e: HhKonto) => {
           this.store.dispatch(HhBuchungActions.SaveAccount({ account: e }));
+          this.store.dispatch(HhBuchungActions.Load());
+        });
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
+      },
+    );
+  }
+
+  /**
+   * Lesen einer Liste von Ereignissen.
+   * @param uid Betroffene ID.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  getEventList(replidne: string): Promise<HhEreignis[]> {
+    if (Global.nes(replidne)) {
+      return this.db.HhEreignis.orderBy('bezeichnung').toArray();
+    } else
+      return this.db.HhEreignis.where('replid').notEqual(replidne).sortBy('bezeichnung');
+  }
+
+  /**
+   * Lesen eines Ereignisses.
+   * @param uid Betroffene ID.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  getEvent(uid: string): Dexie.Promise<HhEreignis> {
+    let l = this.db.HhEreignis.get(uid);
+    return l;
+  }
+
+  /**
+   * Schreiben eines Kontos mit Anpassung der Revisionsdaten.
+   * @param daten Betroffener Kontext.
+   * @param e Betroffene Entity.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  private iuHhEreignis(daten: Kontext, e: HhEreignis): Dexie.Promise<string> {
+    if (daten == null || e == null) {
+      return Dexie.Promise.reject('Parameter fehlt');
+    }
+    if (e.replid === 'new') {
+      e.replid = Global.getUID();
+    } else if (e.replid !== 'server') {
+      if (e.angelegtAm == null) {
+        e.angelegtAm = daten.jetzt;
+        e.angelegtVon = daten.benutzerId;
+      } else {
+        e.geaendertAm = daten.jetzt;
+        e.geaendertVon = daten.benutzerId;
+      }
+    }
+    return this.db.HhEreignis.put(e);
+  }
+
+  /**
+   * Speichern eines Ereignisses.
+   * @param e Betroffenes Ereignis.
+   * @returns Eine Observable zur weiteren Verarbeitung.
+   */
+  public saveEventOb(e: HhEreignis): Observable<Action> {
+    var ob = new Observable<Action>(s => {
+      this.saveEvent(e)
+        .then(a => s.next(HhBuchungActions.Empty()))
+        .catch(ex => s.next(GlobalActions.SetError(ex)))
+        .finally(() => s.complete());
+    });
+    return ob;
+  }
+
+  /**
+   * Speichern eines Ereignisses.
+   * @param e Betroffenes Ereignis.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  public saveEvent(e0: HhEreignis): Dexie.Promise<HhEreignis> {
+    if (e0 == null) {
+      return Dexie.Promise.resolve(null);
+    }
+    var e = Object.assign({}, e0); // Clone erzeugen
+    let daten = this.getKontext();
+    // Korrektur aus Import vom Server
+    if (e.angelegtAm != null && typeof e.angelegtAm == 'string')
+      e.angelegtAm = new Date(Date.parse(e.angelegtAm));
+    if (e.geaendertAm != null && typeof e.geaendertAm == 'string')
+      e.geaendertAm = new Date(Date.parse(e.geaendertAm));
+    if (Global.nes(e.uid))
+      e.uid = Global.getUID();
+    e.kz = Global.trimNull(e.kz);
+    e.bezeichnung = Global.trim(e.bezeichnung);
+    e.etext = Global.trim(e.etext);
+    if (Global.nes(e.bezeichnung))
+      return Dexie.Promise.reject('Bezeichnung fehlt');
+    if (Global.nes(e.etext))
+      return Dexie.Promise.reject('Buchungstext fehlt');
+
+    return this.getEvent(e.uid).then((alt: HhEreignis) => {
+      if (alt == null) {
+        if (e.replid !== 'server')
+          e.replid = Global.getUID();
+        return this.iuHhEreignis(daten, e).then(r => {
+          return new Dexie.Promise<HhEreignis>(resolve => resolve(e))
+        });
+      } else {
+        let art = 0; // 0 überschreiben, (1 zusammenkopieren,) 2 lassen
+        if (e.kz === alt.kz && e.sollKontoUid === alt.sollKontoUid && e.habenKontoUid === alt.habenKontoUid
+          && e.bezeichnung === alt.bezeichnung && e.etext === alt.etext) {
+          // alt.replid alt | e.replid neu | Aktion
+          // Guid           | server       | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
+          art = 2;
+          if (alt.replid !== 'server') {
+            if (e.replid === 'server') {
+              art = 0;
+              alt.replid = 'server'; // neue Guid
+              alt.angelegtAm = e.angelegtAm;
+              alt.angelegtVon = e.angelegtVon;
+              alt.geaendertAm = e.geaendertAm;
+              alt.geaendertVon = e.geaendertVon;
+            }
+          }
+        } else {
+          // alt.replid alt | e.replid neu | Aktion
+          // server         | null         | neue Guid, Eintrag überschreiben
+          // server         | server       | Eintrag überschreiben
+          // Guid           | null         | Eintrag überschreiben
+          // Guid           | server       | Eintrag überschreiben
+          if (alt.replid === 'server') {
+            if (e.replid !== 'server')
+              alt.replid = Global.getUID(); // neue Guid
+          } else if (e.replid === 'server') {
+            alt.replid = e.replid;
+          }
+          if (art == 0) {
+            alt.kz = e.kz;
+            alt.sollKontoUid = e.sollKontoUid;
+            alt.habenKontoUid = e.habenKontoUid;
+            alt.bezeichnung = e.bezeichnung;
+            alt.etext = e.etext;
+          }
+          //return Dexie.Promise.reject('Fehler beim Ändern.');
+        }
+        if (art != 2) {
+          return this.iuHhEreignis(daten, alt).then(r => {
+            return new Dexie.Promise<HhEreignis>(resolve => resolve(alt))
+          });
+        }
+      }
+      return alt;
+    }); // .catch((ex) => console.log('speichereEintrag: ' + ex));
+  }
+
+  /**
+   * Senden und Empfangen von Ereignis-Listen zur Replikation.
+   * @param arr Liste von geänderten Entities.
+   */
+  public postServerEvent(arr: HhEreignis[]): void {
+    let jarr = JSON.stringify({ 'HH_Ereignis': arr });
+    this.postReadServer<HhEreignis[]>('HH_Ereignis', jarr).subscribe(
+      (a: HhEreignis[]) => {
+        a.forEach((e: HhEreignis) => {
+          this.store.dispatch(HhBuchungActions.SaveEvent({ event: e }));
           this.store.dispatch(HhBuchungActions.Load());
         });
       },

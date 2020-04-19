@@ -85,6 +85,8 @@ export class Hh400Component implements OnInit {
     this.store.dispatch(GlobalActions.SetError(null));
     this.budgetservice.getAccountList('server')
       .then(l => { this.budgetservice.postServerAccount(l || []); })
+      .then(() => this.budgetservice.getEventList('server'))
+      .then(l => { this.budgetservice.postServerEvent(l || []); })
       .then(() => this.budgetservice.getBookingList('server'))
       .then(l => { this.budgetservice.postServerBooking(l || []); })
       .catch(e => this.store.dispatch(GlobalActions.SetError(e)));

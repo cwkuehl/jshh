@@ -80,12 +80,8 @@ export class DateComponent implements OnInit, OnChanges {
   seldate: NgbDateStruct;
 
   constructor(private calendar: NgbCalendar) {
-    // if (this.date == null) {
-    //   //this.seldate = this.today;
-    //   this.seldate = this.calendar.getToday();
-    // } else
-    //   this.seldate = { year: this.date.getFullYear(), month: this.date.getMonth() + 1, day: this.date.getDate() };
   }
+
   ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
     // console.log('ngOnChanges: ' + this.date);
     if (this.date == null) {
@@ -97,17 +93,7 @@ export class DateComponent implements OnInit, OnChanges {
   ngOnInit() {
   }
 
-  // get today() {
-  //   var d = Global.today();
-  //   //return new NgbDate(d.getFullYear(), d.getMonth() + 1, d.getDate());
-  //   return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
-  // }
-
   openSelection(d: any) {
-    // if (this.seldate.month == 12)
-    //   d.startDate = {year: this.seldate.year + 11, month: 1, day: this.seldate.day};
-    // else
-    //   d.startDate = {year: this.seldate.year + 10, month: this.seldate.month + 1, day: 1};
     d.open();
     d.startDate = { year: this.seldate.year + 10, month: this.seldate.month, day: this.seldate.day };
     d.navigateTo({ year: this.seldate.year, month: this.seldate.month, day: this.seldate.day });
@@ -116,10 +102,6 @@ export class DateComponent implements OnInit, OnChanges {
   onSeldateChange(x: any) {
     if (typeof x === 'string')
       return;
-    //if (x instanceof Date) {
-    //  //this.seldate = { year: x.getFullYear(), month: x.getMonth() + 1, day: x.getDate() };
-    //  return;
-    //} else
     this.seldate = x;
     var d = Global.date(this.seldate.day, this.seldate.month, this.seldate.year)
     // console.log("onSeldateChange " + d);
