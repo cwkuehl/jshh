@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as GlobalActions from '../../actions/global.actions';
@@ -83,13 +83,17 @@ export class Hh410Component implements OnInit {
   @ViewChild("betrag") betragField: ElementRef;
   first: boolean = true;
 
-  constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions, private budgetservice: BudgetService) {
+  constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions,
+    private budgetservice: BudgetService, private router: Router) {
     this.route.params.subscribe(
       params => {
         if (!Global.nes(params['id']))
           this.budgetservice.getBooking(params['id'])
-            .then(a => { if (a != null) this.item = a; })
-            .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
+            .then(a => {
+              if (a != null) this.item = a;
+              if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.'));
+            })
+        //.finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
         this.budgetservice.getEventList(null).then(l => this.events = l || []);
         this.budgetservice.getAccountList(null).then(l => this.accounts = l || []);
       }
@@ -125,8 +129,14 @@ export class Hh410Component implements OnInit {
   }
 
   public save() {
+    this.store.dispatch(GlobalActions.SetError(null));
     if (this.betragField != null) {
       this.item.ebetrag = Global.round(Global.toNumber(this.betragField.nativeElement.value), 2);
     }
+    this.item.kz = 'A';
+    //this.budgetservice.saveBookingOb(this.item).subscribe(() => this.router.navigate(['/', 'bookings']));
+    this.budgetservice.saveBooking(this.item)
+      .then(() => this.router.navigate(['/', 'bookings']))
+      .catch(ex => this.store.dispatch(GlobalActions.SetError(ex)));
   }
 }

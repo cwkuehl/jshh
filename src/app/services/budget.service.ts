@@ -43,7 +43,7 @@ export class BudgetService extends BaseService {
    * @param uid Betroffene ID.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  getBooking(uid: string): Dexie.Promise<HhBuchung> {
+  getBooking(uid: string): Promise<HhBuchung> {
     let l = this.db.HhBuchung.get(uid);
     return l;
   }
@@ -54,9 +54,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffene Entity.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  private iuHhBuchung(daten: Kontext, e: HhBuchung): Dexie.Promise<string> {
+  private iuHhBuchung(daten: Kontext, e: HhBuchung): Promise<string> {
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
     if (e.replid === 'new') {
       e.replid = Global.getUID();
@@ -82,7 +82,7 @@ export class BudgetService extends BaseService {
       this.saveBooking(e)
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
@@ -92,9 +92,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffene Buchung.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  public saveBooking(e0: HhBuchung): Dexie.Promise<HhBuchung> {
+  public async saveBooking(e0: HhBuchung): Promise<HhBuchung> {
     if (e0 == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
@@ -117,21 +117,48 @@ export class BudgetService extends BaseService {
       e.geaendertAm = new Date(Date.parse(e.geaendertAm));
     if (Global.nes(e.uid))
       e.uid = Global.getUID();
+    e.habenValuta = e.sollValuta;
+    e.betrag = Global.round(e.ebetrag * 1.95583)
     e.btext = Global.trim(e.btext);
     e.belegNr = Global.trimNull(e.belegNr);
-    if (Global.nes(e.btext))
-      return Dexie.Promise.reject('Buchungstext fehlt');
-    if (Global.nes(e.sollKontoUid))
-      return Dexie.Promise.reject('Sollkonto fehlt');
-    if (Global.nes(e.habenKontoUid))
-      return Dexie.Promise.reject('Habenkonto fehlt');
-
+    if (e.replid != 'server') {
+      if (e.sollValuta == null)
+        return Promise.reject('Valuta fehlt');
+      if (e.betrag <= 0 || e.ebetrag <= 0)
+        return Promise.reject('Betrag fehlt');
+      if (Global.nes(e.btext))
+        return Promise.reject('Buchungstext fehlt');
+      if (e.belegDatum == null)
+        return Promise.reject('Belegdatum fehlt');
+      if (Global.nes(e.sollKontoUid))
+        return Promise.reject('Sollkonto fehlt');
+      if (Global.nes(e.habenKontoUid))
+        return Promise.reject('Habenkonto fehlt');
+      if (e.sollKontoUid === e.habenKontoUid)
+        return Promise.reject('Soll- und Habenkonto müssen sich unterscheiden');
+      const sk = await this.getAccount(e.sollKontoUid);
+      const hk = await this.getAccount(e.habenKontoUid);
+      if (sk == null)
+        return Promise.reject('Sollkonto fehlt');
+      if (hk == null)
+        return Promise.reject('Habenkonto fehlt');
+      if (sk.kz === 'E' || sk.kz === 'G' || hk.kz === 'E' || hk.kz === 'G')
+        return Promise.reject('Das Eigenkapital- und Gewinn+Verlust-Konto sind nicht bebuchbar.');
+      if (sk.gueltigVon != null && e.sollValuta.getTime() < sk.gueltigVon.getTime())
+        return Promise.reject('Das Sollkonto ist erst ab ' + sk.gueltigVon + ' gültig.');
+      if (sk.gueltigBis != null && e.sollValuta.getTime() > sk.gueltigBis.getTime())
+        return Promise.reject('Das Sollkonto ist nur bis ' + sk.gueltigBis + ' gültig.');
+      if (hk.gueltigVon != null && e.sollValuta.getTime() < hk.gueltigVon.getTime())
+        return Promise.reject('Das Habenkonto ist erst ab ' + hk.gueltigVon + ' gültig.');
+      if (hk.gueltigBis != null && e.sollValuta.getTime() > hk.gueltigBis.getTime())
+        return Promise.reject('Das Habenkonto ist nur bis ' + hk.gueltigBis + ' gültig.');
+    }
     return this.getBooking(e.uid).then((alt: HhBuchung) => {
       if (alt == null) {
         if (e.replid !== 'server')
           e.replid = Global.getUID();
         return this.iuHhBuchung(daten, e).then(r => {
-          return new Dexie.Promise<HhBuchung>(resolve => resolve(e))
+          return new Promise<HhBuchung>(resolve => resolve(e))
         });
       } else {
         let art = 0; // 0 überschreiben, (1 zusammenkopieren,) 2 lassen
@@ -176,11 +203,11 @@ export class BudgetService extends BaseService {
             alt.belegNr = e.belegNr;
             alt.belegDatum = e.belegDatum;
           }
-          //return Dexie.Promise.reject('Fehler beim Ändern.');
+          //return Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
           return this.iuHhBuchung(daten, alt).then(r => {
-            return new Dexie.Promise<HhBuchung>(resolve => resolve(alt))
+            return new Promise<HhBuchung>(resolve => resolve(alt))
           });
         }
       }
@@ -241,7 +268,7 @@ export class BudgetService extends BaseService {
    * @param uid Betroffene ID.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  getAccount(uid: string): Dexie.Promise<HhKonto> {
+  getAccount(uid: string): Promise<HhKonto> {
     let l = this.db.HhKonto.get(uid);
     return l;
   }
@@ -252,9 +279,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffene Entity.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  private iuHhKonto(daten: Kontext, e: HhKonto): Dexie.Promise<string> {
+  private iuHhKonto(daten: Kontext, e: HhKonto): Promise<string> {
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
     if (e.replid === 'new') {
       e.replid = Global.getUID();
@@ -280,7 +307,7 @@ export class BudgetService extends BaseService {
       this.saveAccount(e)
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
@@ -290,9 +317,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffenes Konto.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  public saveAccount(e0: HhKonto): Dexie.Promise<HhKonto> {
+  public saveAccount(e0: HhKonto): Promise<HhKonto> {
     if (e0 == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
@@ -317,14 +344,14 @@ export class BudgetService extends BaseService {
       e.uid = Global.getUID();
     e.name = Global.trim(e.name);
     if (Global.nes(e.name))
-      return Dexie.Promise.reject('Bezeichnung fehlt');
+      return Promise.reject('Bezeichnung fehlt');
 
     return this.getAccount(e.uid).then((alt: HhKonto) => {
       if (alt == null) {
         if (e.replid !== 'server')
           e.replid = Global.getUID();
         return this.iuHhKonto(daten, e).then(r => {
-          return new Dexie.Promise<HhKonto>(resolve => resolve(e))
+          return new Promise<HhKonto>(resolve => resolve(e))
         });
       } else {
         let art = 0; // 0 überschreiben, (1 zusammenkopieren,) 2 lassen
@@ -368,11 +395,11 @@ export class BudgetService extends BaseService {
             alt.betrag = e.betrag;
             alt.ebetrag = e.ebetrag;
           }
-          //return Dexie.Promise.reject('Fehler beim Ändern.');
+          //return Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
           return this.iuHhKonto(daten, alt).then(r => {
-            return new Dexie.Promise<HhKonto>(resolve => resolve(alt))
+            return new Promise<HhKonto>(resolve => resolve(alt))
           });
         }
       }
@@ -416,7 +443,7 @@ export class BudgetService extends BaseService {
    * @param uid Betroffene ID.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  getEvent(uid: string): Dexie.Promise<HhEreignis> {
+  getEvent(uid: string): Promise<HhEreignis> {
     let l = this.db.HhEreignis.get(uid);
     return l;
   }
@@ -427,9 +454,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffene Entity.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  private iuHhEreignis(daten: Kontext, e: HhEreignis): Dexie.Promise<string> {
+  private iuHhEreignis(daten: Kontext, e: HhEreignis): Promise<string> {
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
     if (e.replid === 'new') {
       e.replid = Global.getUID();
@@ -455,7 +482,7 @@ export class BudgetService extends BaseService {
       this.saveEvent(e)
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
@@ -465,9 +492,9 @@ export class BudgetService extends BaseService {
    * @param e Betroffenes Ereignis.
    * @returns Ein Promise zur weiteren Verarbeitung.
    */
-  public saveEvent(e0: HhEreignis): Dexie.Promise<HhEreignis> {
+  public saveEvent(e0: HhEreignis): Promise<HhEreignis> {
     if (e0 == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
@@ -482,16 +509,16 @@ export class BudgetService extends BaseService {
     e.bezeichnung = Global.trim(e.bezeichnung);
     e.etext = Global.trim(e.etext);
     if (Global.nes(e.bezeichnung))
-      return Dexie.Promise.reject('Bezeichnung fehlt');
+      return Promise.reject('Bezeichnung fehlt');
     if (Global.nes(e.etext))
-      return Dexie.Promise.reject('Buchungstext fehlt');
+      return Promise.reject('Buchungstext fehlt');
 
     return this.getEvent(e.uid).then((alt: HhEreignis) => {
       if (alt == null) {
         if (e.replid !== 'server')
           e.replid = Global.getUID();
         return this.iuHhEreignis(daten, e).then(r => {
-          return new Dexie.Promise<HhEreignis>(resolve => resolve(e))
+          return new Promise<HhEreignis>(resolve => resolve(e))
         });
       } else {
         let art = 0; // 0 überschreiben, (1 zusammenkopieren,) 2 lassen
@@ -529,11 +556,11 @@ export class BudgetService extends BaseService {
             alt.bezeichnung = e.bezeichnung;
             alt.etext = e.etext;
           }
-          //return Dexie.Promise.reject('Fehler beim Ändern.');
+          //return Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
           return this.iuHhEreignis(daten, alt).then(r => {
-            return new Dexie.Promise<HhEreignis>(resolve => resolve(alt))
+            return new Promise<HhEreignis>(resolve => resolve(alt))
           });
         }
       }
