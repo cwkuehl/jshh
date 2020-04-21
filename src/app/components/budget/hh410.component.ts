@@ -63,6 +63,16 @@ import { Global } from '../../services/global';
     </div>
   </div>
   <div class="form-row">
+    <div class="form-group col">
+      <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+      <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
+    </div>
+    <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
+      <p class="form-control-static" title="Geändert">{{geaendert}}</p>
+    </div>
+  </div>
+  <div class="form-row">
     <button type="submit" class="btn btn-primary col-sm-2" title="Schließen mit Speichern." (click)="save()">Speichern</button>
     <a class="btn btn-primary col-sm-2 ml-1" title="Schließen ohne Speichern." [routerLink]="'/bookings'">Abbrechen</a>
   </div>
@@ -76,6 +86,8 @@ export class Hh410Component implements OnInit {
     uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
     sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
   };
+  angelegt: string;
+  geaendert: string;
   eventuid: string;
   events: HhEreignis[] = [];
   accounts: HhKonto[] = [];
@@ -92,6 +104,8 @@ export class Hh410Component implements OnInit {
             .then(a => {
               if (a != null) this.item = a;
               if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.'));
+              this.angelegt = Global.formatDatumVon(this.item.angelegtAm, this.item.angelegtVon) + ' (' + this.item.replid + ')';
+              this.geaendert = Global.formatDatumVon(this.item.geaendertAm, this.item.geaendertVon);
             })
         //.finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
         this.budgetservice.getEventList(null).then(l => this.events = l || []);
@@ -134,8 +148,9 @@ export class Hh410Component implements OnInit {
       this.item.ebetrag = Global.round(Global.toNumber(this.betragField.nativeElement.value), 2);
     }
     this.item.kz = 'A';
-    //this.budgetservice.saveBookingOb(this.item).subscribe(() => this.router.navigate(['/', 'bookings']));
-    this.budgetservice.saveBooking(this.item)
+    var b = Object.assign({}, this.item); // Clone erzeugen
+    b.replid = null;
+    this.budgetservice.saveBooking(b)
       .then(() => this.router.navigate(['/', 'bookings']))
       .catch(ex => this.store.dispatch(GlobalActions.SetError(ex)));
   }
