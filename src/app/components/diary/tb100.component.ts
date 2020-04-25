@@ -18,7 +18,9 @@ import { throttleTime } from 'rxjs/operators';
     <div class="form-group col-sm-4 col-md-3">
       <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
       <app-date2 [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date2>
-      <button type="button" class="btn btn-primary mt-3" (click)="save()">Speichern</button><br>
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch-Ablgeich mit Server" (click)="replicate()"><img src="assets/icons/ic_cached_white_24dp.png"/></button>
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch löschen" (click)="delete()"><img src="assets/icons/ic_delete_white_24dp.png"/></button>
     </div>
     <div class="form-group col-sm-4 col-md-6">
       <label class="d-none d-md-block" for="eintrag">Eintrag</label>
@@ -32,11 +34,6 @@ import { throttleTime } from 'rxjs/operators';
     </div>
   </div>
 </form>
-
-<div class="row">
-  <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Tagebuch-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
-  <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Tagebuch löschen">Löschen</button>
-</div>
   `,
   styles: [``]
 })

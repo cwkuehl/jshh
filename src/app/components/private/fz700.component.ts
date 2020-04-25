@@ -15,8 +15,8 @@ import { PrivateService } from '../../services';
   <h3>Notizen</h3>
 
   <div class="row">
-    <button type="button" class="btn btn-primary col-sm-2" (click)="replicate()" title="Notizen-Ablgeich mit Server">Server-Ablgeich</button>&nbsp;
-    <button type="button" class="btn btn-primary col-sm-2" (click)="delete()" title="Notizen löschen">Löschen</button>
+    <button type="button" class="btn btn-primary ml-1" (click)="replicate()" title="Notizen-Ablgeich mit Server"><img src="assets/icons/ic_cached_white_24dp.png"/></button>
+    <button type="button" class="btn btn-primary ml-1" (click)="delete()" title="Notizen löschen"><img src="assets/icons/ic_delete_white_24dp.png"/></button>
   </div>
 
   <div class="row card mt-1" *ngIf="memos.length > 0">
