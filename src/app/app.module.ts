@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { AppState } from './app.state';
 import { DateComponent } from './components/comp/date.component';
+import { Date2Component } from './components/comp/date2.component';
 import { JshhDatabase } from './services/database';
 import { MenuComponent } from './components/menu.component';
 import { Am000Component } from './components/user/am000.component';
@@ -34,6 +35,7 @@ import { BudgetService, DiaryService, PrivateService, UserService } from './serv
     AppComponent,
     MenuComponent,
     DateComponent,
+    Date2Component,
     Am000Component,
     Am500Component,
     Fz700Component,

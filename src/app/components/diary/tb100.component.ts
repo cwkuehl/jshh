@@ -17,7 +17,7 @@ import { throttleTime } from 'rxjs/operators';
   <div class="form-row">
     <div class="form-group col-sm-4 col-md-3">
       <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
-      <app-date [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date>
+      <app-date2 [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date2>
       <button type="button" class="btn btn-primary mt-3" (click)="save()">Speichern</button><br>
     </div>
     <div class="form-group col-sm-4 col-md-6">

@@ -12,7 +12,7 @@ export class Global {
   }
 
   /**
-   * Liefert Datum aus Einzeldaten.
+   * Liefert UTC-Datum aus Einzeldaten.
    * @param tag
    * @param monat
    * @param jahr
@@ -21,6 +21,17 @@ export class Global {
     //let d = new Date(jahr, monat - 1, tag);
     //return this.clearTime(d);
     var d = new Date(Date.UTC(jahr, monat - 1, tag, 0, 0, 0, 0));
+    return d;
+  }
+
+  /**
+   * Liefert UTC-Datum aus Datum.
+   * @param tag
+   * @param monat
+   * @param jahr
+   */
+  public static date2(date: Date): Date {
+    var d = Global.date(date.getDate(), date.getMonth() + 1, date.getFullYear());
     return d;
   }
 

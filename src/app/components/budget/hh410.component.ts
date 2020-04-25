@@ -15,17 +15,9 @@ import { Global } from '../../services/global';
 
 <form>
   <div class="form-row">
-    <div class="form-group col">
-      <label class="control-label d-none d-md-block" for="habenvaluta">Haben-Valuta</label>
-      <input type="date" class="form-control" id="habenvaluta" name="habenvaluta"
-        [ngModel]="item.habenValuta | date:'yyyy-MM-dd'" (ngModelChange)="onHabenValutaChange($event)"
-        #habenvaluta="ngModel" required pattern="\d{4}-\d{2}-\d{2}" required>
-    </div>
-  </div>
-  <div class="form-row">
     <div class="form-group col-9">
       <label class="control-label d-none d-md-block" for="valuta">Valuta</label>
-      <app-date [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date>
+      <app-date2 [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date2>
     </div>
     <div class="form-group col-3">
       <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
@@ -67,7 +59,7 @@ import { Global } from '../../services/global';
     </div>
     <div class="form-group col-9">
       <label class="control-label d-none d-md-block" for="belegdatum">Belegdatum</label>
-      <app-date [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date>
+      <app-date2 [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date2>
     </div>
   </div>
   <div class="form-row">
@@ -132,14 +124,9 @@ export class Hh410Component implements OnInit {
   }
 
   public onValutaChange(datum: Date) {
+    this.item.sollValuta = datum;
     this.item.habenValuta = datum;
     this.item.belegDatum = datum;
-  }
-
-  public onHabenValutaChange(datum: string) {
-    //console.log(this.item.habenValuta);
-    //this.item.habenValuta = datum;
-    this.item.belegDatum = Global.toDate(datum);
   }
 
   public onEreignisChange(uid: string) {
@@ -163,6 +150,9 @@ export class Hh410Component implements OnInit {
     }
     this.item.kz = 'A';
     var b = Object.assign({}, this.item); // Clone erzeugen
+    b.sollValuta = Global.date2(b.sollValuta);
+    b.habenValuta = Global.date2(b.habenValuta);
+    b.belegDatum = Global.date2(b.belegDatum);
     b.replid = null;
     this.budgetservice.saveBooking(b)
       .then(() => this.router.navigate(['/', 'bookings']))
