@@ -5,10 +5,10 @@ import { environment } from '../../environments/environment';
   selector: 'app-menu',
   template: `
 <div class="row navbar">
-  <div class="col-sm-6 col-md-4">
+  <div class="ml-1">
     <a class="navbar-brand" href="#"><img src="favicon.ico" width="20px"> {{ title }}</a>
   </div>
-  <div class="col-sm-3 col-md-2">
+  <div class="ml-1">
     <div ngbDropdown class="d-inline-block">
       <button class="btn btn-secondary" id="dd1" ngbDropdownToggle>Benutzer</button>
       <div ngbDropdownMenu aria-labelledby="dd1">
@@ -17,7 +17,7 @@ import { environment } from '../../environments/environment';
       </div>
     </div>
   </div>
-  <div class="col-sm-3 col-md-2">
+  <div class="ml-1">
     <div ngbDropdown class="d-inline-block">
       <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Funkionen</button>
       <div ngbDropdownMenu aria-labelledby="dd2">
