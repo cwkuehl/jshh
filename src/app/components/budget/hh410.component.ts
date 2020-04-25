@@ -16,10 +16,18 @@ import { Global } from '../../services/global';
 <form>
   <div class="form-row">
     <div class="form-group col">
+      <label class="control-label d-none d-md-block" for="habenvaluta">Haben-Valuta</label>
+      <input type="date" class="form-control" id="habenvaluta" name="habenvaluta"
+        [ngModel]="item.habenValuta | date:'yyyy-MM-dd'" (ngModelChange)="onHabenValutaChange($event)"
+        #habenvaluta="ngModel" required pattern="\d{4}-\d{2}-\d{2}" required>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-9">
       <label class="control-label d-none d-md-block" for="valuta">Valuta</label>
       <app-date [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date>
     </div>
-    <div class="form-group col">
+    <div class="form-group col-3">
       <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
       <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag | number:'1.2-2'" title="Betrag" placeholder="Betrag">
     </div>
@@ -35,13 +43,13 @@ import { Global } from '../../services/global';
   <div class="form-row">
     <div class="form-group col">
       <label class="control-label d-none d-md-block" for="sollkonto">Sollkonto</label>
-      <select class="form-control" name="Sollkonto" [(ngModel)]="item.sollKontoUid" size="5" title="Sollkonto" placeholder="Sollkonto">
+      <select class="form-control" name="Sollkonto" [(ngModel)]="item.sollKontoUid" size="1" title="Sollkonto" placeholder="Sollkonto">
         <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
       </select>
     </div>
     <div class="form-group col">
       <label class="control-label d-none d-md-block" for="habenkonto">Habenkonto</label>
-      <select class="form-control" name="Habenkonto" [(ngModel)]="item.habenKontoUid" size="5" title="Habenkonto" placeholder="Habenkonto">
+      <select class="form-control" name="Habenkonto" [(ngModel)]="item.habenKontoUid" size="1" title="Habenkonto" placeholder="Habenkonto">
         <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
       </select>
     </div>
@@ -53,11 +61,11 @@ import { Global } from '../../services/global';
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col">
+    <div class="form-group col-3">
       <label class="control-label d-none d-md-block" for="belegnr">Belegnummer</label>
       <input type="text" class="form-control" name="belegnr" [(ngModel)]="item.belegNr" title="Belegnummer" placeholder="Belegnummer">
     </div>
-    <div class="form-group col">
+    <div class="form-group col-9">
       <label class="control-label d-none d-md-block" for="belegdatum">Belegdatum</label>
       <app-date [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date>
     </div>
@@ -126,6 +134,12 @@ export class Hh410Component implements OnInit {
   public onValutaChange(datum: Date) {
     this.item.habenValuta = datum;
     this.item.belegDatum = datum;
+  }
+
+  public onHabenValutaChange(datum: string) {
+    //console.log(this.item.habenValuta);
+    //this.item.habenValuta = datum;
+    this.item.belegDatum = Global.toDate(datum);
   }
 
   public onEreignisChange(uid: string) {
