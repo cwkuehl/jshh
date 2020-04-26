@@ -17,8 +17,8 @@ import { AppState } from '../../app.state';
   </div>
   <div class="form-row">
       <div class="form-group col-sm-6">
-      <label class="control-label" for="months">Anzahl Monate</label>&nbsp;
-      <input type="text" class="form-control" name="months" [(ngModel)]="months" title="Anzahl Monate">
+      <label class="control-label" for="days">Anzahl Tage</label>&nbsp;
+      <input type="text" class="form-control" name="days" [(ngModel)]="days" title="Anzahl Tage">
     </div>
   </div>
   <div class="form-row">
@@ -33,12 +33,12 @@ import { AppState } from '../../app.state';
 })
 export class Am500Component implements OnInit {
   server: string;
-  months: string;
+  days: string;
 
   constructor(private store: Store<AppState>) {
     store.select('options').subscribe(a => {
       this.server = a.replicationServer;
-      this.months = a.replicationMonths;
+      this.days = a.replicationDays;
     });
   }
 
@@ -46,6 +46,6 @@ export class Am500Component implements OnInit {
   }
 
   save() {
-    this.store.dispatch(SaveOptions({ options: { replicationServer: this.server, replicationMonths: this.months } }));
+    this.store.dispatch(SaveOptions({ options: { replicationServer: this.server, replicationDays: this.days } }));
   }
 }

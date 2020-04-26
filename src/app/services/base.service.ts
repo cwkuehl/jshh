@@ -27,8 +27,8 @@ export class BaseService {
   protected postReadServer<T>(table: string, data: string): Observable<T> {
 
     let url = this.options.replicationServer;
-    let m = Math.max(1, Global.toInt(this.options.replicationMonths));
-    let mode = `read_${m}m`;
+    let days = Math.max(1, Global.toInt(this.options.replicationDays));
+    let mode = `read_${days}d`;
     let headers = new HttpHeaders({
       'Accept': 'application/json',
       //'Authorization': 'my-auth-token'

@@ -27,7 +27,7 @@ const InitReplicationServer = 'https://localhost:4202/';
 
 const InitOptions: Options = {
   replicationServer: environment.production ? InitReplicationServer : 'http://localhost:4201/',
-  replicationMonths: '1'
+  replicationDays: '10'
 };
 
 export const reducerOptions = createReducer(
@@ -35,7 +35,7 @@ export const reducerOptions = createReducer(
   on(GlobalActions.SaveOptionsOk,
     (state, { options }) => ({
       replicationServer: options.replicationServer == null ? state.replicationServer : options.replicationServer,
-      replicationMonths: options.replicationMonths == null ? state.replicationMonths : options.replicationMonths
+      replicationDays: options.replicationDays == null ? state.replicationDays : options.replicationDays
     }))
 );
 

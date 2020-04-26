@@ -68,11 +68,11 @@ export class UserService extends BaseService {
   }
 
   public getOptions(): Dexie.Promise<Options> {
-    let options: Options = { replicationServer: null, replicationMonths: null };
+    let options: Options = { replicationServer: null, replicationDays: null };
     return this.db.Parameter.get('ReplicationServer')
       .then(a => { if (a != null) options.replicationServer = a.wert; })
-      .then(() => this.db.Parameter.get('ReplicationMonths'))
-      .then(a => { if (a != null) options.replicationMonths = a.wert; })
+      .then(() => this.db.Parameter.get('ReplicationDays'))
+      .then(a => { if (a != null) options.replicationDays = a.wert; })
       .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
   }
 
@@ -93,11 +93,11 @@ export class UserService extends BaseService {
     if (Global.nes(options.replicationServer)) {
       return Dexie.Promise.reject('Die URL für den Replikationsserver muss angegeben werden.');
     }
-    if (Global.toInt(options.replicationMonths) <= 0) {
-      return Dexie.Promise.reject('Die Monate müssen größer 0 sein.');
+    if (Global.toInt(options.replicationDays) <= 0) {
+      return Dexie.Promise.reject('Die Tage müssen größer 0 sein.');
     }
     return this.saveParam('ReplicationServer', options.replicationServer)
-      .then(() => this.saveParam('ReplicationMonths', options.replicationMonths))
+      .then(() => this.saveParam('ReplicationDays', options.replicationDays))
       .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
   }
 
