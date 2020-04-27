@@ -221,9 +221,12 @@ export class BudgetService extends BaseService {
   public deleteAllBookingsOb(): Observable<Action> {
     var ob = new Observable<Action>(s => {
       this.db.transaction('rw', this.db.HhBuchung, this.db.HhEreignis, this.db.HhKonto, async () => {
+        var c = await this.db.HhBuchung.count();
         await this.db.HhBuchung.toCollection().delete();
-        //await this.db.HhEreignis.toCollection().delete();
-        //await this.db.HhKonto.toCollection().delete();
+        if (c <= 0) {
+          await this.db.HhEreignis.toCollection().delete();
+          await this.db.HhKonto.toCollection().delete();
+        }
       })
         .then(a => s.next(HhBuchungActions.Empty()))
         .catch(ex => s.next(GlobalActions.SetError(ex)))
