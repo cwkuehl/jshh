@@ -28,7 +28,7 @@ import { Router } from '@angular/router';
 <table class="table table-contensed" >
   <thead>
   <tr>
-    <th colspan='2'>Aktionen</th>
+    <th colspan='3'>Aktionen</th>
     <th>Valuta</th>
     <th>K.</th>
     <th class='text-right'>Betrag</th>
@@ -43,7 +43,8 @@ import { Router } from '@angular/router';
   </tr>
   </thead>
   <tr *ngFor="let item of bookings"> <!-- [class.active]="item === selectedFlight"> -->
-    <td><a class='btn btn-secondary' [routerLink]="['/booking', item.uid]" title='Details'><img src='assets/icons/ic_details_white_24dp.png' height='10px'/></a></td>
+    <td><a class='btn btn-secondary' [routerLink]="['/booking', item.uid, '']" title='Details'><img src='assets/icons/ic_details_white_24dp.png' height='10px'/></a></td>
+    <td><a class='btn btn-secondary' [routerLink]="['/booking', item.uid, 'copy']" title='Kopieren'><img src='assets/icons/ic_filter_2_white_24dp.png' height='10px'/></a></td>
     <td><button type='button' class='btn btn-secondary' title='Stornieren' (click)="reverse(item.uid)"><img src='assets/icons/ic_delete_white_24dp.png' height='10px'/></button></td>
     <td>{{item.sollValuta | date:'yyyy-MM-dd'}}</td>
     <td>{{item.kz}}</td>

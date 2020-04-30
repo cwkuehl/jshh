@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'memo/:id', component: Fz710Component },
   { path: 'diary', component: Tb100Component, canDeactivate: [Tb100DeactivateGuard] },
   { path: 'bookings', component: Hh400Component },
-  { path: 'booking/:id', component: Hh410Component },
+  { path: 'booking/:id/:copy', component: Hh410Component },
   // { path: '**', component: NotFoundPageComponent }
 ];
 @NgModule({
