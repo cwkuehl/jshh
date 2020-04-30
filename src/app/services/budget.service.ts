@@ -216,6 +216,28 @@ export class BudgetService extends BaseService {
   }
 
   /**
+   * Stornieren einer Buchung.
+   * @param e Betroffene Uid.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  public async reverseBooking(uid: string): Promise<HhBuchung> {
+    if (Global.nes(uid)) {
+      return Promise.reject('Die UID fehlt.');
+    }
+    let daten = this.getKontext();
+    return this.getBooking(uid).then((alt: HhBuchung) => {
+      if (alt == null)
+        return Promise.reject('Die Buchung fehlt.');
+      alt.kz = alt.kz == 'A' ? 'S' : 'A';
+      if (alt.replid === 'server')
+        alt.replid = Global.getUID();
+      return this.iuHhBuchung(daten, alt).then(r => {
+        return new Promise<HhBuchung>(resolve => resolve(alt))
+      });
+    });
+  }
+
+  /**
    * Löschen aller Buchungen, Ereignisse und Konten.
    */
   public deleteAllBookingsOb(): Observable<Action> {

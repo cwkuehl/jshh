@@ -28,7 +28,7 @@ import { Router } from '@angular/router';
 <table class="table table-contensed" >
   <thead>
   <tr>
-    <th>Nr.</th>
+    <th colspan='2'>Aktionen</th>
     <th>Valuta</th>
     <th>K.</th>
     <th class='text-right'>Betrag</th>
@@ -43,7 +43,8 @@ import { Router } from '@angular/router';
   </tr>
   </thead>
   <tr *ngFor="let item of bookings"> <!-- [class.active]="item === selectedFlight"> -->
-    <td><a [routerLink]="['/booking', item.uid]">{{item.uid}}</a></td>
+    <td><a class='btn btn-secondary' [routerLink]="['/booking', item.uid]" title='Details'><img src='assets/icons/ic_details_white_24dp.png' height='10px'/></a></td>
+    <td><button type='button' class='btn btn-secondary' title='Stornieren' (click)="reverse(item.uid)"><img src='assets/icons/ic_delete_white_24dp.png' height='10px'/></button></td>
     <td>{{item.sollValuta | date:'yyyy-MM-dd'}}</td>
     <td>{{item.kz}}</td>
     <td class='text-right'>{{item.ebetrag | number:'1.2'}}</td>
@@ -105,4 +106,12 @@ export class Hh400Component implements OnInit {
     this.router.navigate(['/', 'booking', ''])
       .then(nav => { console.log(nav); }, err => { console.log(err) });
   }
+
+  public reverse(uid: string) {
+    //if (!confirm('Soll die Buchung ' + uid + ' storniert werden?'))
+    //  return;
+    this.store.dispatch(GlobalActions.SetError(null));
+    this.budgetservice.reverseBooking(uid).then(() => this.reload());
+  }
+
 }
