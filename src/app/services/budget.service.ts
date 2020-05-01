@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
-import Dexie from 'dexie';
 import { Kontext, HhBuchung, HhKonto, HhEreignis } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';

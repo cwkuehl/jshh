@@ -24,7 +24,7 @@ import { environment } from '../../environments/environment';
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
         <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem [routerLink]="'/bookings'">Buchungen</button>
-        <button ngbDropdownItem>Sudoku</button>
+        <button ngbDropdownItem [routerLink]="'/sudoku'">Sudoku</button>
       </div>
     </div>
   </div>

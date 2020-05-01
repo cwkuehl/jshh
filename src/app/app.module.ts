@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-rounting.module';
 import { AppComponent } from './app.component';
 import { AppEffects } from './app.effects';
 import { AppState } from './app.state';
+import { CellComponent } from './components/comp/cell.component';
 import { DateComponent } from './components/comp/date.component';
 import { Date2Component } from './components/comp/date2.component';
 import { JshhDatabase } from './services/database';
@@ -25,15 +26,17 @@ import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
 import { Hh410Component } from './components/budget/hh410.component';
+import { So100Component } from './components/misc/so100.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
-import { BudgetService, DiaryService, PrivateService, UserService } from './services';
+import { BudgetService, DiaryService, PrivateService, UserService, SudokuService } from './services';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
+    CellComponent,
     DateComponent,
     Date2Component,
     Am000Component,
@@ -42,6 +45,7 @@ import { BudgetService, DiaryService, PrivateService, UserService } from './serv
     Fz710Component,
     Hh400Component,
     Hh410Component,
+    So100Component,
     Tb100Component,
   ],
   imports: [
@@ -59,7 +63,12 @@ import { BudgetService, DiaryService, PrivateService, UserService } from './serv
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'de' },
-    JshhDatabase, BudgetService, DiaryService, PrivateService, UserService,
+    JshhDatabase,
+    BudgetService,
+    DiaryService,
+    PrivateService,
+    SudokuService,
+    UserService,
     Tb100DeactivateGuard
   ],
   bootstrap: [AppComponent]

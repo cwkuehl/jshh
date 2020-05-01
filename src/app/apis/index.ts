@@ -7,4 +7,5 @@ export { MaReplikation } from './mareplikation';
 export { Options } from './options';
 export { Parameter } from './parameter';
 export { Revision } from './revision';
+export { Sudoku } from './sudoku';
 export { TbEintrag } from './tbeintrag';

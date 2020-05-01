@@ -6,6 +6,11 @@ export class Global {
 
   constructor() { }
 
+  // Globale Konstanten
+  public static SU_MAXX: number = 9; // 6
+  public static SU_MAXXW: number = 3; // 3
+  public static SU_MAXYW: number = 3; // 2
+
   /** Macht nichts. */
   public static machNichts(): number {
     return 0;
