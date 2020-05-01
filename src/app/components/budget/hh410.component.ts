@@ -109,12 +109,15 @@ export class Hh410Component implements OnInit {
               if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.'));
               if (!Global.nes(params['copy'])) {
                 this.item.uid = null;
+                this.item.replid = null;
                 this.item.angelegtAm = null;
                 this.item.angelegtVon = null;
                 this.item.geaendertAm = null;
                 this.item.geaendertVon = null;
               }
-              this.angelegt = Global.formatDatumVon(this.item.angelegtAm, this.item.angelegtVon) + ' (' + this.item.replid + ')';
+              this.angelegt = Global.formatDatumVon(this.item.angelegtAm, this.item.angelegtVon) ?? '';
+              if (!Global.nes(this.item.replid))
+                this.angelegt += ' (' + this.item.replid + ')';
               this.geaendert = Global.formatDatumVon(this.item.geaendertAm, this.item.geaendertVon);
             })
         //.finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.')); });
