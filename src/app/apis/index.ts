@@ -1,3 +1,5 @@
+export { FzFahrrad } from './fzfahrrad';
+export { FzFahrradstand } from './fzfahrradstand';
 export { FzNotiz } from './fznotiz';
 export { HhBuchung } from './hhbuchung';
 export { HhEreignis } from './hhereignis';

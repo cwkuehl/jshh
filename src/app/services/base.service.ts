@@ -1,5 +1,5 @@
 import { JshhDatabase } from './database';
-import { Kontext, Options } from '../apis';
+import { Kontext, Options, Revision } from '../apis';
 import { Global } from './global';
 import { Observable } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -17,6 +17,20 @@ export class BaseService {
   public getKontext(): Kontext {
     // console.log('getKontext: ' + this.benutzerId);
     return { benutzerId: this.db.userId, jetzt: Global.now(), heute: Global.today() };
+  }
+
+  iuRevision(daten: Kontext, e: Revision): void {
+    if (e.replid === 'new') {
+      e.replid = Global.getUID();
+    } else if (e.replid !== 'server') {
+      if (e.angelegtAm == null) {
+        e.angelegtAm = daten.jetzt;
+        e.angelegtVon = daten.benutzerId;
+      } else {
+        e.geaendertAm = daten.jetzt;
+        e.geaendertVon = daten.benutzerId;
+      }
+    }
   }
 
   protected postReadServer<T>(table: string, data: string): Observable<T> {

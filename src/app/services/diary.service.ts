@@ -19,15 +19,15 @@ export class DiaryService extends BaseService {
     super(store, db, http);
   }
 
-  getEintrag(datum: string): Dexie.Promise<TbEintrag> {
+  getEintrag(datum: string): Promise<TbEintrag> {
 
     if (datum == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
-    return Dexie.Promise.resolve(this.getTbEintrag(datum));
+    return Promise.resolve(this.getTbEintrag(datum));
   }
 
-  getTbEintrag(datum: string): Dexie.Promise<TbEintrag> {
+  getTbEintrag(datum: string): Promise<TbEintrag> {
 
     // console.log('getEintrag: ' + datum);
     // let l = this.db.TbEintrag.where('datum').equals(datum).first().finally(
@@ -36,28 +36,18 @@ export class DiaryService extends BaseService {
     return l;
   }
 
-  getTbEintragListe(replidne: string): Dexie.Promise<TbEintrag[]> {
+  getTbEintragListe(replidne: string): Promise<TbEintrag[]> {
 
     let l = this.db.TbEintrag.where('replid').notEqual(replidne).toArray();
     return l;
   }
 
-  iuTbEintrag(daten: Kontext, e: TbEintrag): Dexie.Promise<string> {
+  iuTbEintrag(daten: Kontext, e: TbEintrag): Promise<string> {
 
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
-    if (e.replid === 'new') {
-      e.replid = Global.getUID();
-    } else if (e.replid !== 'server') {
-      if (e.angelegtAm == null) {
-        e.angelegtAm = daten.jetzt;
-        e.angelegtVon = daten.benutzerId;
-      } else {
-        e.geaendertAm = daten.jetzt;
-        e.geaendertVon = daten.benutzerId;
-      }
-    }
+    this.iuRevision(daten, e);
     return this.db.TbEintrag.put(e);
   }
 
@@ -67,14 +57,14 @@ export class DiaryService extends BaseService {
         .then(a => s.next(TbEintragActions.Empty()))
         //.catch(e => s.error(e))
         .catch(e => s.next(TbEintragActions.Error(e)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
 
-  public saveEntry(eintrag0: TbEintrag): Dexie.Promise<TbEintrag> {
+  public saveEntry(eintrag0: TbEintrag): Promise<TbEintrag> {
     if (eintrag0 == null || eintrag0.datum == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
     var eintrag = Object.assign({}, eintrag0); // Clone erzeugen
     let daten = this.getKontext();
@@ -94,7 +84,7 @@ export class DiaryService extends BaseService {
           if (eintrag.replid !== 'server')
             eintrag.replid = Global.getUID();
           return this.iuTbEintrag(daten, eintrag).then(r => {
-            return new Dexie.Promise<TbEintrag>(resolve => resolve(eintrag))
+            return new Promise<TbEintrag>(resolve => resolve(eintrag))
           });
         }
       } else if (!leer) {
@@ -146,19 +136,19 @@ export class DiaryService extends BaseService {
             alt.geaendertAm = daten.jetzt;
             alt.geaendertVon = daten.benutzerId;
           }
-          //return Dexie.Promise.reject('Fehler beim Ändern.');
+          //return Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
           return this.iuTbEintrag(daten, alt).then(r => {
-            return new Dexie.Promise<TbEintrag>(resolve => resolve(alt))
+            return new Promise<TbEintrag>(resolve => resolve(alt))
           });
         }
       } else {
         // leeren Eintrag löschen
         //if (eintrag.datum == null)
-        //  return Dexie.Promise.reject('Fehler beim Löschen.');
+        //  return Promise.reject('Fehler beim Löschen.');
         return this.db.TbEintrag.delete(eintrag.datum).then(r => {
-          return new Dexie.Promise<TbEintrag>(resolve => resolve(alt))
+          return new Promise<TbEintrag>(resolve => resolve(alt))
         });
       }
       return alt;
@@ -193,5 +183,4 @@ export class DiaryService extends BaseService {
       //() => this.store.dispatch(TbEintragActions.Load())
     );
   }
-
 }
