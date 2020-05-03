@@ -11,7 +11,7 @@ import { throttleTime } from 'rxjs/operators';
 @Component({
   selector: 'app-tb100',
   template: `
-<h3>Tagebuch</h3>
+<h4>Tagebuch</h4>
 
 <form>
   <div class="form-row">

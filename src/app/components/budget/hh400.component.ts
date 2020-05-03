@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-hh400',
   template: `
-<h3>Buchungen</h3>
+<h4>Buchungen</h4>
 
 <div class="row">
   <div class="form-group col">
@@ -106,7 +106,7 @@ export class Hh400Component implements OnInit {
   }
 
   public newbooking() {
-    this.router.navigate(['/', 'booking', ''])
+    this.router.navigate(['/', 'booking', '', ''])
       .then(nav => { console.log(nav); }, err => { console.log(err) });
   }
 

@@ -6,7 +6,7 @@ import { Login } from 'src/app/actions/global.actions';
 @Component({
   selector: 'app-am000',
   template: `
-<h3>Anmeldung</h3>
+<h4>Anmeldung</h4>
 
 <form>
   <div class="form-row">

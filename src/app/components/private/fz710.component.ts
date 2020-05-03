@@ -11,7 +11,7 @@ import { Global } from '../../services/global';
 @Component({
   selector: 'app-fz710',
   template: `
-<h3>Notiz</h3>
+<h4>Notiz</h4>
 
 <form>
   <div class="form-row">

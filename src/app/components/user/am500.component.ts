@@ -6,7 +6,7 @@ import { AppState } from '../../app.state';
 @Component({
   selector: 'app-am500',
   template: `
-<h3>Einstellungen</h3>
+<h4>Einstellungen</h4>
 
 <form>
   <div class="form-row">

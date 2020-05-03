@@ -12,7 +12,7 @@ import { PrivateService } from '../../services';
 @Component({
   selector: 'app-fz700',
   template: `
-  <h3>Notizen</h3>
+  <h4>Notizen</h4>
 
   <div class="row">
     <div class="form-group col">

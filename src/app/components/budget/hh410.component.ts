@@ -11,7 +11,7 @@ import { Global } from '../../services/global';
 @Component({
   selector: 'app-hh410',
   template: `
-<h3>{{title}}</h3>
+<h4>Buchung <small class="text-muted">{{title}}</small></h4>
 
 <form>
   <div class="form-row">
@@ -83,7 +83,7 @@ import { Global } from '../../services/global';
   styles: [``]
 })
 export class Hh410Component implements OnInit {
-  title: string = 'Buchung';
+  title: string = 'Neu';
   item: HhBuchung = {
     uid: '', sollValuta: Global.today(), habenValuta: Global.today(), betrag: 0, ebetrag: 0,
     sollKontoUid: '', habenKontoUid: '', btext: '', belegDatum: Global.today()
@@ -104,7 +104,7 @@ export class Hh410Component implements OnInit {
         if (!Global.nes(params['id']))
           this.budgetservice.getBooking(params['id'])
             .then(a => {
-              this.title = 'Buchung ' + (Global.nes(params['copy']) ? params['id'] : 'Kopieren');
+              this.title = Global.nes(params['copy']) ? params['id'] : 'Kopieren';
               if (a != null) this.item = a;
               if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Buchung nicht gefunden.'));
               if (!Global.nes(params['copy'])) {
