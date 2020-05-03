@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import Dexie from 'dexie';
 import { Observable } from 'rxjs';
 import * as TbEintragActions from '../actions/tbeintrag.actions';
 import { Kontext, TbEintrag } from '../apis';

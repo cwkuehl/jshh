@@ -43,8 +43,13 @@ export class Fz710Component implements OnInit {
   constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions, private privateservice: PrivateService) {
     this.route.params.subscribe(
       params => this.privateservice.getMemo(params['id'])
-        .then(a => { if (a != null) this.item = a; })
-        .finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Notiz nicht gefunden.')); })
+        .then(a => {
+          if (a != null)
+            this.item = a;
+          if (Global.nes(this.item.uid))
+            this.store.dispatch(GlobalActions.SetError('Notiz nicht gefunden.'));
+        })
+      //.finally(() => { if (Global.nes(this.item.uid)) this.store.dispatch(GlobalActions.SetError('Notiz nicht gefunden.')); })
     );
   }
 

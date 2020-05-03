@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
-import Dexie from 'dexie';
 import { FzNotiz, Kontext } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';
@@ -22,7 +21,7 @@ export class PrivateService extends BaseService {
 
   // memos: FzNotiz[] = [];
 
-  getMemoList(replidne: string): Dexie.Promise<FzNotiz[]> {
+  getMemoList(replidne: string): Promise<FzNotiz[]> {
 
     if (Global.nes(replidne))
       return this.db.FzNotiz.toArray();
@@ -30,7 +29,7 @@ export class PrivateService extends BaseService {
       return this.db.FzNotiz.where('replid').notEqual(replidne).toArray();
   }
 
-  getMemo(uid: string): Dexie.Promise<FzNotiz> {
+  getMemo(uid: string): Promise<FzNotiz> {
     let l = this.db.FzNotiz.get(uid);
     return l;
   }
@@ -40,21 +39,11 @@ export class PrivateService extends BaseService {
   //     .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
   // }
 
-  private iuFzNotiz(daten: Kontext, e: FzNotiz): Dexie.Promise<string> {
+  private iuFzNotiz(daten: Kontext, e: FzNotiz): Promise<string> {
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
-    if (e.replid === 'new') {
-      e.replid = Global.getUID();
-    } else if (e.replid !== 'server') {
-      if (e.angelegtAm == null) {
-        e.angelegtAm = daten.jetzt;
-        e.angelegtVon = daten.benutzerId;
-      } else {
-        e.geaendertAm = daten.jetzt;
-        e.geaendertVon = daten.benutzerId;
-      }
-    }
+    this.iuRevision(daten, e);
     return this.db.FzNotiz.put(e);
   }
 
@@ -63,14 +52,14 @@ export class PrivateService extends BaseService {
       this.saveMemo(eintrag)
         .then(a => s.next(FzNotizActions.Empty()))
         .catch(e => s.next(GlobalActions.SetError(e)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
 
-  public saveMemo(e0: FzNotiz): Dexie.Promise<FzNotiz> {
+  public saveMemo(e0: FzNotiz): Promise<FzNotiz> {
     if (e0 == null || e0.uid == null) {
-      return Dexie.Promise.resolve(null);
+      return Promise.resolve(null);
     }
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
@@ -89,7 +78,7 @@ export class PrivateService extends BaseService {
         if (e.replid !== 'server')
           e.replid = Global.getUID();
         return this.iuFzNotiz(daten, e).then(r => {
-          return new Dexie.Promise<FzNotiz>(resolve => resolve(e))
+          return new Promise<FzNotiz>(resolve => resolve(e))
         });
       } else {
         let art = 0; // 0 überschreiben, 1 zusammenkopieren, 2 lassen
@@ -142,11 +131,11 @@ export class PrivateService extends BaseService {
             alt.geaendertAm = daten.jetzt;
             alt.geaendertVon = daten.benutzerId;
           }
-          //return Dexie.Promise.reject('Fehler beim Ändern.');
+          //return Promise.reject('Fehler beim Ändern.');
         }
         if (art != 2) {
           return this.iuFzNotiz(daten, alt).then(r => {
-            return new Dexie.Promise<FzNotiz>(resolve => resolve(alt))
+            return new Promise<FzNotiz>(resolve => resolve(alt))
           });
         }
       }

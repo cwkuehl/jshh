@@ -12,5 +12,4 @@ export interface HhKonto extends Revision {
   periodeBis: number;
   betrag: number;
   ebetrag: number;
-  replid?: string;
 }

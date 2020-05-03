@@ -99,13 +99,7 @@ export class SudokuService extends BaseService {
     if (daten == null || e == null) {
       return Promise.reject('Parameter fehlt');
     }
-    if (e.angelegtAm == null) {
-      e.angelegtAm = daten.jetzt;
-      e.angelegtVon = daten.benutzerId;
-    } else {
-      e.geaendertAm = daten.jetzt;
-      e.geaendertVon = daten.benutzerId;
-    }
+    this.iuRevision(daten, e);
     return this.db.Sudoku.put(e);
   }
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import Dexie from 'dexie';
 import { Observable, of } from 'rxjs';
 import { Global } from './global';
 import * as GlobalActions from '../actions/global.actions';
@@ -19,24 +18,17 @@ export class UserService extends BaseService {
     super(store, db, http);
   }
 
-  getParameter(key: string): Dexie.Promise<Parameter> {
+  getParameter(key: string): Promise<Parameter> {
 
     let l = this.db.Parameter.get(key); // .catch(e => console.log('Fehler: ' + e));
     return l;
   }
 
-  iuParameter(daten: Kontext, e: Parameter): Dexie.Promise<string> {
-
+  iuParameter(daten: Kontext, e: Parameter): Promise<string> {
     if (daten == null || e == null) {
-      return Dexie.Promise.reject('Parameter fehlt');
+      return Promise.reject('Parameter fehlt');
     }
-    if (e.angelegtAm == null) {
-      e.angelegtAm = daten.jetzt;
-      e.angelegtVon = daten.benutzerId;
-    } else {
-      e.geaendertAm = daten.jetzt;
-      e.geaendertVon = daten.benutzerId;
-    }
+    this.iuRevision(daten, e);
     return this.db.Parameter.put(e);
   }
 
@@ -45,15 +37,14 @@ export class UserService extends BaseService {
       this.login(userId)
         .then(a => s.next(GlobalActions.LoginOk(a.wert)))
         .catch(e => s.next(GlobalActions.SetError(e)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
 
-  public login(userId: string): Dexie.Promise<Parameter> {
-
+  public login(userId: string): Promise<Parameter> {
     if (Global.nes(userId)) {
-      return Dexie.Promise.reject('Die Benutzer-ID darf nicht leer sein.');
+      return Promise.reject('Die Benutzer-ID darf nicht leer sein.');
     }
     let daten = this.getKontext();
     return this.getParameter('UserId').then((parameter: Parameter) => {
@@ -62,18 +53,18 @@ export class UserService extends BaseService {
       else
         parameter.wert = userId;
       return this.iuParameter(daten, parameter).then(r => {
-        return new Dexie.Promise<Parameter>(resolve => resolve(parameter))
+        return new Promise<Parameter>(resolve => resolve(parameter))
       });
     });
   }
 
-  public getOptions(): Dexie.Promise<Options> {
+  public getOptions(): Promise<Options> {
     let options: Options = { replicationServer: null, replicationDays: null };
     return this.db.Parameter.get('ReplicationServer')
       .then(a => { if (a != null) options.replicationServer = a.wert; })
       .then(() => this.db.Parameter.get('ReplicationDays'))
       .then(a => { if (a != null) options.replicationDays = a.wert; })
-      .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
+      .then(() => new Promise<Options>(resolve => resolve(options)));
   }
 
   public saveOptionsOb(options: Options): Observable<Action> {
@@ -81,29 +72,29 @@ export class UserService extends BaseService {
       this.saveOptions(options)
         .then(a => s.next(GlobalActions.SaveOptionsOk({ options: a })))
         .catch(e => s.next(GlobalActions.SetError(e)))
-        .finally(() => s.complete());
+      //.finally(() => s.complete());
     });
     return ob;
   }
 
-  public saveOptions(options: Options): Dexie.Promise<Options> {
+  public saveOptions(options: Options): Promise<Options> {
     if (options == null) {
-      return Dexie.Promise.reject('Die Optionen dürfen nicht leer sein.');
+      return Promise.reject('Die Optionen dürfen nicht leer sein.');
     }
     if (Global.nes(options.replicationServer)) {
-      return Dexie.Promise.reject('Die URL für den Replikationsserver muss angegeben werden.');
+      return Promise.reject('Die URL für den Replikationsserver muss angegeben werden.');
     }
     if (Global.toInt(options.replicationDays) <= 0) {
-      return Dexie.Promise.reject('Die Tage müssen größer 0 sein.');
+      return Promise.reject('Die Tage müssen größer 0 sein.');
     }
     return this.saveParam('ReplicationServer', options.replicationServer)
       .then(() => this.saveParam('ReplicationDays', options.replicationDays))
-      .then(() => new Dexie.Promise<Options>(resolve => resolve(options)));
+      .then(() => new Promise<Options>(resolve => resolve(options)));
   }
 
-  public saveParam(key: string, value: string): Dexie.Promise<Parameter> {
+  public saveParam(key: string, value: string): Promise<Parameter> {
     if (Global.nes(key)) {
-      return Dexie.Promise.reject('Der Schlüssel darf nicht leer sein.');
+      return Promise.reject('Der Schlüssel darf nicht leer sein.');
     }
     let daten = this.getKontext();
     return this.getParameter(key).then((parameter: Parameter) => {
@@ -112,7 +103,7 @@ export class UserService extends BaseService {
       else
         parameter.wert = value;
       return this.iuParameter(daten, parameter)
-        .then(r => new Dexie.Promise<Parameter>(resolve => resolve(parameter)));
+        .then(r => new Promise<Parameter>(resolve => resolve(parameter)));
     });
   }
 }

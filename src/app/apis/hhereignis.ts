@@ -7,5 +7,4 @@ export interface HhEreignis extends Revision {
   habenKontoUid: string;
   bezeichnung: string;
   etext: string;
-  replid?: string;
 }

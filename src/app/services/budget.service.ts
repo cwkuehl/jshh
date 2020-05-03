@@ -57,17 +57,7 @@ export class BudgetService extends BaseService {
     if (daten == null || e == null) {
       return Promise.reject('Parameter fehlt');
     }
-    if (e.replid === 'new') {
-      e.replid = Global.getUID();
-    } else if (e.replid !== 'server') {
-      if (e.angelegtAm == null) {
-        e.angelegtAm = daten.jetzt;
-        e.angelegtVon = daten.benutzerId;
-      } else {
-        e.geaendertAm = daten.jetzt;
-        e.geaendertVon = daten.benutzerId;
-      }
-    }
+    this.iuRevision(daten, e);
     return this.db.HhBuchung.put(e);
   }
 
@@ -307,17 +297,7 @@ export class BudgetService extends BaseService {
     if (daten == null || e == null) {
       return Promise.reject('Parameter fehlt');
     }
-    if (e.replid === 'new') {
-      e.replid = Global.getUID();
-    } else if (e.replid !== 'server') {
-      if (e.angelegtAm == null) {
-        e.angelegtAm = daten.jetzt;
-        e.angelegtVon = daten.benutzerId;
-      } else {
-        e.geaendertAm = daten.jetzt;
-        e.geaendertVon = daten.benutzerId;
-      }
-    }
+    this.iuRevision(daten, e);
     return this.db.HhKonto.put(e);
   }
 
@@ -482,17 +462,7 @@ export class BudgetService extends BaseService {
     if (daten == null || e == null) {
       return Promise.reject('Parameter fehlt');
     }
-    if (e.replid === 'new') {
-      e.replid = Global.getUID();
-    } else if (e.replid !== 'server') {
-      if (e.angelegtAm == null) {
-        e.angelegtAm = daten.jetzt;
-        e.angelegtVon = daten.benutzerId;
-      } else {
-        e.geaendertAm = daten.jetzt;
-        e.geaendertVon = daten.benutzerId;
-      }
-    }
+    this.iuRevision(daten, e);
     return this.db.HhEreignis.put(e);
   }
 
