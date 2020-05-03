@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500.component';
+import { Fz250Component } from './components/private/fz250.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
@@ -15,12 +16,13 @@ const routes: Routes = [
   { path: '', redirectTo: 'bookings', pathMatch: 'full' },
   { path: 'login', component: Am000Component },
   { path: 'options', component: Am500Component },
+  { path: 'mileages', component: Fz250Component },
   { path: 'memos', component: Fz700Component },
   { path: 'memo/:id', component: Fz710Component },
-  { path: 'diary', component: Tb100Component, canDeactivate: [Tb100DeactivateGuard] },
   { path: 'bookings', component: Hh400Component },
   { path: 'booking/:id/:copy', component: Hh410Component },
   { path: 'sudoku', component: So100Component },
+  { path: 'diary', component: Tb100Component, canDeactivate: [Tb100DeactivateGuard] },
   // { path: '**', component: NotFoundPageComponent }
 ];
 @NgModule({

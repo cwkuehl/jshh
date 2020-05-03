@@ -22,8 +22,9 @@ import { environment } from '../../environments/environment';
       <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Funkionen</button>
       <div ngbDropdownMenu aria-labelledby="dd2">
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
-        <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem [routerLink]="'/bookings'">Buchungen</button>
+        <button ngbDropdownItem [routerLink]="'/mileages'">Fahrradstände</button>
+        <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem [routerLink]="'/sudoku'">Sudoku</button>
       </div>
     </div>
