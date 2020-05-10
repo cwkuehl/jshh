@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import * as FzFahrradActions from './actions/fzfahrrad.actions'
 import * as FzNotizActions from './actions/fznotiz.actions'
 import * as GlobalActions from './actions/global.actions';
 import * as HhBuchungActions from './actions/hhbuchung.actions'
@@ -24,6 +25,12 @@ export class AppEffects {
     //   //}
     // }, e => { console.log('AppEffects addTbEintrag Fehler: ' + e) });
   }
+
+  saveFzFahrrad$ = createEffect(() => this.actions$.pipe(
+    ofType(FzFahrradActions.SaveBike),
+    mergeMap(x => this.privateservice.saveBikeOb(x.bike)),
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
+  ), { useEffectsErrorHandler: false });
 
   saveFzNotiz$ = createEffect(() => this.actions$.pipe(
     ofType(FzNotizActions.Save),
