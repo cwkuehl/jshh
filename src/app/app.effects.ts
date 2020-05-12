@@ -26,6 +26,12 @@ export class AppEffects {
     // }, e => { console.log('AppEffects addTbEintrag Fehler: ' + e) });
   }
 
+  saveFzFahrradstand$ = createEffect(() => this.actions$.pipe(
+    ofType(FzFahrradActions.Save),
+    mergeMap(x => this.privateservice.saveMileageOb(x.mileage)),
+    catchError(e => of(GlobalActions.SetError(e))) // Effect wird beendet.
+  ), { useEffectsErrorHandler: false });
+
   saveFzFahrrad$ = createEffect(() => this.actions$.pipe(
     ofType(FzFahrradActions.SaveBike),
     mergeMap(x => this.privateservice.saveBikeOb(x.bike)),

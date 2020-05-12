@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FzFahrrad, FzFahrradstand } from 'src/app/apis';
+import { FzFahrradstand } from 'src/app/apis';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { Actions, ofType } from '@ngrx/effects';
@@ -23,19 +23,16 @@ import { Router } from '@angular/router';
   </div>
 </div>
 
-<div class="row card mt-1" *ngIf="mileages.length > 0">
-
-<table class="table table-contensed" >
+<div class="row card mt-1" *ngIf="mileages.length>0">
+<table class="table table-condensed" >
   <thead>
   <tr>
     <th>Aktionen</th>
-    <th>Valuta</th>
-    <th>K.</th>
-    <th class='text-right'>Betrag</th>
-    <th>Buchungstext</th>
-    <th>Sollkonto</th>
-    <th>Habenkonto</th>
-    <th>Beleg</th>
+    <th>Fahrrad</th>
+    <th>Datum</th>
+    <th>Nr.</th>
+    <th class='text-right'>Zähler</th>
+    <th>Beschreibung</th>
     <th>Geändert am</th>
     <th>Geändert von</th>
     <th>Angelegt am</th>
@@ -44,17 +41,15 @@ import { Router } from '@angular/router';
   </thead>
   <tr *ngFor="let item of mileages">
     <td><div class="btn-group">
-      <a class='btn btn-secondary' [routerLink]="['/booking', item.uid, '']" title='Details'><img src='assets/icons/ic_details_white_24dp.png' height='20px'/></a>
-      <a class='btn btn-secondary' [routerLink]="['/booking', item.uid, 'copy']" title='Kopieren'><img src='assets/icons/ic_filter_2_white_24dp.png' height='20px'/></a>
-      <button type='button' class='btn btn-secondary' title='Löschen' (click)="delete(item.uid)"><img src='assets/icons/ic_delete_white_24dp.png' height='20px'/></button>
+      <a class='btn btn-secondary' [routerLink]="['/booking', item.fahrradUid, '']" title='Details'><img src='assets/icons/ic_details_white_24dp.png' height='20px'/></a>
+      <a class='btn btn-secondary' [routerLink]="['/booking', item.fahrradUid, 'copy']" title='Kopieren'><img src='assets/icons/ic_filter_2_white_24dp.png' height='20px'/></a>
+      <button type='button' class='btn btn-secondary' title='Löschen' (click)="delete(item.fahrradUid)"><img src='assets/icons/ic_delete_white_24dp.png' height='20px'/></button>
     </div></td>
-    <td>{{item.sollValuta | date:'yyyy-MM-dd'}}</td>
-    <td>{{item.kz}}</td>
-    <td class='text-right'>{{item.ebetrag | number:'1.2'}}</td>
-    <td>{{item.btext}}</td>
-    <td>{{item.sollKontoName}}</td>
-    <td>{{item.habenKontoName}}</td>
-    <td>{{item.belegNr}}</td>
+    <td>{{item.fahrradName}}</td>
+    <td>{{item.datum}}</td>
+    <td>{{item.nr}}</td>
+    <td class='text-right'>{{item.zaehlerKm | number:'1.2'}}</td>
+    <td>{{item.beschreibung}}</td>
     <td>{{item.geaendertAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
     <td>{{item.geaendertVon}}</td>
     <td>{{item.angelegtAm | date:'yyyy-MM-ddTHH:mm:ss'}}</td>
@@ -65,8 +60,8 @@ import { Router } from '@angular/router';
 `,
   styles: [``]
 })
+
 export class Fz250Component implements OnInit {
-  bikes: FzFahrrad[] = [];
   mileages: FzFahrradstand[] = [];
 
   constructor(private store: Store<AppState>, private actions$: Actions, private privateservice: PrivateService, private router: Router) {
@@ -81,9 +76,9 @@ export class Fz250Component implements OnInit {
   }
 
   public reload() {
-    this.privateservice.getBikeList(null)
-      //.then(l => this.budgetservice.getBookingListJoin(l || []))
-      .then(l => { this.bikes = l || []; this.mileages = []; })
+    this.privateservice.getMileageListJoin(null)
+      //this.privateservice.getMileageList(null)
+      .then(l => { this.mileages = l || []; })
       //.catch(e => this.store.dispatch(GlobalActions.SetError(e)));
       .catch(e => console.log(e));
   }
@@ -92,8 +87,8 @@ export class Fz250Component implements OnInit {
     this.store.dispatch(GlobalActions.SetError(null));
     this.privateservice.getBikeList('server')
       .then(l => { this.privateservice.postServerBike(l || []); })
-      //.then(() => this.budgetservice.getBookingList('server'))
-      //.then(l => { this.budgetservice.postServerBooking(l || []); })
+      .then(() => this.privateservice.getMileageList('server'))
+      .then(l => { this.privateservice.postServerMileage(l || []); })
       .catch(e => this.store.dispatch(GlobalActions.SetError(e)));
   }
 

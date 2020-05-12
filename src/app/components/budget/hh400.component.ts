@@ -23,9 +23,8 @@ import { Router } from '@angular/router';
   </div>
 </div>
 
-<div class="row card mt-1" *ngIf="bookings.length > 0">
-
-<table class="table table-contensed" >
+<div class="row card mt-1" *ngIf="bookings.length>0">
+<table class="table table-condensed" >
   <thead>
   <tr>
     <th>Aktionen</th>
@@ -81,7 +80,6 @@ export class Hh400Component implements OnInit {
 
   public reload() {
     this.budgetservice.getBookingListJoin(null)
-      //.then(l => this.budgetservice.getBookingListJoin(l || []))
       .then(l => { this.bookings = l || []; })
       //.catch(e => this.store.dispatch(GlobalActions.SetError(e)));
       .catch(e => console.log(e));

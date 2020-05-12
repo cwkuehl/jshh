@@ -22,6 +22,7 @@ import { JshhDatabase } from './services/database';
 import { MenuComponent } from './components/menu.component';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500.component';
+import { Fz250Component } from './components/private/fz250.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
@@ -41,6 +42,7 @@ import { BudgetService, DiaryService, PrivateService, UserService, SudokuService
     Date2Component,
     Am000Component,
     Am500Component,
+    Fz250Component,
     Fz700Component,
     Fz710Component,
     Hh400Component,

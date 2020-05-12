@@ -8,4 +8,5 @@ export interface FzFahrradstand extends Revision {
   periodeKm: number;
   periodeSchnitt: number;
   beschreibung: string;
+  fahrradName?: string;
 }

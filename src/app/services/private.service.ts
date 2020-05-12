@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store, Action } from '@ngrx/store';
-import { FzNotiz, Kontext, FzFahrrad } from '../apis';
+import { FzNotiz, Kontext, FzFahrrad, FzFahrradstand } from '../apis';
 import { AppState } from '../app.state';
 import { JshhDatabase } from './database';
 import { BaseService } from './base.service';
@@ -83,6 +83,8 @@ export class PrivateService extends BaseService {
     var e = Object.assign({}, e0); // Clone erzeugen
     let daten = this.getKontext();
     // Korrektur aus Import vom Server
+    if (e.typ != null && typeof e.typ == 'number')
+      e.typ = String(e.typ);
     if (e.angelegtAm != null && typeof e.angelegtAm == 'string')
       e.angelegtAm = new Date(Date.parse(e.angelegtAm));
     if (e.geaendertAm != null && typeof e.geaendertAm == 'string')
@@ -157,6 +159,170 @@ export class PrivateService extends BaseService {
       (a: FzFahrrad[]) => {
         a.forEach((e: FzFahrrad) => {
           this.store.dispatch(FzFahrradActions.SaveBike({ bike: e }));
+          this.store.dispatch(FzFahrradActions.Load());
+        });
+      },
+      (err: HttpErrorResponse) => {
+        return this.store.dispatch(GlobalActions.SetError(Global.handleError(err)));
+      },
+    );
+  }
+
+  /**
+   * Lesen einer Liste von Fahrradständen.
+   * @param uid Betroffene ID.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  getMileageList(replidne: string): Promise<FzFahrradstand[]> {
+    if (Global.nes(replidne)) {
+      return this.db.FzFahrradstand.orderBy('[fahrradUid+datum+nr]').toArray();
+    } else
+      return this.db.FzFahrradstand.where('replid').notEqual(replidne).sortBy('[fahrradUid+datum+nr]');
+  }
+
+  async getMileageListJoin(replidne: string): Promise<FzFahrradstand[]> {
+    const list = await this.getMileageList(replidne);
+    await Promise.all(list.map(async a => {
+      [a.fahrradName] = await Promise.all([
+        this.db.FzFahrrad.get(a.fahrradUid).then(b => { return b == null ? "fahrrad" : b.bezeichnung; })
+      ]);
+    }));
+    return list;
+  }
+
+  /**
+   * Lesen eines Fahrradstands.
+   * @param uid Betroffene ID.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  getMileage(uid: string, datum: string, nr: number): Promise<FzFahrradstand> {
+    let l = this.db.FzFahrradstand.where({ fahrradUid: uid, datum: datum, nr: nr }).first();
+    return l;
+  }
+
+  /**
+   * Schreiben eines Fahrradstands mit Anpassung der Revisionsdaten.
+   * @param daten Betroffener Kontext.
+   * @param e Betroffene Entity.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  private iuFzFahrradstand(daten: Kontext, e: FzFahrradstand): Promise<string> {
+    if (daten == null || e == null) {
+      return Promise.reject('Parameter fehlt');
+    }
+    this.iuRevision(daten, e);
+    return this.db.FzFahrradstand.put(e);
+  }
+
+  /**
+   * Speichern eines Fahrradstands.
+   * @param e Betroffene Entity.
+   * @returns Eine Observable zur weiteren Verarbeitung.
+   */
+  public saveMileageOb(e: FzFahrradstand): Observable<Action> {
+    var ob = new Observable<Action>(s => {
+      this.saveMileage(e)
+        .then(a => s.next(FzFahrradActions.Empty()))
+        .catch(ex => s.next(GlobalActions.SetError(ex)))
+      //.finally(() => s.complete());
+    });
+    return ob;
+  }
+
+  /**
+   * Speichern eines Fahrradstands.
+   * @param e Betroffenes Enity.
+   * @returns Ein Promise zur weiteren Verarbeitung.
+   */
+  public saveMileage(e0: FzFahrradstand): Promise<FzFahrradstand> {
+    if (e0 == null) {
+      return Promise.resolve(null);
+    }
+    var e = Object.assign({}, e0); // Clone erzeugen
+    let daten = this.getKontext();
+    // Korrektur aus Import vom Server
+    if (e.nr != null && typeof e.nr == 'string')
+      e.nr = Number((<string>e.nr).replace(',', ''));
+    if (e.zaehlerKm != null && typeof e.zaehlerKm == 'string')
+      e.zaehlerKm = Number((<string>e.zaehlerKm).replace(',', ''));
+    if (e.periodeKm != null && typeof e.periodeKm == 'string')
+      e.periodeKm = Number((<string>e.periodeKm).replace(',', ''));
+    if (e.periodeSchnitt != null && typeof e.periodeSchnitt == 'string')
+      e.periodeSchnitt = Number((<string>e.periodeSchnitt).replace(',', ''));
+    if (e.angelegtAm != null && typeof e.angelegtAm == 'string')
+      e.angelegtAm = new Date(Date.parse(e.angelegtAm));
+    if (e.geaendertAm != null && typeof e.geaendertAm == 'string')
+      e.geaendertAm = new Date(Date.parse(e.geaendertAm));
+    if (Global.nes(e.fahrradUid))
+      return Promise.reject('Fahrrad fehlt');
+    e.beschreibung = Global.trim(e.beschreibung);
+    if (Global.nes(e.beschreibung))
+      e.beschreibung = ''; // return Promise.reject('Beschreibung fehlt');
+
+    return this.getMileage(e.fahrradUid, e.datum, e.nr).then((alt: FzFahrradstand) => {
+      if (alt == null) {
+        if (e.replid !== 'server')
+          e.replid = Global.getUID();
+        return this.iuFzFahrradstand(daten, e).then(r => {
+          return new Promise<FzFahrradstand>(resolve => resolve(e))
+        });
+      } else {
+        let art = 0; // 0 überschreiben, (1 zusammenkopieren,) 2 lassen
+        if (e.zaehlerKm === alt.zaehlerKm && e.periodeKm === alt.periodeKm
+          && e.periodeSchnitt === alt.periodeSchnitt && e.beschreibung === alt.beschreibung) {
+          // alt.replid alt | e.replid neu | Aktion
+          // Guid           | server       | replid = 'server', Revision übernehmen, damit nicht mehr an Server geschickt wird
+          art = 2;
+          if (alt.replid !== 'server') {
+            if (e.replid === 'server') {
+              art = 0;
+              alt.replid = 'server'; // neue Guid
+              alt.angelegtAm = e.angelegtAm;
+              alt.angelegtVon = e.angelegtVon;
+              alt.geaendertAm = e.geaendertAm;
+              alt.geaendertVon = e.geaendertVon;
+            }
+          }
+        } else {
+          // alt.replid alt | e.replid neu | Aktion
+          // server         | null         | neue Guid, Eintrag überschreiben
+          // server         | server       | Eintrag überschreiben
+          // Guid           | null         | Eintrag überschreiben
+          // Guid           | server       | Eintrag überschreiben
+          if (alt.replid === 'server') {
+            if (e.replid !== 'server')
+              alt.replid = Global.getUID(); // neue Guid
+          } else if (e.replid === 'server') {
+            alt.replid = e.replid;
+          }
+          if (art == 0) {
+            alt.zaehlerKm = e.zaehlerKm;
+            alt.periodeKm = e.periodeKm;
+            alt.periodeSchnitt = e.periodeSchnitt;
+            alt.beschreibung = e.beschreibung;
+          }
+          //return Promise.reject('Fehler beim Ändern.');
+        }
+        if (art != 2) {
+          return this.iuFzFahrradstand(daten, alt).then(r => {
+            return new Promise<FzFahrradstand>(resolve => resolve(alt))
+          });
+        }
+      }
+      return alt;
+    }); // .catch((ex) => console.log('speichereEintrag: ' + ex));
+  }
+
+  /**
+   * Senden und Empfangen von Fahrrad-Listen zur Replikation.
+   * @param arr Liste von geänderten Entities.
+   */
+  public postServerMileage(arr: FzFahrradstand[]): void {
+    let jarr = JSON.stringify({ 'FZ_Fahrradstand': arr });
+    this.postReadServer<FzFahrradstand[]>('FZ_Fahrradstand', jarr).subscribe(
+      (a: FzFahrradstand[]) => {
+        a.forEach((e: FzFahrradstand) => {
+          this.store.dispatch(FzFahrradActions.Save({ mileage: e }));
           this.store.dispatch(FzFahrradActions.Load());
         });
       },

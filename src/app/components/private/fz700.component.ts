@@ -22,8 +22,7 @@ import { PrivateService } from '../../services';
   </div>
 
   <div class="row card mt-1" *ngIf="memos.length > 0">
-
-    <table class="table table-contensed" >
+    <table class="table table-condensed" >
       <thead>
       <tr>
         <th>Nr.</th>
