@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { Am000Component } from './components/user/am000.component';
 import { Am500Component } from './components/user/am500.component';
 import { Fz250Component } from './components/private/fz250.component';
+import { Fz260Component } from './components/private/fz260.component';
 import { Fz700Component } from './components/private/fz700.component';
 import { Fz710Component } from './components/private/fz710.component';
 import { Hh400Component } from './components/budget/hh400.component';
@@ -13,10 +14,11 @@ import { Tb100DeactivateGuard } from './guards/diary.guard';
 //import { NotFoundPageComponent } from './containers/not-found-page';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'bookings', pathMatch: 'full' },
+  { path: '', redirectTo: 'mileages', pathMatch: 'full' },
   { path: 'login', component: Am000Component },
   { path: 'options', component: Am500Component },
   { path: 'mileages', component: Fz250Component },
+  { path: 'mileage/:id/:date/:nr/:copy', component: Fz260Component },
   { path: 'memos', component: Fz700Component },
   { path: 'memo/:id', component: Fz710Component },
   { path: 'bookings', component: Hh400Component },
