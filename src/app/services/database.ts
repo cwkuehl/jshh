@@ -26,30 +26,30 @@ export class JshhDatabase extends Dexie {
     super(DB_NAME);
     store.select('userId').subscribe(x => this.userId = x);
     this.version(1).stores({
-      //   FzNotiz: '&uid,thema,replid',
-      //   HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
-      //   MaReplikation: '&replikationUid,tabellenNr',
-      //   Parameter: '&schluessel',
-      //   TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+      FzNotiz: '&uid,thema,replid',
+      HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
     this.version(2).stores({
-      //   FzNotiz: '&uid,thema,replid',
-      //   HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
-      //   HhEreignis: '&uid,bezeichnung,etext,replid',
-      //   HhKonto: '&uid,sortierung,name,replid',
-      //   MaReplikation: '&replikationUid,tabellenNr',
-      //   Parameter: '&schluessel',
-      //   TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+      FzNotiz: '&uid,thema,replid',
+      HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
+      HhEreignis: '&uid,bezeichnung,etext,replid',
+      HhKonto: '&uid,sortierung,name,replid',
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
     this.version(3).stores({
-      //   FzNotiz: '&uid,thema,replid',
-      //   HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
-      //   HhEreignis: '&uid,bezeichnung,etext,replid',
-      //   HhKonto: '&uid,sortierung,name,replid',
-      //   MaReplikation: '&replikationUid,tabellenNr',
-      //   Parameter: '&schluessel',
-      //   Sudoku: '&schluessel', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
-      //   TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+      FzNotiz: '&uid,thema,replid',
+      HhBuchung: '&uid,sollValuta,kz,ebetrag,sollKontoUid,habenKontoUid,btext,replid',
+      HhEreignis: '&uid,bezeichnung,etext,replid',
+      HhKonto: '&uid,sortierung,name,replid',
+      MaReplikation: '&replikationUid,tabellenNr',
+      Parameter: '&schluessel',
+      Sudoku: '&schluessel', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
+      TbEintrag: '&datum,eintrag,replid', // ,angelegtAm,angelegtVon,geaendertAm,geaendertVon
     });
     this.version(4).stores({
       FzFahrrad: '&uid,bezeichnung,replid',
