@@ -17,23 +17,23 @@ import { Global } from '../../services/global';
   <div class="form-row">
   <div class="form-group col-5">
       <label class="control-label d-none d-md-block" for="fahrrad">Fahrrad</label>
-      <select class="form-control" name="fahrrad" [(ngModel)]="item.fahrradUid" size="1" title="Fahrrad" placeholder="Fahrrad auswählen">
+      <select class="form-control" name="fahrrad" [(ngModel)]="item.fahrradUid" size="1" title="Fahrrad" placeholder="Fahrrad auswählen" [disabled]="edit">
         <option *ngFor="let k of bikes" [value]="k.uid">{{ k.bezeichnung }}</option>
       </select>
     </div>
     <div class="form-group col-7">
       <label class="control-label d-none d-md-block" for="datum">Datum</label>
-      <app-date2 [date]="item.datum" title="Datum des Standes" id="datum" (dateChange)="onDatumChange($event)"></app-date2>
+      <app-date2 [date]="item.datum" title="Datum des Standes" id="datum" (dateChange)="onDatumChange($event)" [readonly]="edit"></app-date2>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-4">
       <label class="control-label d-none d-md-block" for="zaehler">Zähler</label>
-      <input type="text" class="form-control" #zaehler name="zaehler" [ngModel]="item.zaehlerKm | number:'1.0-2'" title="Zählerstand" placeholder="Zählerstand">
+      <input type="text" class="form-control" #zaehler name="zaehler" [ngModel]="item.zaehlerKm | number:'1.0-2'" title="Zählerstand" placeholder="Zählerstand" [readonly]="true">
     </div>
     <div class="form-group col-4">
       <label class="control-label d-none d-md-block" for="km">Km</label>
-      <input type="text" class="form-control" #km name="km" [ngModel]="item.periodeKm | number:'1.0-2'" title="Tages- oder Wochen-Km" placeholder="Tages- oder Wochen-Km">
+      <input type="text" class="form-control" #km name="km" [ngModel]="item.periodeKm | number:'1.0-2'" (ngModelChange)="onKmChange($event)" title="Tages- oder Wochen-Km" placeholder="Tages- oder Wochen-Km">
     </div>
     <div class="form-group col-4">
       <label class="control-label d-none d-md-block" for="schnitt">Schnitt</label>
@@ -79,7 +79,7 @@ export class Fz260Component implements OnInit {
 
   @ViewChild("km") kmField: ElementRef;
   @ViewChild("zaehler") zaehlerField: ElementRef;
-  first: boolean = true;
+  edit: boolean = false;
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>, private actions$: Actions,
     private privateservice: PrivateService, private router: Router) {
@@ -89,8 +89,10 @@ export class Fz260Component implements OnInit {
           this.privateservice.getMileage(params['id'], params['date'], Global.toInt(params['nr']))
             .then(a => {
               this.title = Global.nes(params['copy']) ? params['nr'] : 'Kopieren';
+              this.edit = Global.nes(params['copy']);
               if (a != null) this.item = a;
-              if (Global.nes(this.item.fahrradUid)) this.store.dispatch(GlobalActions.SetError('Fahrradstand nicht gefunden.'));
+              if (Global.nes(this.item.fahrradUid))
+                this.store.dispatch(GlobalActions.SetError('Fahrradstand nicht gefunden.'));
               if (!Global.nes(params['copy'])) {
                 //this.item.uid = null;
                 this.item.replid = null;
@@ -121,6 +123,12 @@ export class Fz260Component implements OnInit {
 
   public onDatumChange(datum: Date) {
     this.item.datum = Global.toString(datum);
+  }
+
+  public onKmChange(km: string) {
+    if (this.zaehlerField != null) {
+      this.zaehlerField.nativeElement.value = '';
+    }
   }
 
   public delete() {

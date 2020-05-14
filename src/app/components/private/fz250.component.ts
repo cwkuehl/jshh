@@ -103,7 +103,7 @@ export class Fz250Component implements OnInit {
 
   public newmileage() {
     this.router.navigate(['/', 'mileage', '', '', '', ''])
-      .then(nav => { console.log(nav); }, err => { console.log(err) });
+      .then(nav => { /* console.log(nav); */ }, err => { console.log(err) });
   }
 
   public delete(uid: string, datum: string, nr: number) {

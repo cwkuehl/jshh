@@ -7,11 +7,11 @@ import { Global } from '../../services/global';
 <div class="input-group">
   <input class="form-control" type="date" id="d" name="d"
     [ngModel]="seldate | date:'yyyy-MM-dd'" (ngModelChange)="onSeldateChange($event)"
-    #d="ngModel" required pattern="\d{4}-\d{2}-\d{2}" required>
+    #d="ngModel" required pattern="\d{4}-\d{2}-\d{2}" [readonly]="readonly" required>
   <div class="input-group-append">
-    <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button" title="Vorheriger Tag">-</button>
-    <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button" title="Heute">o</button>
-    <button class="btn btn-outline-secondary calendar" (click)="onChanged(1)" type="button" title="Nächster Tag">+</button>
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged(-1)" type="button" title="Vorheriger Tag" [disabled]="readonly">-</button>
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged()" type="button" title="Heute" [disabled]="readonly">o</button>
+    <button class="btn btn-outline-secondary calendar" (click)="onChanged(1)" type="button" title="Nächster Tag" [disabled]="readonly">+</button>
   </div>
 </div>
   `,
@@ -23,6 +23,7 @@ export class Date2Component implements OnInit, OnChanges {
 
   @Output() dateChange = new EventEmitter<Date>();
   @Input('date') date: Date = Global.today();
+  @Input('readonly') readonly: boolean = false;
 
   seldate: Date;
 
