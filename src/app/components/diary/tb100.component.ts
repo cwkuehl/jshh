@@ -14,13 +14,17 @@ import { throttleTime } from 'rxjs/operators';
 <h4>Tagebuch</h4>
 
 <form>
+  <div class="row">
+    <div class="form-group col">
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch-Ablgeich mit Server" (click)="replicate()"><img src="assets/icons/ic_cached_white_24dp.png"/></button>
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch löschen" (click)="delete()"><img src="assets/icons/ic_delete_white_24dp.png"/></button>
+    </div>
+  </div>
   <div class="form-row">
     <div class="form-group col-sm-4 col-md-3">
       <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
       <app-date2 [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date2>
       <button type="button" class="btn btn-primary mt-1 ml-1" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch-Ablgeich mit Server" (click)="replicate()"><img src="assets/icons/ic_cached_white_24dp.png"/></button>
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch löschen" (click)="delete()"><img src="assets/icons/ic_delete_white_24dp.png"/></button>
     </div>
     <div class="form-group col-sm-4 col-md-6">
       <label class="d-none d-md-block" for="eintrag">Eintrag</label>
