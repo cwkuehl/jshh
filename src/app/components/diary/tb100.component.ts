@@ -21,20 +21,30 @@ import { throttleTime } from 'rxjs/operators';
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col-sm-4 col-md-3">
+    <div class="form-group col">
       <label class="control-label d-none d-md-block" for="entrydate">Datum</label>
       <app-date2 [date]="date" title="Datum des Eintrags" id="entrydate" (dateChange)="onDateChange($event)"></app-date2>
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
     </div>
-    <div class="form-group col-sm-4 col-md-6">
+  </div>
+  <div class="form-row">
+      <div class="form-group col">
       <label class="d-none d-md-block" for="eintrag">Eintrag</label>
       <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="5" cols="20"></textarea>
     </div>
-    <div class="form-group col-sm-4 col-md-3">
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
       <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
       <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
+    </div>
+    <div class="form-group col">
       <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
       <p class="form-control-static" title="Geändert">{{geaendert}}</p>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <button type="button" class="btn btn-primary mt-1 ml-1" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
     </div>
   </div>
 </form>
