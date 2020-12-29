@@ -14,7 +14,7 @@ import { Tb100DeactivateGuard } from './guards/diary.guard';
 //import { NotFoundPageComponent } from './containers/not-found-page';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'mileages', pathMatch: 'full' },
+  { path: '', redirectTo: 'diary', pathMatch: 'full' },
   { path: 'login', component: Am000Component },
   { path: 'options', component: Am500Component },
   { path: 'mileages', component: Fz250Component },
