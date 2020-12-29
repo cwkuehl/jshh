@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "uuid"
+            ],
             "aot": true,
             "outputPath": "dist/jshh",
             "index": "src/index.html",
