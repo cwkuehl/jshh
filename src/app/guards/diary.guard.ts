@@ -1,6 +1,8 @@
 import { CanDeactivate } from '@angular/router';
 import { Tb100Component } from '../components/diary/tb100.component';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class Tb100DeactivateGuard implements CanDeactivate<Tb100Component> {
 
   canDeactivate(target: Tb100Component) {
