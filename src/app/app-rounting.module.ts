@@ -28,7 +28,7 @@ const routes: Routes = [
   // { path: '**', component: NotFoundPageComponent }
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })], // TODO corrected
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
