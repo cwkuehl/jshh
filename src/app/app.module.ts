@@ -32,7 +32,7 @@ import { So100Component } from './components/misc/so100.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
-import { BudgetService, DiaryService, PrivateService, UserService, SudokuService } from './services';
+import { BudgetService, CheckForUpdateService, DiaryService, PrivateService, UserService, SudokuService } from './services';
 
 @NgModule({
   declarations: [
@@ -69,6 +69,7 @@ import { BudgetService, DiaryService, PrivateService, UserService, SudokuService
     { provide: LOCALE_ID, useValue: 'de' },
     JshhDatabase,
     BudgetService,
+    CheckForUpdateService,
     DiaryService,
     PrivateService,
     SudokuService,

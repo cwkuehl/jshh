@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import * as GlobalActions from './actions/global.actions'
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { HttpClient } from '@angular/common/http';
+import { CheckForUpdateService } from './services';
 
 
 @Component({
@@ -26,27 +27,35 @@ export class AppComponent implements OnInit {
   globalError$: Observable<string>;
   readonly VAPID_PUBLIC_KEY = "BDdqW4UCMfv2JBGzsECU3pBUaCuR_qe0QHeJNV2EKxfGZXQ7ufIEqNX5TL5jdhbYdmdWV0Iti0-uaqr-JDj2jYQ";
   private baseUrl = 'https://jshh.cwkuehl.de/notifications';
-  push$: Observable<PushSubscription>;
+  updateAvailable = false;
 
   constructor(private store: Store<AppState>, @Inject(LOCALE_ID) locale: string,
-    private swUpdate: SwUpdate, private swPush: SwPush, private http: HttpClient) {
+    private swUpdate: SwUpdate, private swPush: SwPush, private http: HttpClient,
+    private checkForUpdateService: CheckForUpdateService) {
     this.globalError$ = store.pipe(select('globalError'));
     console.log('locale: ' + locale);
-    this.swPush.notificationClicks.subscribe(event => {
-      console.log('Received notification: ', event);
-      const url = event.notification.data.url;
-      window.open(url, '_self'); // _blank
+    // this.swPush.notificationClicks.subscribe(event => {
+    //   console.log('Received notification: ', event);
+    //   const url = event.notification.data.url;
+    //   window.open(url, '_self'); // _blank
+    // });
+    this.swUpdate.available.subscribe((event) => {
+      console.log('Update available: ', event);
+      this.updateAvailable = true;
+      if (confirm("Soll die neue Version geladen werden?")) {
+        window.location.reload();
+      }
     });
   }
 
   ngOnInit() {
-    if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe(() => {
-        if (confirm("Soll die neue Version geladen werden?")) {
-          window.location.reload();
-        }
-      });
-    }
+    // if (this.swUpdate.isEnabled) {
+    //   this.swUpdate.available.subscribe(() => {
+    //     if (confirm("Soll die neue Version geladen werden?")) {
+    //       window.location.reload();
+    //     }
+    //   });
+    // }
     this.subscribeToNotifications();
   }
 
