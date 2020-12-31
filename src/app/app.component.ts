@@ -131,6 +131,9 @@ export class AppComponent implements OnInit {
       data: { url: url },
     }
     var n = new Notification(title, options);
+    n.onclick = function () {
+      alert("Notification clicked: " + n.data.url);
+    };
     // setTimeout(function () {
     //   var n = new Notification(title + " time", options);
     // }, 10);
