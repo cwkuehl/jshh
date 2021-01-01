@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   version: 'DEV',
-  date: '2020-12-30'
+  date: '2021-01-01'
 };
 
 /*

@@ -32,7 +32,7 @@ import { So100Component } from './components/misc/so100.component';
 import { Tb100Component } from './components/diary/tb100.component';
 import { Tb100DeactivateGuard } from './guards/diary.guard';
 import * as Reducer from './reducers/reducer';
-import { BudgetService, CheckForUpdateService, DiaryService, PrivateService, UserService, SudokuService } from './services';
+import { BudgetService, CheckForUpdateService, DiaryService, NotificationService, PrivateService, UserService, SudokuService } from './services';
 
 @NgModule({
   declarations: [
@@ -71,6 +71,7 @@ import { BudgetService, CheckForUpdateService, DiaryService, PrivateService, Use
     BudgetService,
     CheckForUpdateService,
     DiaryService,
+    NotificationService,
     PrivateService,
     SudokuService,
     UserService,

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import * as GlobalActions from './actions/global.actions'
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { HttpClient } from '@angular/common/http';
-import { CheckForUpdateService } from './services';
+import { CheckForUpdateService, NotificationService } from './services';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { CheckForUpdateService } from './services';
   template: `
 <div class="container">
   <!--button class="button button-primary" (click)="subscribeToNotifications()">Abonnieren</button-->
-  <button class="button button-primary" (click)="notifyMe()">Benachrichtigung</button>
+  <!--button class="button button-primary" (click)="notifyMe()">Benachrichtigung</button-->
   <app-menu></app-menu>
   <div *ngIf="globalError$ | async as globalError">
     <ngb-alert type="danger" (close)="clearErrorGlobal()">{{ globalError }}</ngb-alert>
@@ -26,13 +26,13 @@ import { CheckForUpdateService } from './services';
 export class AppComponent implements OnInit {
   title: string = 'JSHH';
   globalError$: Observable<string>;
-  readonly VAPID_PUBLIC_KEY = "BDdqW4UCMfv2JBGzsECU3pBUaCuR_qe0QHeJNV2EKxfGZXQ7ufIEqNX5TL5jdhbYdmdWV0Iti0-uaqr-JDj2jYQ";
-  private baseUrl = 'https://jshh.cwkuehl.de/notifications';
+  //readonly VAPID_PUBLIC_KEY = "BDdqW4UCMfv2JBGzsECU3pBUaCuR_qe0QHeJNV2EKxfGZXQ7ufIEqNX5TL5jdhbYdmdWV0Iti0-uaqr-JDj2jYQ";
+  //private baseUrl = 'https://jshh.cwkuehl.de/notifications';
   updateAvailable = false;
 
   constructor(private store: Store<AppState>, @Inject(LOCALE_ID) locale: string,
     private swUpdate: SwUpdate, private swPush: SwPush, private http: HttpClient,
-    private checkForUpdateService: CheckForUpdateService) {
+    private checkForUpdateService: CheckForUpdateService, private n: NotificationService) {
     this.globalError$ = store.pipe(select('globalError'));
     console.log('locale: ' + locale);
     this.swPush.notificationClicks.subscribe(event => {
@@ -48,6 +48,7 @@ export class AppComponent implements OnInit {
         window.location.reload();
       }
     });
+    n.resetCounter(-1);
   }
 
   ngOnInit() {
@@ -65,13 +66,13 @@ export class AppComponent implements OnInit {
     this.store.dispatch(GlobalActions.ClearError());
   }
 
-  subscribeToNotifications() {
-    this.swPush.requestSubscription({
-      serverPublicKey: this.VAPID_PUBLIC_KEY
-    })
-      .then(sub => this.sendToServer(sub)) // this.newsletterService.addPushSubscriber(sub).subscribe())
-      .catch(err => console.error("Could not subscribe to notifications", err));
-  }
+  // subscribeToNotifications() {
+  //   this.swPush.requestSubscription({
+  //     serverPublicKey: this.VAPID_PUBLIC_KEY
+  //   })
+  //     .then(sub => this.sendToServer(sub)) // this.newsletterService.addPushSubscriber(sub).subscribe())
+  //     .catch(err => console.error("Could not subscribe to notifications", err));
+  // }
 
   sendToServer(params: PushSubscription) {
     console.log('Subscription received: ', params);
