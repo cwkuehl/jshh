@@ -10,15 +10,6 @@ import { environment } from '../../environments/environment';
   </div>
   <div class="ml-1">
     <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-secondary" id="dd1" ngbDropdownToggle>Benutzer</button>
-      <div ngbDropdownMenu aria-labelledby="dd1">
-        <button ngbDropdownItem [routerLink]="'/login'">Anmeldung</button>
-        <button ngbDropdownItem [routerLink]="'/options'">Einstellungen</button>
-      </div>
-    </div>
-  </div>
-  <div class="ml-1">
-    <div ngbDropdown class="d-inline-block">
       <button class="btn btn-secondary" id="dd2" ngbDropdownToggle>Funkionen</button>
       <div ngbDropdownMenu aria-labelledby="dd2">
         <button ngbDropdownItem [routerLink]="'/diary'">Tagebuch</button>
@@ -26,6 +17,9 @@ import { environment } from '../../environments/environment';
         <button ngbDropdownItem [routerLink]="'/mileages'">Fahrradstände</button>
         <button ngbDropdownItem [routerLink]="'/memos'">Notizen</button>
         <button ngbDropdownItem [routerLink]="'/sudoku'">Sudoku</button>
+        <hr/>
+        <button ngbDropdownItem [routerLink]="'/login'">Anmeldung</button>
+        <button ngbDropdownItem [routerLink]="'/options'">Einstellungen</button>
       </div>
     </div>
   </div>
