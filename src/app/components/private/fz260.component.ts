@@ -48,7 +48,7 @@ import { Global } from '../../services/global';
   </div>
   <div class="form-row">
     <div class="form-group col">
-      <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+      <label class="control-label mt-1 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
       <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
     </div>
     <div class="form-group col">
@@ -58,8 +58,8 @@ import { Global } from '../../services/global';
   </div>
   <div class="form-row">
     <div class="form-group col">
-      <button type="submit" class="btn btn-primary ml-1" title="Schließen mit Speichern." (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
-      <a class="btn btn-primary ml-1" title="Schließen ohne Speichern." [routerLink]="'/mileages'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>
+      <button type="submit" class="btn btn-primary" title="Schließen mit Speichern." (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
+      <a class="btn btn-primary" title="Schließen ohne Speichern." [routerLink]="'/mileages'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>&nbsp;
     </div>
   </div>
 </form>

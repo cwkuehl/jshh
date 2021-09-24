@@ -17,9 +17,9 @@ import { Router } from '@angular/router';
 
 <div class="row">
   <div class="form-group col">
-    <button type="button" class="btn btn-primary ml-1" (click)="replicate()" title="Buchungen-Ablgeich mit Server"><img src="assets/icons/ic_cached_white_24dp.png"/></button>&nbsp;
-    <button type="button" class="btn btn-primary ml-1" (click)="delete()" title="Alle Buchungen löschen"><img src="assets/icons/ic_delete_white_24dp.png"/></button>&nbsp;
-    <button type="button" class="btn btn-primary ml-1" (click)="newbooking()" title="Neue Buchung erstellen"><img src="assets/icons/ic_add_box_white_24dp.png"/></button>
+    <button type="button" class="btn btn-primary" (click)="replicate()" title="Buchungen-Ablgeich mit Server"><img src="assets/icons/ic_cached_white_24dp.png"/></button>&nbsp;
+    <button type="button" class="btn btn-primary" (click)="delete()" title="Alle Buchungen löschen"><img src="assets/icons/ic_delete_white_24dp.png"/></button>&nbsp;
+    <button type="button" class="btn btn-primary" (click)="newbooking()" title="Neue Buchung erstellen"><img src="assets/icons/ic_add_box_white_24dp.png"/></button>&nbsp;
   </div>
 </div>
 

@@ -16,8 +16,8 @@ import { throttleTime } from 'rxjs/operators';
 <form>
   <div class="row">
     <div class="form-group col">
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch-Ablgeich mit Server" (click)="replicate()"><img src="assets/icons/ic_cached_white_24dp.png"/></button>
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Tagebuch löschen" (click)="delete()"><img src="assets/icons/ic_delete_white_24dp.png"/></button>
+      <button type="button" class="btn btn-primary" title="Tagebuch-Ablgeich mit Server" (click)="replicate()"><img src="assets/icons/ic_cached_white_24dp.png"/></button>&nbsp;
+      <button type="button" class="btn btn-primary" title="Tagebuch löschen" (click)="delete()"><img src="assets/icons/ic_delete_white_24dp.png"/></button>&nbsp;
     </div>
   </div>
   <div class="form-row">
@@ -29,18 +29,18 @@ import { throttleTime } from 'rxjs/operators';
   <div class="form-row">
       <div class="form-group col">
       <label class="d-none d-md-block" for="eintrag">Eintrag</label>
-      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="5" cols="20"></textarea>
+      <textarea class="form-control" title="Tagebuch-Eintrag" id="eintrag" name="entry" [(ngModel)]="entry" rows="8" cols="20"></textarea>
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col">
-      <button type="button" class="btn btn-primary mt-1 ml-1" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
+    <div class="form-group col-4">
+      <button type="button" class="btn btn-primary" title="Eintrag speichern" (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
     </div>
-    <div class="form-group col">
-      <label class="control-label mt-3 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+    <div class="form-group col-4">
+      <label class="control-label mt-1 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
       <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
     </div>
-    <div class="form-group col">
+    <div class="form-group col-4">
       <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
       <p class="form-control-static" title="Geändert">{{geaendert}}</p>
     </div>
