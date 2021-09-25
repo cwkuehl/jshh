@@ -14,68 +14,66 @@ import { Global } from '../../services/global';
 <h4>Buchung <small class="text-muted">{{title}}</small></h4>
 
 <form>
-  <div class="form-row">
-    <div class="form-group col-9">
+  <div class="row">
+    <div class="col-9">
       <label class="control-label d-none d-md-block" for="valuta">Valuta</label>
       <app-date2 [date]="item.sollValuta" title="Valuta der Buchung" id="valuta" (dateChange)="onValutaChange($event)"></app-date2>
     </div>
-    <div class="form-group col-3">
+    <div class="col-3">
       <label class="control-label d-none d-md-block" for="betrag">Betrag</label>
       <input type="text" class="form-control" #betrag name="betrag" [ngModel]="item.ebetrag | number:'1.2-2'" title="Betrag" placeholder="Betrag">
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
+  <div class="row">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="ereignis">Ereignis</label>
       <select class="form-control" name="ereignis" [ngModel]="eventuid" (ngModelChange)="onEreignisChange($event)" size="5" title="Ereignis" placeholder="Ereignis">
         <option *ngFor="let k of events" [value]="k.uid">{{ k.bezeichnung }}</option>
       </select>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
+  <div class="row">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="sollkonto">Sollkonto</label>
-      <select class="form-control" name="Sollkonto" [(ngModel)]="item.sollKontoUid" size="1" title="Sollkonto" placeholder="Sollkonto">
+      <select class="form-control" name="Sollkonto" [(ngModel)]="item.sollKontoUid" size="3" title="Sollkonto" placeholder="Sollkonto">
         <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
       </select>
     </div>
-    <div class="form-group col">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="habenkonto">Habenkonto</label>
-      <select class="form-control" name="Habenkonto" [(ngModel)]="item.habenKontoUid" size="1" title="Habenkonto" placeholder="Habenkonto">
+      <select class="form-control" name="Habenkonto" [(ngModel)]="item.habenKontoUid" size="3" title="Habenkonto" placeholder="Habenkonto">
         <option *ngFor="let k of accounts" [value]="k.uid">{{ k.name }}</option>
       </select>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
+  <div class="row">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="btext">Buchungstext</label>
       <input type="text" class="form-control" name="btext" [(ngModel)]="item.btext" title="Buchungstext" placeholder="Buchungstext">
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col-3">
+  <div class="row">
+    <div class="col-3">
       <label class="control-label d-none d-md-block" for="belegnr">Belegnummer</label>
       <input type="text" class="form-control" name="belegnr" [(ngModel)]="item.belegNr" title="Belegnummer" placeholder="Belegnummer">
     </div>
-    <div class="form-group col-9">
+    <div class="col-9">
       <label class="control-label d-none d-md-block" for="belegdatum">Belegdatum</label>
       <app-date2 [(date)]="item.belegDatum" title="Belegdatum" id="belegdatum"></app-date2>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <label class="control-label mt-1 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-primary" title="Schließen mit Speichern." (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
+      <a class="btn btn-primary" title="Schließen ohne Speichern." [routerLink]="'/bookings'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>&nbsp;
+    </div>
+    <div class="col">
+      <label class="control-label d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
       <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
     </div>
-    <div class="form-group col">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
       <p class="form-control-static" title="Geändert">{{geaendert}}</p>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <button type="submit" class="btn btn-primary ml-1" title="Schließen mit Speichern." (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
-      <a class="btn btn-primary ml-1" title="Schließen ohne Speichern." [routerLink]="'/bookings'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>
     </div>
   </div>
 </form>

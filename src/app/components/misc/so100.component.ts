@@ -17,23 +17,23 @@ interface Wert {
     <app-sudoku-zelle *ngFor="let x of indexx" x="{{x}}" y="{{y}}" rechts="{{x==maxx-1?'1':''}}" links="{{x%maxxw==0?'1':''}}" oben="{{y%maxyw==0?'1':''}}" unten="{{y==maxy-1?'1':''}}" [value]="werte[x+y*maxx].value" (changed)="onChanged($event)"></app-sudoku-zelle><br>
   </ng-template>
   <div class="row">
-    <div class="form-group col">
-      <label class="control-label mt-1">Gefüllt: {{anzahl}}</label>
-      <label class="control-label mt-1 ml-1"><input type="checkbox" [(ngModel)]="diagonal" (change)="onDiagonal()" tooltip="Müssen die Diagonalen auch alle Zahlen enthalten? (Schüssler-Sudoku)">Diagonalen verschieden (Schüssler-Sudoku)</label>
+    <div class="col">
+      <label class="control-label">Gefüllt: {{anzahl}}</label>
+      <label class="control-label"><input type="checkbox" [(ngModel)]="diagonal" (change)="onDiagonal()" tooltip="Müssen die Diagonalen auch alle Zahlen enthalten? (Schüssler-Sudoku)">Diagonalen verschieden (Schüssler-Sudoku)</label>
     </div>
   </div>
   <div class="row">
-    <div class="form-group col">
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onZug()" title="Eine Zahl bestimmen und eintragen.">1 Zug</button>
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onLoesen()" title="Alle Zahlen bestimmen und eintragen.">Lösen</button>
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onTest()" title="Widersprechen sich die bisherigen Zahlen?">Widerspruch-Test</button>
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onLeeren()" title="Alle Felder leeren.">Leeren</button>
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onSpeichern()" title="Den aktuellen Stand speichern.">Speichern</button>
-      <button class="btn btn-secondary mt-1 ml-1" (click)="onReset()" title="Den gespeicherten Stand wiederherstellen.">Zurücksetzen</button>
+    <div class="col">
+      <button class="btn btn-secondary" (click)="onZug()" title="Eine Zahl bestimmen und eintragen.">1 Zug</button>&nbsp;
+      <button class="btn btn-secondary" (click)="onLoesen()" title="Alle Zahlen bestimmen und eintragen.">Lösen</button>&nbsp;
+      <button class="btn btn-secondary" (click)="onTest()" title="Widersprechen sich die bisherigen Zahlen?">Widerspruch-Test</button>&nbsp;
+      <button class="btn btn-secondary" (click)="onLeeren()" title="Alle Felder leeren.">Leeren</button>&nbsp;
+      <button class="btn btn-secondary" (click)="onSpeichern()" title="Den aktuellen Stand speichern.">Speichern</button>&nbsp;
+      <button class="btn btn-secondary" (click)="onReset()" title="Den gespeicherten Stand wiederherstellen.">Zurücksetzen</button>&nbsp;
     </div>
   </div>
   <div class="row">
-    <div class="form-group col">
+    <div class="col">
       <label class="control-label">{{status}}</label>
     </div>
   </div>

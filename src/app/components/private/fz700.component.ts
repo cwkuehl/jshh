@@ -15,13 +15,13 @@ import { PrivateService } from '../../services';
   <h4>Notizen</h4>
 
   <div class="row">
-    <div class="form-group col">
+    <div class="col">
       <button type="button" class="btn btn-primary" (click)="replicate()" title="Notizen-Ablgeich mit Server"><img src="assets/icons/ic_cached_white_24dp.png"/></button>&nbsp;
       <button type="button" class="btn btn-primary" (click)="delete()" title="Notizen löschen"><img src="assets/icons/ic_delete_white_24dp.png"/></button>&nbsp;
     </div>
   </div>
 
-  <div class="row card mt-1" *ngIf="memos.length > 0">
+  <div class="row card" *ngIf="memos.length > 0">
     <table class="table table-condensed" >
       <thead>
       <tr>

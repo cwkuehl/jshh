@@ -14,52 +14,50 @@ import { Global } from '../../services/global';
 <h4>Fahrradstand <small class="text-muted">{{title}}</small></h4>
 
 <form>
-  <div class="form-row">
-  <div class="form-group col-5">
+  <div class="row">
+  <div class="col-5">
       <label class="control-label d-none d-md-block" for="fahrrad">Fahrrad</label>
       <select class="form-control" name="fahrrad" [(ngModel)]="item.fahrradUid" size="1" title="Fahrrad" placeholder="Fahrrad auswählen" [disabled]="edit">
         <option *ngFor="let k of bikes" [value]="k.uid">{{ k.bezeichnung }}</option>
       </select>
     </div>
-    <div class="form-group col-7">
+    <div class="col-7">
       <label class="control-label d-none d-md-block" for="datum">Datum</label>
       <app-date2 [date]="item.datum" title="Datum des Standes" id="datum" (dateChange)="onDatumChange($event)" [readonly]="edit"></app-date2>
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col-4">
+  <div class="row">
+    <div class="col-4">
       <label class="control-label d-none d-md-block" for="zaehler">Zähler</label>
       <input type="text" class="form-control" #zaehler name="zaehler" [ngModel]="item.zaehlerKm | number:'1.0-2'" title="Zählerstand" placeholder="Zählerstand" [readonly]="true">
     </div>
-    <div class="form-group col-4">
+    <div class="col-4">
       <label class="control-label d-none d-md-block" for="km">Km</label>
       <input type="text" class="form-control" #km name="km" [ngModel]="item.periodeKm | number:'1.0-2'" (ngModelChange)="onKmChange($event)" title="Tages- oder Wochen-Km" placeholder="Tages- oder Wochen-Km">
     </div>
-    <div class="form-group col-4">
+    <div class="col-4">
       <label class="control-label d-none d-md-block" for="schnitt">Schnitt</label>
       <input type="text" class="form-control" #schnitt name="schnitt" [ngModel]="item.periodeSchnitt | number:'1.0-2'" title="Durchschnittsgeschwindigkeit" placeholder="Durchschnittsgeschwindigkeit">
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
+  <div class="row">
+    <div class="col">
       <label class="control-label d-none d-md-block" for="beschreibung">Beschreibung</label>
       <input type="text" class="form-control" name="beschreibung" [(ngModel)]="item.beschreibung" title="Beschreibung" placeholder="Beschreibung">
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <label class="control-label mt-1 d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
-      <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
-    </div>
-    <div class="form-group col">
-      <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
-      <p class="form-control-static" title="Geändert">{{geaendert}}</p>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col">
+  <div class="row">
+    <div class="col">
       <button type="submit" class="btn btn-primary" title="Schließen mit Speichern." (click)="save()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
       <a class="btn btn-primary" title="Schließen ohne Speichern." [routerLink]="'/mileages'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>&nbsp;
+    </div>
+    <div class="col">
+      <label class="control-label d-none d-md-block" for="created" *ngIf="angelegt">Angelegt</label>
+      <p class="form-control-static" title="Angelegt">{{angelegt}}</p>
+    </div>
+    <div class="col">
+      <label class="control-label d-none d-md-block" for="changed" *ngIf="geaendert">Geändert</label>
+      <p class="form-control-static" title="Geändert">{{geaendert}}</p>
     </div>
   </div>
 </form>

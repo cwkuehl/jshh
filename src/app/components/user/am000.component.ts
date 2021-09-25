@@ -10,21 +10,21 @@ import { SwUpdate } from '@angular/service-worker';
 <h4>Anmeldung</h4>
 
 <form>
-  <div class="form-row">
-    <div class="form-group col-sm-6">
+  <div class="row">
+    <div class="col-sm-6">
       <label class="control-label" for="user">Benutzer</label>
       <input type="text" class="form-control" name="user" [(ngModel)]="userId" placeholder="Angemeldeter Benutzer">
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <button type="submit" class="btn btn-primary ml-1" title="Anmelden" (click)="login()"><img src="assets/icons/ic_save_white_24dp.png"/></button>
-      <a class="btn btn-primary ml-1" title="Schließen ohne Speichern." [routerLink]="'/'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-primary" title="Anmelden" (click)="login()"><img src="assets/icons/ic_save_white_24dp.png"/></button>&nbsp;
+      <a class="btn btn-primary" title="Schließen ohne Speichern." [routerLink]="'/'"><img src="assets/icons/ic_cancel_white_24dp.png"/></a>&nbsp;
     </div>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <button class="btn btn-primary ml-1" title="Prüfen auf neue Programm-Version" (click)="checkForUpdate()">Neue Version prüfen?</button>
+  <div class="row mt-1">
+    <div class="col">
+      <button class="btn btn-primary" title="Prüfen auf neue Programm-Version" (click)="checkForUpdate()">Neue Version prüfen?</button>&nbsp;
     </div>
   </div>
 </form>

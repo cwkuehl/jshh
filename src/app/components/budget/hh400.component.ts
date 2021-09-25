@@ -16,14 +16,14 @@ import { Router } from '@angular/router';
 <h4>Buchungen</h4>
 
 <div class="row">
-  <div class="form-group col">
+  <div class="col">
     <button type="button" class="btn btn-primary" (click)="replicate()" title="Buchungen-Ablgeich mit Server"><img src="assets/icons/ic_cached_white_24dp.png"/></button>&nbsp;
     <button type="button" class="btn btn-primary" (click)="delete()" title="Alle Buchungen löschen"><img src="assets/icons/ic_delete_white_24dp.png"/></button>&nbsp;
     <button type="button" class="btn btn-primary" (click)="newbooking()" title="Neue Buchung erstellen"><img src="assets/icons/ic_add_box_white_24dp.png"/></button>&nbsp;
   </div>
 </div>
 
-<div class="row card mt-1" *ngIf="bookings.length>0">
+<div class="row card" *ngIf="bookings.length>0">
 <table class="table table-condensed" >
   <thead>
   <tr>
