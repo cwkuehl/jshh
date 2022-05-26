@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   version: 'DEV',
-  date: '2021-09-25'
+  date: '2022-05-26'
 };
 
 /*
